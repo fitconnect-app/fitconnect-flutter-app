@@ -5,17 +5,17 @@ class FirebaseExceptionHelper {
   static String getMessage(BuildContext context, FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':
-        return "Este correo ya se encuentra en uso, por favor use uno diferente";
+        return "This email is already in use, please use a different one";
       case 'invalid-email':
-        return "El correo ingresado no es válido";
+        return "The email entered is not valid";
       case 'weak-password':
-        return "La contraseña debe tener al menos 6 caracteres";
+        return "Password must be at least 6 characters";
       case 'user-not-found':
-        return "No se encontró una cuenta asociada a este correo";
+        return "No account associated with this email was found";
       case 'wrong-password':
-        return "Contraseña incorrecta";
+        return "Incorrect password";
       default:
-        return "Ha ocurrido un error. Por favor inténtalo de nuevo más tarde";
+        return "An error has occurred. Please try again later";
     }
   }
 }
