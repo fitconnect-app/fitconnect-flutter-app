@@ -1,15 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:fit_connect/routes.dart';
 import 'package:fit_connect/theme/style.dart';
+import 'package:fit_connect/model/config/firebase_singleton.dart';
 import 'package:flutter/material.dart';
-
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  User? user = FirebaseAuth.instance.currentUser;
+  await FirebaseInstance.app;
+  User? user = FirebaseInstance.auth.currentUser;
   String initialRoute = '/auth';
   // TODO: String initialRoute = user == null ? '/signup' : '/home';
 

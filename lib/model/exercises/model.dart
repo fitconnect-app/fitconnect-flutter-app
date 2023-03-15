@@ -12,7 +12,6 @@ class ExerciseRoutine {
     required this.video,
   });
 
-
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -29,5 +28,4 @@ class ExerciseRoutine {
       video: data['video'],
     )..id = document.id;
   }
-
 }

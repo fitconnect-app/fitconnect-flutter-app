@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData appTheme() {
   return ThemeData(
-      useMaterial3: true,
-      colorScheme: LightColorScheme,
-      fontFamily: 'Roboto'
-);
+      useMaterial3: true, colorScheme: LightColorScheme, fontFamily: 'Roboto');
 }
 
 const LightColorScheme = ColorScheme(
