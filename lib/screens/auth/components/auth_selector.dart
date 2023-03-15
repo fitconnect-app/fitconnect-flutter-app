@@ -48,24 +48,20 @@ class AuthSelectorState extends State<AuthSelector> {
                     bottom: BorderSide(
                       color: _isLoginForm
                           ? LightColorScheme.tertiary
-                          : Colors
-                              .transparent, // set the color of the bottom line
-                      width: 2.0, // set the width of the bottom line
+                          : Colors.transparent,
+                      width: 2.0,
                     ),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0), // add padding to the button
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'LOG IN',
                   style: TextStyle(
-                      fontSize: 16.0, // set the font size of the button text
+                      fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: _isLoginForm
                           ? LightColorScheme.onPrimary
-                          : LightColorScheme.onPrimary.withOpacity(
-                              0.75) // set the font weight of the button text
-                      ),
+                          : LightColorScheme.onPrimary.withOpacity(0.75)),
                 ),
               ),
             ),
@@ -77,24 +73,20 @@ class AuthSelectorState extends State<AuthSelector> {
                     bottom: BorderSide(
                       color: _isLoginForm
                           ? Colors.transparent
-                          : LightColorScheme
-                              .tertiary, // set the color of the bottom line
-                      width: 2.0, // set the width of the bottom line
+                          : LightColorScheme.tertiary,
+                      width: 2.0,
                     ),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0), // add padding to the button
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'SIGN UP',
                   style: TextStyle(
-                      fontSize: 16.0, // set the font size of the button text
+                      fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: _isLoginForm
                           ? LightColorScheme.onPrimary.withOpacity(0.75)
-                          : LightColorScheme
-                              .onPrimary // set the font weight of the button text
-                      ),
+                          : LightColorScheme.onPrimary),
                 ),
               ),
             )
