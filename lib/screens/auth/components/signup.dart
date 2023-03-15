@@ -37,7 +37,7 @@ class SignupFormState extends State<SignupForm> {
           TextFormField(
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: LightColorScheme.onPrimary,
+                  fillColor: lightColorScheme.onPrimary,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   isDense: true,
@@ -47,7 +47,7 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: DarkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary))),
               controller: _firstName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -65,7 +65,7 @@ class SignupFormState extends State<SignupForm> {
           TextFormField(
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: LightColorScheme.onPrimary,
+                  fillColor: lightColorScheme.onPrimary,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   isDense: true,
@@ -75,7 +75,7 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: DarkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary))),
               controller: _lastName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -93,7 +93,7 @@ class SignupFormState extends State<SignupForm> {
           TextFormField(
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: LightColorScheme.onPrimary,
+                  fillColor: lightColorScheme.onPrimary,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   isDense: true,
@@ -103,7 +103,7 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: DarkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary))),
               controller: _email,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -127,7 +127,7 @@ class SignupFormState extends State<SignupForm> {
           TextFormField(
             decoration: InputDecoration(
                 filled: true,
-                fillColor: LightColorScheme.onPrimary,
+                fillColor: lightColorScheme.onPrimary,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 isDense: true,
@@ -137,7 +137,7 @@ class SignupFormState extends State<SignupForm> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                        width: 2.5, color: DarkColorScheme.secondary))),
+                        width: 2.5, color: darkColorScheme.secondary))),
             obscureText: true,
             controller: _password,
             validator: (value) {
@@ -161,10 +161,10 @@ class SignupFormState extends State<SignupForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: LightColorScheme.scrim,
-                        foregroundColor: LightColorScheme.onSecondary,
+                        backgroundColor: lightColorScheme.scrim,
+                        foregroundColor: lightColorScheme.onSecondary,
                         side: BorderSide(
-                            width: 0.5, color: LightColorScheme.onSecondary)),
+                            width: 0.5, color: lightColorScheme.onSecondary)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _registerUser(context);
