@@ -101,7 +101,10 @@ class AuthSelectorState extends State<AuthSelector> {
           ],
         ),
         const SizedBox(height: 16.0),
-        _isLoginForm ? _buildLoginWidget() : _buildSignupWidget(),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 750),
+          child: _isLoginForm ? _buildLoginWidget() : _buildSignupWidget(),
+        ),
       ],
     );
   }
