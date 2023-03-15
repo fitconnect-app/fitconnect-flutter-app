@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_selector.dart';
+import 'components/auth_selector.dart';
 import 'package:fit_connect/theme/style.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -16,10 +16,10 @@ class _AuthScreenState extends State<AuthScreen> {
         body: Container(
       decoration: BoxDecoration(
           gradient: RadialGradient(
-              center: const Alignment(-0.4, -0.7), // near the top right
-              radius: 1.3,
-              colors: [LightColorScheme.shadow, LightColorScheme.scrim],
-              )),
+        center: const Alignment(-0.4, -0.7), // near the top right
+        radius: 1.3,
+        colors: [LightColorScheme.shadow, LightColorScheme.scrim],
+      )),
       child: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -28,11 +28,10 @@ class _AuthScreenState extends State<AuthScreen> {
               children: [
                 Center(
                   child: Image.asset(
-                    'assets/images/fitconnect-cropped-logo.png',
-                    width: 200
-                  ),
+                      'assets/images/fitconnect-cropped-logo.png',
+                      width: 200),
                 ),
-                const SizedBox(height:10),
+                const SizedBox(height: 10),
                 const Center(child: AuthSelector()),
                 const SizedBox(height: 30),
               ],

@@ -1,7 +1,7 @@
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
-import 'signup/signup.dart';
-import 'login/login.dart';
+import 'signup.dart';
+import 'login.dart';
 
 class AuthSelector extends StatefulWidget {
   const AuthSelector({super.key});

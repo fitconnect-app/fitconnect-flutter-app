@@ -30,137 +30,114 @@ class SignupFormState extends State<SignupForm> {
         children: <Widget>[
           const Text('  First Name',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              )
-          ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           const SizedBox(height: 5),
           TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: LightColorScheme.onPrimary,
-              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              isDense: true,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  width: 2.5,
-                  color: DarkColorScheme.secondary
-                )
-              )
-            ),
-            controller: _firstName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'The first name is required';
-              }
-              return null;
-            }
-          ),
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: LightColorScheme.onPrimary,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  isDense: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                          width: 2.5, color: DarkColorScheme.secondary))),
+              controller: _firstName,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'The first name is required';
+                }
+                return null;
+              }),
           const SizedBox(height: 15),
           const Text('  Last Name',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              )
-          ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           const SizedBox(height: 5),
           TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: LightColorScheme.onPrimary,
-              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              isDense: true,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  width: 2.5,
-                  color: DarkColorScheme.secondary
-                )
-              )
-            ),
-            controller: _lastName,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'The last name is required';
-              }
-              return null;
-            }
-          ),
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: LightColorScheme.onPrimary,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  isDense: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                          width: 2.5, color: DarkColorScheme.secondary))),
+              controller: _lastName,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'The last name is required';
+                }
+                return null;
+              }),
           const SizedBox(height: 15),
           const Text('  Email',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              )
-          ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           const SizedBox(height: 5),
           TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: LightColorScheme.onPrimary,
-              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              isDense: true,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  width: 2.5,
-                  color: DarkColorScheme.secondary
-                )
-              )
-            ),
-            controller: _email,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'The email is required';
-              }
-              if (!value.contains('@')) {
-                return 'The email is invalid';
-              }
-              return null;
-            },
-            onChanged: (_) {
-              _formKey.currentState!.validate();
-            }
-          ),
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: LightColorScheme.onPrimary,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  isDense: true,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                          width: 2.5, color: DarkColorScheme.secondary))),
+              controller: _email,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'The email is required';
+                }
+                if (!value.contains('@')) {
+                  return 'The email is invalid';
+                }
+                return null;
+              },
+              onChanged: (_) {
+                _formKey.currentState!.validate();
+              }),
           const SizedBox(height: 15),
           const Text('  Password',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              )
-          ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           const SizedBox(height: 5),
           TextFormField(
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: LightColorScheme.onPrimary,
-              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              isDense: true,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  width: 2.5,
-                  color: DarkColorScheme.secondary
-                )
-              )
-            ),
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: LightColorScheme.onPrimary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                isDense: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                        width: 2.5, color: DarkColorScheme.secondary))),
             obscureText: true,
             controller: _password,
             validator: (value) {
@@ -187,10 +164,7 @@ class SignupFormState extends State<SignupForm> {
                         backgroundColor: LightColorScheme.scrim,
                         foregroundColor: LightColorScheme.onSecondary,
                         side: BorderSide(
-                            width:0.5,
-                            color: LightColorScheme.onSecondary
-                        )
-                    ),
+                            width: 0.5, color: LightColorScheme.onSecondary)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _registerUser(context);
