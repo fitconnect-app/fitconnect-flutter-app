@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:169795872766:android:2b9fc2ac3ebdde191202af",
+        "mobilesdk_app_id": "1:169795872766:android:3ac60bcdd6b37cbb1202af",
         "android_client_info": {
-          "package_name": "com.example.fit_connect"
+          "package_name": "com.uniandes.fitconnect"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "169795872766-42cmnbtba22bgqvjhm0i270n21f7o4mf.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitConnect"
+              }
             }
           ]
         }
