@@ -35,7 +35,7 @@ class LoginFormState extends State<LoginForm> {
             controller: _email,
             decoration: InputDecoration(
                 filled: true,
-                fillColor: LightColorScheme.onPrimary,
+                fillColor: lightColorScheme.onPrimary,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 isDense: true,
@@ -45,7 +45,7 @@ class LoginFormState extends State<LoginForm> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                        width: 2.5, color: DarkColorScheme.secondary))),
+                        width: 2.5, color: darkColorScheme.secondary))),
           ),
           const SizedBox(height: 20),
           const Text('  Password',
@@ -59,7 +59,7 @@ class LoginFormState extends State<LoginForm> {
             controller: _password,
             decoration: InputDecoration(
                 filled: true,
-                fillColor: LightColorScheme.onPrimary,
+                fillColor: lightColorScheme.onPrimary,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 isDense: true,
@@ -69,7 +69,7 @@ class LoginFormState extends State<LoginForm> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                        width: 2.5, color: DarkColorScheme.secondary))),
+                        width: 2.5, color: darkColorScheme.secondary))),
           ),
           const SizedBox(height: 40),
           Center(
@@ -79,10 +79,10 @@ class LoginFormState extends State<LoginForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: LightColorScheme.scrim,
-                        foregroundColor: LightColorScheme.onSecondary,
+                        backgroundColor: lightColorScheme.scrim,
+                        foregroundColor: lightColorScheme.onSecondary,
                         side: BorderSide(
-                            width: 0.5, color: LightColorScheme.onSecondary)),
+                            width: 0.5, color: lightColorScheme.onSecondary)),
                     onPressed: () {
                       _loginUser(context);
                     },

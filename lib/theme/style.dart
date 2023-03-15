@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 
 ThemeData appTheme() {
   return ThemeData(
-      useMaterial3: true,
-      colorScheme: LightColorScheme,
-      fontFamily: 'Roboto'
-);
+      useMaterial3: true, colorScheme: lightColorScheme, fontFamily: 'Roboto');
 }
 
-const LightColorScheme = ColorScheme(
+const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Color(0xFF20A4F3),
   onPrimary: Color(0xFFFFFFFF),
@@ -42,7 +39,7 @@ const LightColorScheme = ColorScheme(
   scrim: Color(0xFF1D3744),
 );
 
-const DarkColorScheme = ColorScheme(
+const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: Color(0xFFB8C4FF),
   onPrimary: Color(0xFF0F2878),
