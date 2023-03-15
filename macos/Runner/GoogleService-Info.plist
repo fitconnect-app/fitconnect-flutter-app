@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDhkoIAmVbfSSY1WtHecpMk7KWB64wFg6s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>169795872766</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.fitConnect</string>
+	<key>PROJECT_ID</key>
+	<string>fitconnect-be78b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitconnect-be78b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:169795872766:ios:f276d0907a044c551202af</string>
+</dict>
+</plist>
