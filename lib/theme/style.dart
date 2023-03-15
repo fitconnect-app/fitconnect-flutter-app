@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 ThemeData appTheme() {
   return ThemeData(
     useMaterial3: true,
-    colorScheme: lightColorScheme,
+    colorScheme: LightColorScheme,
+    fontFamily: 'Roboto'
   );
 }
 
-const lightColorScheme = ColorScheme(
+const LightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF4559A9),
+  primary: Color(0xFF20A4F3),
   onPrimary: Color(0xFFFFFFFF),
   primaryContainer: Color(0xFFDDE1FF),
   onPrimaryContainer: Color(0xFF001454),
-  secondary: Color(0xFFA73A06),
+  secondary: Color(0xFF091540),
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: Color(0xFFFFDBCF),
   onSecondaryContainer: Color(0xFF380D00),
-  tertiary: Color(0xFF006398),
+  tertiary: Color(0xFFDC602E),
   onTertiary: Color(0xFFFFFFFF),
   tertiaryContainer: Color(0xFFCDE5FF),
   onTertiaryContainer: Color(0xFF001D31),
@@ -38,7 +39,7 @@ const lightColorScheme = ColorScheme(
   shadow: Color(0xFF000000),
   surfaceTint: Color(0xFF4559A9),
   outlineVariant: Color(0xFFC6C5D0),
-  scrim: Color(0xFF000000),
+  scrim: Color(0xFF1D3744),
 );
 
 const darkColorScheme = ColorScheme(

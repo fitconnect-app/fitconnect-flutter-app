@@ -24,23 +24,30 @@ class LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('Email',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
+          const SizedBox(height: 40),
           TextFormField(
             controller: _email,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              hintText: 'Email',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+              )
+            ),
           ),
-          const SizedBox(height: 10),
-          const Text('Password',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
+          const SizedBox(height: 20),
           TextFormField(
             obscureText: true,
             controller: _password,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: LightColorScheme.onPrimary,
+                hintText: 'Password',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                )
+            ),
           ),
           const SizedBox(height: 40),
           Center(
@@ -50,13 +57,17 @@ class LoginFormState extends State<LoginForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: lightColorScheme.tertiary,
-                      foregroundColor: lightColorScheme.onTertiary,
+                      backgroundColor: LightColorScheme.scrim,
+                      foregroundColor: LightColorScheme.onSecondary,
+                      side: BorderSide(
+                          width:0.5,
+                          color: LightColorScheme.onSecondary
+                      )
                     ),
                     onPressed: () {
                       _loginUser(context);
                     },
-                    child: const Text('Log in'),
+                    child: const Text('LOG IN'),
                   ),
                 ),
                 const SizedBox(height: 2)

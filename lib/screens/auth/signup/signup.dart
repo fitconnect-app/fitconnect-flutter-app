@@ -28,46 +28,54 @@ class SignupFormState extends State<SignupForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'First Name',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
           TextFormField(
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: LightColorScheme.onPrimary,
+                hintText: 'First Name',
+                hintStyle: const TextStyle(
+                    fontSize: 15
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                )
+            ),
             controller: _firstName,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'The first name is required';
               }
               return null;
-            },
+            }
           ),
-          const SizedBox(height: 10),
-          const Text(
-            'Last Name',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const SizedBox(height: 15),
           TextFormField(
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: LightColorScheme.onPrimary,
+                hintText: 'Last Name',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                )
+            ),
             controller: _lastName,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'The last name is required';
               }
               return null;
-            },
+            }
           ),
-          const SizedBox(height: 10),
-          const Text('Email',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
+          const SizedBox(height: 15),
           TextFormField(
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: LightColorScheme.onPrimary,
+                hintText: 'Email',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                )
+            ),
             controller: _email,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -80,15 +88,18 @@ class SignupFormState extends State<SignupForm> {
             },
             onChanged: (_) {
               _formKey.currentState!.validate();
-            },
+            }
           ),
-          const SizedBox(height: 10),
-          const Text('Password',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
+          const SizedBox(height: 15),
           TextFormField(
+          decoration: InputDecoration(
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              hintText: 'Password',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+              )
+          ),
             obscureText: true,
             controller: _password,
             validator: (value) {
@@ -112,8 +123,12 @@ class SignupFormState extends State<SignupForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: lightColorScheme.tertiary,
-                      foregroundColor: lightColorScheme.onTertiary,
+                        backgroundColor: LightColorScheme.scrim,
+                        foregroundColor: LightColorScheme.onSecondary,
+                        side: BorderSide(
+                            width:0.5,
+                            color: LightColorScheme.onSecondary
+                        )
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -130,7 +145,7 @@ class SignupFormState extends State<SignupForm> {
                         ).show(context);
                       }
                     },
-                    child: const Text('Sign up'),
+                    child: const Text('SIGN UP'),
                   ),
                 ),
                 const SizedBox(height: 2)
@@ -142,7 +157,7 @@ class SignupFormState extends State<SignupForm> {
     );
   }
 
-    Future<void> _registerUser(BuildContext context) async {
+  Future<void> _registerUser(BuildContext context) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: _email.text, password: _password.text);
@@ -186,5 +201,4 @@ class SignupFormState extends State<SignupForm> {
       ).show(context);
     }
   }
-
 }

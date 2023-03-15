@@ -18,8 +18,7 @@ class AuthSelectorState extends State<AuthSelector> {
       setState(() {
         _isLoginForm = !_isLoginForm;
       });
-    }
-    else if (!_isLoginForm && buttonText == 'Log in') {
+    } else if (!_isLoginForm && buttonText == 'Log in') {
       setState(() {
         _isLoginForm = !_isLoginForm;
       });
@@ -47,7 +46,10 @@ class AuthSelectorState extends State<AuthSelector> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: _isLoginForm ? lightColorScheme.secondary : Colors.transparent, // set the color of the bottom line
+                      color: _isLoginForm
+                          ? LightColorScheme.tertiary
+                          : Colors
+                              .transparent, // set the color of the bottom line
                       width: 2.0, // set the width of the bottom line
                     ),
                   ),
@@ -55,13 +57,15 @@ class AuthSelectorState extends State<AuthSelector> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0), // add padding to the button
                 child: Text(
-                  'Log in',
+                  'LOG IN',
                   style: TextStyle(
-                    fontSize: 16.0, // set the font size of the button text
-                    fontWeight: FontWeight
-                        .bold,
-                    color: _isLoginForm ? lightColorScheme.primary : lightColorScheme.primary.withOpacity(0.75) // set the font weight of the button text
-                  ),
+                      fontSize: 16.0, // set the font size of the button text
+                      fontWeight: FontWeight.bold,
+                      color: _isLoginForm
+                          ? LightColorScheme.onPrimary
+                          : LightColorScheme.onPrimary.withOpacity(
+                              0.75) // set the font weight of the button text
+                      ),
                 ),
               ),
             ),
@@ -71,7 +75,10 @@ class AuthSelectorState extends State<AuthSelector> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: _isLoginForm ? Colors.transparent : lightColorScheme.secondary, // set the color of the bottom line
+                      color: _isLoginForm
+                          ? Colors.transparent
+                          : LightColorScheme
+                              .tertiary, // set the color of the bottom line
                       width: 2.0, // set the width of the bottom line
                     ),
                   ),
@@ -79,12 +86,15 @@ class AuthSelectorState extends State<AuthSelector> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0), // add padding to the button
                 child: Text(
-                  'Sign up',
+                  'SIGN UP',
                   style: TextStyle(
-                    fontSize: 16.0, // set the font size of the button text
-                    fontWeight: FontWeight.bold,
-                    color: _isLoginForm ? lightColorScheme.primary.withOpacity(0.75) : lightColorScheme.primary // set the font weight of the button text
-                  ),
+                      fontSize: 16.0, // set the font size of the button text
+                      fontWeight: FontWeight.bold,
+                      color: _isLoginForm
+                          ? LightColorScheme.onPrimary.withOpacity(0.75)
+                          : LightColorScheme
+                              .onPrimary // set the font weight of the button text
+                      ),
                 ),
               ),
             )
