@@ -15,11 +15,11 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
         body: Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [LightColorScheme.scrim, LightColorScheme.scrim],
-              tileMode: TileMode.mirror)),
+          gradient: RadialGradient(
+              center: const Alignment(-0.4, -0.7), // near the top right
+              radius: 1.3,
+              colors: [LightColorScheme.shadow, LightColorScheme.scrim],
+              )),
       child: Center(
         child: SingleChildScrollView(
           child: Padding(
