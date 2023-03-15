@@ -28,17 +28,30 @@ class SignupFormState extends State<SignupForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          const Text('  First Name',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
             decoration: InputDecoration(
-                filled: true,
-                fillColor: LightColorScheme.onPrimary,
-                hintText: 'First Name',
-                hintStyle: const TextStyle(
-                    fontSize: 15
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
                 )
+              )
             ),
             controller: _firstName,
             validator: (value) {
@@ -49,14 +62,30 @@ class SignupFormState extends State<SignupForm> {
             }
           ),
           const SizedBox(height: 15),
+          const Text('  Last Name',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
             decoration: InputDecoration(
-                filled: true,
-                fillColor: LightColorScheme.onPrimary,
-                hintText: 'Last Name',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
                 )
+              )
             ),
             controller: _lastName,
             validator: (value) {
@@ -67,14 +96,30 @@ class SignupFormState extends State<SignupForm> {
             }
           ),
           const SizedBox(height: 15),
+          const Text('  Email',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
             decoration: InputDecoration(
-                filled: true,
-                fillColor: LightColorScheme.onPrimary,
-                hintText: 'Email',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
                 )
+              )
             ),
             controller: _email,
             validator: (value) {
@@ -91,15 +136,31 @@ class SignupFormState extends State<SignupForm> {
             }
           ),
           const SizedBox(height: 15),
+          const Text('  Password',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
           decoration: InputDecoration(
               filled: true,
               fillColor: LightColorScheme.onPrimary,
-              hintText: 'Password',
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
+                )
               )
-          ),
+            ),
             obscureText: true,
             controller: _password,
             validator: (value) {

@@ -25,28 +25,60 @@ class LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 40),
+          const Text('  Email',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
             controller: _email,
             decoration: InputDecoration(
               filled: true,
               fillColor: LightColorScheme.onPrimary,
-              hintText: 'Email',
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
+                )
               )
             ),
           ),
           const SizedBox(height: 20),
+          const Text('  Password',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              )
+          ),
+          const SizedBox(height: 5),
           TextFormField(
             obscureText: true,
             controller: _password,
             decoration: InputDecoration(
-                filled: true,
-                fillColor: LightColorScheme.onPrimary,
-                hintText: 'Password',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
+              filled: true,
+              fillColor: LightColorScheme.onPrimary,
+              contentPadding:const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(
+                  width: 2.5,
+                  color: DarkColorScheme.secondary
                 )
+              )
             ),
           ),
           const SizedBox(height: 40),

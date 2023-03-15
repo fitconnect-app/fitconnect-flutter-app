@@ -42,7 +42,7 @@ const LightColorScheme = ColorScheme(
   scrim: Color(0xFF1D3744),
 );
 
-const darkColorScheme = ColorScheme(
+const DarkColorScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: Color(0xFFB8C4FF),
   onPrimary: Color(0xFF0F2878),
