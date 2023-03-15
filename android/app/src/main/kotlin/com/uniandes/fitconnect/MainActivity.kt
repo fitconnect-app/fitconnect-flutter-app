@@ -1,4 +1,4 @@
-package com.example.fit_connect
+package com.uniandes.fitconnect
 
 import io.flutter.embedding.android.FlutterActivity
 
