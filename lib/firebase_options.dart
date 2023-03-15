@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '169795872766',
     projectId: 'fitconnect-be78b',
     storageBucket: 'fitconnect-be78b.appspot.com',
-    iosClientId: '169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com',
+    iosClientId:
+        '169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com',
     iosBundleId: 'com.example.fitConnect',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '169795872766',
     projectId: 'fitconnect-be78b',
     storageBucket: 'fitconnect-be78b.appspot.com',
-    iosClientId: '169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com',
+    iosClientId:
+        '169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com',
     iosBundleId: 'com.example.fitConnect',
   );
 }
