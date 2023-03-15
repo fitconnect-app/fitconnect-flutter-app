@@ -201,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
 
       if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/signup', (_) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
         MotionToast.success(
           position: MotionToastPosition.top,
           animationType: AnimationType.fromTop,

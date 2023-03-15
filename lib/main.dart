@@ -11,7 +11,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   User? user = FirebaseAuth.instance.currentUser;
   String initialRoute = '/signup';
-  // TODO: String initialRoute = user == null ? '/signup' : '/events';
+  // TODO: String initialRoute = user == null ? '/signup' : '/home';
 
   // Run app
   runApp(MyApp(initialRoute: initialRoute));
