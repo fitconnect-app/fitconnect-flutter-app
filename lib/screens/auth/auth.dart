@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'components/auth_selector.dart';
 import 'package:fit_connect/theme/style.dart';
+import 'package:flutter/material.dart';
+
+import 'components/auth_selector.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -18,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
           gradient: RadialGradient(
         center: const Alignment(-0.4, -0.7), // near the top right
         radius: 1.3,
-        colors: [LightColorScheme.shadow, LightColorScheme.scrim],
+        colors: [lightColorScheme.shadow, lightColorScheme.scrim],
       )),
       child: Center(
         child: SingleChildScrollView(

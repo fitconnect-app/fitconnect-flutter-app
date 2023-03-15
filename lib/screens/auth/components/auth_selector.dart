@@ -1,7 +1,8 @@
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
-import 'signup.dart';
+
 import 'login.dart';
+import 'signup.dart';
 
 class AuthSelector extends StatefulWidget {
   const AuthSelector({super.key});
@@ -47,7 +48,7 @@ class AuthSelectorState extends State<AuthSelector> {
                   border: Border(
                     bottom: BorderSide(
                       color: _isLoginForm
-                          ? LightColorScheme.tertiary
+                          ? lightColorScheme.tertiary
                           : Colors.transparent,
                       width: 2.0,
                     ),
@@ -60,8 +61,8 @@ class AuthSelectorState extends State<AuthSelector> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: _isLoginForm
-                          ? LightColorScheme.onPrimary
-                          : LightColorScheme.onPrimary.withOpacity(0.75)),
+                          ? lightColorScheme.onPrimary
+                          : lightColorScheme.onPrimary.withOpacity(0.75)),
                 ),
               ),
             ),
@@ -73,7 +74,7 @@ class AuthSelectorState extends State<AuthSelector> {
                     bottom: BorderSide(
                       color: _isLoginForm
                           ? Colors.transparent
-                          : LightColorScheme.tertiary,
+                          : lightColorScheme.tertiary,
                       width: 2.0,
                     ),
                   ),
@@ -85,8 +86,8 @@ class AuthSelectorState extends State<AuthSelector> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: _isLoginForm
-                          ? LightColorScheme.onPrimary.withOpacity(0.75)
-                          : LightColorScheme.onPrimary),
+                          ? lightColorScheme.onPrimary.withOpacity(0.75)
+                          : lightColorScheme.onPrimary),
                 ),
               ),
             )
