@@ -64,7 +64,7 @@ class AuthSelectorState extends State<AuthSelector> {
                       color: _isLoginForm
                           ? LightColorScheme.onPrimary
                           : LightColorScheme.onPrimary.withOpacity(
-                              0.75) // set the font weight of the button text
+                              0.75)
                       ),
                 ),
               ),
