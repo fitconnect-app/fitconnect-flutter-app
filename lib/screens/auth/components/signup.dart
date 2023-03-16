@@ -156,12 +156,12 @@ class SignupFormState extends State<SignupForm> {
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
                         width: 2.5, color: darkColorScheme.secondary)),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          width: 2.5, color: Colors.redAccent))),
+                errorBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide:
+                        const BorderSide(width: 2.5, color: Colors.redAccent))),
             obscureText: true,
             controller: _password,
             validator: (value) {
