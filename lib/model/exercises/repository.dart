@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fit_connect/model/config/firebase_singleton.dart';
+import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/model/exercises/model.dart';
 
 class ExerciseRepository {
