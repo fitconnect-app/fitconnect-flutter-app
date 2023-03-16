@@ -47,7 +47,13 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary)),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          width: 2.5, color: Colors.redAccent))),
               controller: _firstName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -75,7 +81,13 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary)),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          width: 2.5, color: Colors.redAccent))),
               controller: _lastName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -103,7 +115,13 @@ class SignupFormState extends State<SignupForm> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary))),
+                          width: 2.5, color: darkColorScheme.secondary)),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          width: 2.5, color: Colors.redAccent))),
               controller: _email,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -137,7 +155,13 @@ class SignupFormState extends State<SignupForm> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                        width: 2.5, color: darkColorScheme.secondary))),
+                        width: 2.5, color: darkColorScheme.secondary)),
+                errorBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide:
+                        const BorderSide(width: 2.5, color: Colors.redAccent))),
             obscureText: true,
             controller: _password,
             validator: (value) {
