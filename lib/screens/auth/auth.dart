@@ -33,8 +33,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       width: 200),
                 ),
                 const SizedBox(height: 10),
-                const Center(child: AuthSelector()),
-                const SizedBox(height: 30),
+                const Center(child: AuthSelector())
               ],
             ),
           ),
