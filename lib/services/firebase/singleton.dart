@@ -9,7 +9,7 @@ class FirebaseInstance {
   static FirebaseFirestore? _firestoreInstance;
   static FirebaseAuth? _authInstance;
 
-  static Future<FirebaseApp> get app async {
+  static Future<FirebaseApp> get initializeApp async {
     _appInstance ??= await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     return _appInstance!;

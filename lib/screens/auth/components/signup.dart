@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_connect/services/firebase_errors.dart';
+import 'package:fit_connect/services/firebase/errors.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';

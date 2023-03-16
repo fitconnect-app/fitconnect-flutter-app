@@ -37,6 +37,8 @@ dependencies:
   cloud_firestore: ^4.4.3
   cached_network_image: ^3.2.3
   firebase_analytics: ^10.1.4
+  firebase_crashlytics: ^3.0.17
+  firebase_performance: ^0.9.0+16
 
 
 dev_dependencies:
