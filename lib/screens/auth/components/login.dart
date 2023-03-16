@@ -24,7 +24,6 @@ class LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(height: 40),
           const Text('  Email',
               style: TextStyle(
                   fontSize: 16,

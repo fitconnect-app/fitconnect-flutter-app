@@ -94,10 +94,14 @@ class AuthSelectorState extends State<AuthSelector> {
           ],
         ),
         const SizedBox(height: 16.0),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 750),
-          child: _isLoginForm ? _buildLoginWidget() : _buildSignupWidget(),
-        ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 750),
+            child: _isLoginForm ? _buildLoginWidget() : _buildSignupWidget(),
+          ),
+        )
       ],
     );
   }
