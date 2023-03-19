@@ -40,6 +40,7 @@ dependencies:
   firebase_crashlytics: ^3.0.17
   firebase_performance: ^0.9.0+16
   google_fonts: ^4.0.3
+  provider: ^6.0.5
 
 
 dev_dependencies:
