@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'chart.dart';
+import 'package:fit_connect/screens/bpm/components/chart.dart';
 
 class BPMViewModel extends ChangeNotifier {
   bool _toggled = false;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'chart.dart';
-import 'bpm_viewmodel.dart';
+import 'package:fit_connect/screens/bpm/components/chart.dart';
+import 'package:fit_connect/view_model/bpm_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class BPMPage extends StatefulWidget {
-  const BPMPage({super.key});
+class BPMView extends StatefulWidget {
+  const BPMView({super.key});
 
   @override
   BPMPageView createState() {
@@ -14,7 +14,7 @@ class BPMPage extends StatefulWidget {
   }
 }
 
-class BPMPageView extends State<BPMPage> with SingleTickerProviderStateMixin {
+class BPMPageView extends State<BPMView> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
