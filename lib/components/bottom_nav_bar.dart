@@ -33,7 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.pushReplacementNamed(context, '/events');
         break;
       case 2:
-        Navigator.pushReplacementNamed(context, '/account');
+        Navigator.pushReplacementNamed(context, '/profile');
         break;
     }
   }
