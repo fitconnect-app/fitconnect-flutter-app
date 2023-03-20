@@ -23,6 +23,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
       _selectedTab = index;
     });
 
+    if (index == _selectedTab) return;
+
     switch (index) {
       case 0:
         Navigator.pushReplacementNamed(context, '/home');
