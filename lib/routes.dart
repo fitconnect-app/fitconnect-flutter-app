@@ -1,4 +1,5 @@
 import 'package:fit_connect/screens/auth/auth.dart';
+import 'package:fit_connect/screens/heart_bpm/bpm_view.dart';
 import 'package:flutter/widgets.dart';
 
 // import 'package:fit_connect/screens/account/account.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/widgets.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/auth": (BuildContext context) => const AuthScreen(),
+  "/bpm": (BuildContext context) => const BPMPage(),
   // TODO: "/events": (BuildContext context) => const EventsScreen(),
   // TODO: "/account": (BuildContext context) => const AccountScreen(),
   // TODO: "/account-edit": (BuildContext context) => AccountEditScreen(),
