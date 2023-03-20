@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'package:fit_connect/screens/bpm/components/chart.dart';
 import 'package:fit_connect/view_model/bpm_view_model.dart';
-import 'package:provider/provider.dart';
-import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class BPMView extends StatefulWidget {
-  const BPMView({super.key});
+class BPMScreen extends StatefulWidget {
+  const BPMScreen({super.key});
 
   @override
-  BPMPageView createState() {
-    return BPMPageView();
-  }
+  State<BPMScreen> createState() => _BPMScreenState();
 }
 
-class BPMPageView extends State<BPMView> with SingleTickerProviderStateMixin {
+class _BPMScreenState extends State<BPMScreen>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
