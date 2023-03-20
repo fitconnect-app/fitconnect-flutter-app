@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_connect/model/exercise/exercise_routine.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
-import 'package:fit_connect/model/exercises/model.dart';
 
 class ExerciseRepository {
   CollectionReference exercises =
