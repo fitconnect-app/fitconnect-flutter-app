@@ -165,8 +165,7 @@ class BPMViewModel extends ChangeNotifier {
         _bpm = ((1 - alpha) * this.bpm + alpha * bpm).toInt();
         notifyListeners();
       }
-      await Future.delayed(Duration(
-          milliseconds: 1000 * windowLength ~/fs)); // wait for a new set of bpmData values
+      await Future.delayed(Duration(milliseconds: 1000 *windowLength ~/ fs)); // wait for a new set of bpmData values
     }
   }
 }

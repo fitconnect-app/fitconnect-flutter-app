@@ -43,6 +43,7 @@ dependencies:
   wakelock: ^0.6.2
   charts_flutter: ^0.12.0
   provider: ^6.0.5
+  google_fonts: ^4.0.3
 
 
 dev_dependencies:

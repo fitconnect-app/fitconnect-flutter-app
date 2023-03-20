@@ -3,6 +3,7 @@ import 'chart.dart';
 import 'bpm_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BPMPage extends StatefulWidget {
   const BPMPage({super.key});
@@ -18,7 +19,10 @@ class BPMPageView extends State<BPMPage> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text("Heart Rate Monitor"),
+            title: Text("Heart Rate Monitor",
+                style: TextStyle(
+                    fontFamily: GoogleFonts.rubik().fontFamily,
+                    fontWeight: FontWeight.w700)),
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_sharp),
