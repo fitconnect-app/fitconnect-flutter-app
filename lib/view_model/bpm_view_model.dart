@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:fit_connect/screens/bpm/components/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:fit_connect/screens/bpm/components/chart.dart';
 
 class BPMViewModel extends ChangeNotifier {
   bool _toggled = false;
@@ -165,7 +165,8 @@ class BPMViewModel extends ChangeNotifier {
         _bpm = ((1 - alpha) * this.bpm + alpha * bpm).toInt();
         notifyListeners();
       }
-      await Future.delayed(Duration(milliseconds: 1000 *windowLength ~/ fs)); // wait for a new set of bpmData values
+      // Wait for a new set of bpmData values
+      await Future.delayed(Duration(milliseconds: (1000 * windowLength ~/ fs)));
     }
   }
 }
