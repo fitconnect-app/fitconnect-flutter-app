@@ -44,6 +44,7 @@ dependencies:
   charts_flutter: ^0.12.0
   provider: ^6.0.5
   google_fonts: ^4.0.3
+  flutter_screenutil: ^5.7.0
 
 
 dev_dependencies:
