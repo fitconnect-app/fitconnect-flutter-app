@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import '/services/firebase/singleton.dart';
 import 'services/firebase/config.dart';
-import 'routes.dart';
 import 'theme/style.dart';
+import 'utils/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
