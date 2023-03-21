@@ -5,15 +5,45 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fit_connect/screens/home/components/sport_card.dart';
 import 'package:fit_connect/screens/home/components/feature_button.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  HomeScreenState createState() => HomeScreenState();
+}
+
+class HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text('Home',
+            style: TextStyle(
+              fontFamily: GoogleFonts.rubik().fontFamily,
+              fontWeight: FontWeight.w700,
+            )),
         centerTitle: true,
       ),
       body: Column(
@@ -92,6 +122,7 @@ class HomeScreen extends StatelessWidget {
               imagePath: x.image,
               tag: x.tag,
               onTap: () {},
-            )).toList();
+            ))
+        .toList();
   }
 }
