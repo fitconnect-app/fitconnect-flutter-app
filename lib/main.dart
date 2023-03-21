@@ -12,9 +12,7 @@ Future<void> main() async {
   await initializeFirebase();
 
   User? user = FirebaseInstance.auth.currentUser;
-  String initialRoute = '/auth';
-  //String initialRoute = '/profile';
-  // TODO: String initialRoute = user == null ? '/signup' : '/home';
+  String initialRoute = user == null ? '/auth' : '/home';
 
   // Run app
   runApp(MyApp(initialRoute: initialRoute));
