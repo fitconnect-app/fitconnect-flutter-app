@@ -1,3 +1,4 @@
+import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -165,7 +166,8 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
+        bottomNavigationBar: const BottomNavBar(selectedTab: 2)
     );
   }
 }
