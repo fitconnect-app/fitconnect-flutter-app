@@ -23,6 +23,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
       _selectedTab = index;
     });
 
+    if (index == widget.selectedTab) return;
+
     switch (index) {
       case 0:
         Navigator.pushReplacementNamed(context, '/home');
@@ -31,7 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.pushReplacementNamed(context, '/events');
         break;
       case 2:
-        Navigator.pushReplacementNamed(context, '/account');
+        Navigator.pushReplacementNamed(context, '/profile');
         break;
     }
   }
