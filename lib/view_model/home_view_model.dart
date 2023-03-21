@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fit_connect/model/shared/sports.dart';
 
 class HomeViewModel extends ChangeNotifier {
   List<SportCardInfo>? _sports;
@@ -13,22 +14,22 @@ class HomeViewModel extends ChangeNotifier {
   void getSports() {
     _sports = [
       SportCardInfo(
-        title: 'Basketball',
+        title: Sports.basketball.getString(),
         image: 'assets/images/basketball_card.webp',
         tag: 'basketball_events',
       ),
       SportCardInfo(
-        title: 'Football',
+        title: Sports.football.getString(),
         image: 'assets/images/football_card.jpg',
         tag: 'football_events',
       ),
       SportCardInfo(
-        title: 'Volleyball',
+        title: Sports.volleyball.getString(),
         image: 'assets/images/volleyball_card.jpg',
         tag: 'volleyball_events',
       ),
       SportCardInfo(
-        title: 'Tennis',
+        title: Sports.tennis.getString(),
         image: 'assets/images/tennis_card.jpg',
         tag: 'tennis_events',
       ),
