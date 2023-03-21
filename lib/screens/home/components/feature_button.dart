@@ -23,7 +23,7 @@ class FeatureButton extends StatelessWidget {
           height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.grey[200],
+            color: lightColorScheme.primaryContainer,
           ),
           child: TextButton(
             onPressed: onPressed,
