@@ -1,4 +1,5 @@
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,12 +23,25 @@ class ProfileScreen extends StatelessWidget {
             PopupMenuButton(
               itemBuilder: (BuildContext context) => [
                 const PopupMenuItem(
+                  value: 0,
                   child: Text('Settings'),
                 ),
                 const PopupMenuItem(
+                  value: 1,
                   child: Text('Logout'),
-                ),
+                )
               ],
+              onSelected: (value) {
+                switch (value) {
+                  case 0:
+                    //TODO: Navigate to settings if settings will be a thing
+                    break;
+                  case 1:
+                    FirebaseInstance.auth.signOut();
+                    Navigator.pushReplacementNamed(context, '/auth');
+                    break;
+                }
+              },
             ),
           ],
         ),
@@ -167,7 +181,6 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: const BottomNavBar(selectedTab: 2)
-    );
+        bottomNavigationBar: const BottomNavBar(selectedTab: 2));
   }
 }
