@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:fit_connect/view_model/stats_view_model.dart';
 
 class StatsBarChart extends StatelessWidget {
-  final List<Data> data;
+  final List<DataStats> data;
 
   const StatsBarChart({super.key, required this.data});
 
