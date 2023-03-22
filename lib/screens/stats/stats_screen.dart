@@ -24,7 +24,7 @@ class StatsScreen extends StatelessWidget {
                 children: [
                   const Padding(
                       padding: EdgeInsets.all(10.0),
-                      child: Text('Most searched/played sports per week:')),
+                      child: Text('Your Top Played Sports of the Week\n(Total Sport Count)', style: TextStyle(fontSize: 18))),
                   const SizedBox(height: 10),
                   SizedBox(
                       height: 200,
@@ -37,7 +37,9 @@ class StatsScreen extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
-                        'Most frequent hours where you create or attend events:'),
+                        "When are You Most Active During the Week?\n(Most frequent hours)",
+                        style: TextStyle(fontSize: 18)
+                      ),
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
@@ -52,7 +54,9 @@ class StatsScreen extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
-                        'Hours practiced a specific sport during the week:'),
+                        'How Much Have You Practiced Your Favorite Sports?\n(Hours Practiced)',
+                        style: TextStyle(fontSize: 18)
+                      ),
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
