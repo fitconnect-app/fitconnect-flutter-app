@@ -29,7 +29,7 @@ class UserModel {
     for (String achievementId in achievementsIDs) {
       AchievementModel? achievement =
           await achievementRepo.getAchievement(achievementId);
-      if (achievement != null) {
+      if (achievement != null && !achievements.contains(achievement)) {
         achievements.add(achievement);
       }
     }
