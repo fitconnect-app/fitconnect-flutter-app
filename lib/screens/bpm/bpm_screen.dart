@@ -23,8 +23,7 @@ class _BPMScreenState extends State<BPMScreen>
                     fontFamily: GoogleFonts.rubik().fontFamily,
                     fontWeight: FontWeight.w700)),
             centerTitle: true,
-            leading: const BackButton(color: Colors.black)
-            ),
+            leading: const BackButton(color: Colors.black)),
         body: ChangeNotifierProvider<BPMViewModel>(
           create: (_) => BPMViewModel(this),
           child: Scaffold(
