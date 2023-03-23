@@ -33,19 +33,16 @@ class SportCard extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(26),
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  darkColorScheme.secondaryContainer,
-                  Colors.transparent
-                ]
-              ),
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    darkColorScheme.secondaryContainer,
+                    Colors.transparent
+                  ]),
               image: DecorationImage(
                   image: AssetImage(imagePath!),
                   fit: BoxFit.cover,
-                  opacity: 0.8
-                  )
-                ),
+                  opacity: 0.8)),
           child: SizedBox(
             width: 305,
             child: Stack(
