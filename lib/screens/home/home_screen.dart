@@ -111,9 +111,9 @@ class HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 25),
-          const BottomNavBar(selectedTab: 0),
         ],
       ),
+      bottomNavigationBar: const BottomNavBar(selectedTab: 0),
     );
   }
 
