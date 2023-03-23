@@ -20,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
               body: Center(
                 child: CircularProgressIndicator(),
               ),
+              bottomNavigationBar: BottomNavBar(selectedTab: 2)
             );
           }
           else {
@@ -130,7 +131,8 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              bottomNavigationBar: const BottomNavBar(selectedTab: 2));
+              bottomNavigationBar: const BottomNavBar(selectedTab: 2)
+            );
           }
         }
       )
