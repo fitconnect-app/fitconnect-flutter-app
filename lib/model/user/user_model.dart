@@ -29,8 +29,10 @@ class UserModel {
     for (String achievementId in achievementsIDs) {
       AchievementModel? achievement =
           await achievementRepo.getAchievement(achievementId);
-      var exists = achievements.singleWhere((element) => element?.id == achievement?.id, orElse: () => null);
-      if (achievement != null && exists == null) {
+      var achievementAlreadyInsertedFound = achievements.firstWhere(
+          (element) => element?.id == achievement?.id,
+          orElse: () => null);
+      if (achievement != null && achievementAlreadyInsertedFound == null) {
         achievements.add(achievement);
       }
     }
