@@ -56,7 +56,7 @@ class UserDTO {
       profilePicture: profilePicture,
       fitconnectPoints: fitconnectPoints,
       eventStreak: eventStreak,
-      achievements: achievements,
+      achievementsIDs: achievements,
     )..id = id;
   }
 
@@ -68,7 +68,7 @@ class UserDTO {
       profilePicture: model.profilePicture,
       fitconnectPoints: model.fitconnectPoints,
       eventStreak: model.eventStreak,
-      achievements: model.achievements,
+      achievements: model.achievementsIDs,
     )..id = model.id;
   }
 }

@@ -1,3 +1,6 @@
+import '../achievement/achievement_model.dart';
+import '../achievement/achievement_repository.dart';
+
 class UserModel {
   String? id;
   String firstName;
@@ -6,7 +9,8 @@ class UserModel {
   String profilePicture;
   int fitconnectPoints;
   int eventStreak;
-  List<String> achievements;
+  List<String> achievementsIDs;
+  List<AchievementModel> achievements = [];
 
   UserModel({
     required this.firstName,
@@ -15,8 +19,20 @@ class UserModel {
     required this.profilePicture,
     required this.fitconnectPoints,
     required this.eventStreak,
-    required this.achievements,
+    required this.achievementsIDs,
   });
 
   set setId(String? id) => this.id = id;
+
+  Future<List<AchievementModel>> getAchievements() async {
+    AchievementRepository achievementRepo = AchievementRepository();
+    for (String achievementId in achievementsIDs) {
+      AchievementModel? achievement =
+          await achievementRepo.getAchievement(achievementId);
+      if (achievement != null) {
+        achievements.add(achievement);
+      }
+    }
+    return achievements;
+  }
 }
