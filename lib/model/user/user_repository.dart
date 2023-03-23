@@ -15,14 +15,6 @@ class UserRepository {
     }
   }
 
-  Stream<List<UserModel>> getUsers({int? limit}) {
-    return users.limit(limit ?? 5).snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => UserDTO.fromMap(doc).toModel())
-          .toList();
-    });
-  }
-
   Future<UserModel> createUser(UserDTO user) async {
     final docRef = await users.add(user.toMap());
     user.setId = docRef.id;
