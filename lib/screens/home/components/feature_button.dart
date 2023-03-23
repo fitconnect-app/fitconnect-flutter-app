@@ -40,13 +40,11 @@ class FeatureButton extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 14,
-            fontFamily: GoogleFonts.rubik().fontFamily
-          ),
+              color: Colors.black,
+              fontSize: 14,
+              fontFamily: GoogleFonts.rubik().fontFamily),
         ),
       ],
     );
   }
 }
-
