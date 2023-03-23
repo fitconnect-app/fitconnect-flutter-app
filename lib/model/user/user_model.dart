@@ -10,7 +10,7 @@ class UserModel {
   int fitconnectPoints;
   int eventStreak;
   List<String> achievementsIDs;
-  List<AchievementModel> achievements = [];
+  List<AchievementModel?> achievements = [];
 
   UserModel({
     required this.firstName,
@@ -24,12 +24,15 @@ class UserModel {
 
   set setId(String? id) => this.id = id;
 
-  Future<List<AchievementModel>> getAchievements() async {
+  Future<List<AchievementModel?>> getAchievements() async {
     AchievementRepository achievementRepo = AchievementRepository();
     for (String achievementId in achievementsIDs) {
       AchievementModel? achievement =
           await achievementRepo.getAchievement(achievementId);
-      if (achievement != null && !achievements.contains(achievement)) {
+      var achievementAlreadyInsertedFound = achievements.firstWhere(
+          (element) => element?.id == achievement?.id,
+          orElse: () => null);
+      if (achievement != null && achievementAlreadyInsertedFound == null) {
         achievements.add(achievement);
       }
     }

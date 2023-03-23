@@ -44,7 +44,7 @@ class UserDTO {
       profilePicture: data['profilePicture'],
       fitconnectPoints: data['fitconnectPoints'],
       eventStreak: data['eventStreak'],
-      achievements: data['achievements'],
+      achievements: List<String>.from(data['achievements']),
     )..id = document.id;
   }
 
