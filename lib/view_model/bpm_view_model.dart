@@ -80,13 +80,15 @@ class BPMViewModel extends ChangeNotifier {
     });
   }
 
-  void untoggle() {
-    _disposeController();
-    Wakelock.disable();
-    _animationController?.stop();
-    _animationController?.value = 0.0;
-    _toggled = false;
-    notifyListeners();
+  void untoggle({dispose = false}) {
+    if (_toggled){
+        _disposeController();
+      Wakelock.disable();
+      _animationController?.stop();
+      _animationController?.value = 0.0;
+      _toggled = false;
+      !dispose ? notifyListeners() : null;
+    }
   }
 
   void _disposeController() {
@@ -169,4 +171,5 @@ class BPMViewModel extends ChangeNotifier {
       await Future.delayed(Duration(milliseconds: (1000 * windowLength ~/ fs)));
     }
   }
+
 }
