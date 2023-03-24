@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/events/events_screen.dart';
+
 class BottomNavBar extends StatefulWidget {
   final int selectedTab;
 
@@ -30,7 +32,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.pushReplacementNamed(context, '/home');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/events');
+        Navigator.pushReplacementNamed(
+          context,
+          '/events',
+          arguments: EventsScreenArguments(null),
+        );
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/profile');
