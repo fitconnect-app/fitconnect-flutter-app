@@ -10,6 +10,8 @@ class EventDTO {
   final int spotsAvailable;
   final Timestamp startDate;
   final Timestamp endDate;
+  final List<String> participants;
+  final String eventOwner;
 
   EventDTO({
     this.id,
@@ -19,10 +21,12 @@ class EventDTO {
     required this.spotsAvailable,
     required this.startDate,
     required this.endDate,
+    required this.participants,
+    required this.eventOwner,
   });
 
   set setId(String? id) => this.id = id;
-  
+
   Map<String, dynamic> toMap() {
     return {
       'sport': sport.getString(),
@@ -31,6 +35,8 @@ class EventDTO {
       'spotsAvailable': spotsAvailable,
       'startDate': startDate,
       'endDate': endDate,
+      'participants': participants,
+      'eventOwner': eventOwner,
     };
   }
 
@@ -45,6 +51,8 @@ class EventDTO {
       spotsAvailable: data['spotsAvailable'],
       startDate: data['startDate'],
       endDate: data['endDate'],
+      participants: List<String>.from(data['participants']),
+      eventOwner: data['eventOwner'],
     );
   }
 
@@ -56,6 +64,8 @@ class EventDTO {
       spotsAvailable: spotsAvailable,
       startDate: startDate,
       endDate: endDate,
+      participants: participants,
+      eventOwner: eventOwner,
     )..id = id;
   }
 
@@ -68,6 +78,8 @@ class EventDTO {
       spotsAvailable: model.spotsAvailable,
       startDate: model.startDate,
       endDate: model.endDate,
+      participants: model.participants,
+      eventOwner: model.eventOwner,
     );
   }
 }
