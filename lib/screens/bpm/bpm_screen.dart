@@ -92,7 +92,7 @@ class _BPMScreenState extends State<BPMScreen>
                                       padding: const EdgeInsets.all(4),
                                       child: Text(
                                         model.toggled
-                                            ? "Cover both the camera and the flash with your finger"
+                                            ? "Cover both the camera and the flash with your wrist or back of your hand"
                                             : "Camera feed will display here",
                                         style: TextStyle(
                                             backgroundColor: model.toggled
@@ -144,22 +144,37 @@ class _BPMScreenState extends State<BPMScreen>
                   child: Consumer<BPMViewModel>(
                     builder: (_, model, __) {
                       return Center(
-                        child: Transform.scale(
-                          scale: model.iconScale,
-                          child: IconButton(
-                            icon: Icon(model.toggled
-                                ? Icons.favorite
-                                : Icons.favorite_border),
-                            color: Colors.red,
-                            iconSize: 128,
-                            onPressed: () {
-                              if (model.toggled) {
-                                model.untoggle();
-                              } else {
-                                model.toggle();
-                              }
-                            },
-                          ),
+                        child: Column(
+                          children: [
+                            Transform.scale(
+                              scale: model.iconScale,
+                              child: IconButton(
+                                icon: Icon(model.toggled
+                                    ? Icons.favorite
+                                    : Icons.favorite_border),
+                                color: Colors.red,
+                                iconSize: 128,
+                                onPressed: () {
+                                  if (model.toggled) {
+                                    model.untoggle();
+                                  } else {
+                                    model.toggle();
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              model.toggled
+                                  ? "Tap the heart to stop measuring"
+                                  : "Tap the heart to start measuring",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontFamily: GoogleFonts.rubik().fontFamily,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
