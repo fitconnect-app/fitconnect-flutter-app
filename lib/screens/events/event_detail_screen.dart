@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fit_connect/components/bottom_nav_bar.dart';
 
 class EventDetails extends StatelessWidget {
   final String subtitle;
@@ -7,7 +8,7 @@ class EventDetails extends StatelessWidget {
   final String spotsAvailable;
   final List<String> participants;
 
-  EventDetails({
+  EventDetails({super.key, 
     required this.subtitle,
     required this.description,
     required this.organizer,
@@ -22,17 +23,10 @@ class EventDetails extends StatelessWidget {
         title: Text('Event Details'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Text(
-                'Event Details',
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 10.0),
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
@@ -69,6 +63,7 @@ class EventDetails extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(selectedTab: 1),
     );
   }
 }
