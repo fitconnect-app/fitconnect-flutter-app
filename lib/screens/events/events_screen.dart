@@ -41,6 +41,9 @@ class _EventsScreenState extends State<EventsScreen> {
               title: const Text('Find an event'),
               centerTitle: true,
               automaticallyImplyLeading: false,
+              actions: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+              ],
             ),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
