@@ -16,8 +16,7 @@ class UserRepository {
   }
 
   Future<UserModel> createUser(UserDTO user) async {
-    final docRef = await users.add(user.toMap());
-    user.setId = docRef.id;
+    await users.doc(user.id).set(user.toMap());
     return user.toModel();
   }
 

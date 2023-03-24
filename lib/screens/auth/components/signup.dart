@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/firebase/errors.dart';
 import 'package:fit_connect/theme/style.dart';
+import 'package:fit_connect/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -14,7 +14,7 @@ class SignupForm extends StatefulWidget {
 }
 
 class SignupFormState extends State<SignupForm> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthViewModel viewModel = AuthViewModel();
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -232,17 +232,12 @@ class SignupFormState extends State<SignupForm> {
 
   Future<void> _registerUser(BuildContext context) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: _email.text, password: _password.text);
-      // Store user in Firestore
-      var uid = _auth.currentUser?.uid;
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
-      users.doc(uid).set({
-        'first-name': _firstName.text,
-        'last-name': _lastName.text,
-        'email': _email.text,
-      });
+      await viewModel.signup(
+        _firstName.text,
+        _lastName.text,
+        _email.text,
+        _password.text,
+      );
 
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
