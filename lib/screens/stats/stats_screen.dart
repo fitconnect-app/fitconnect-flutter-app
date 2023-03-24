@@ -35,7 +35,8 @@ class StatsScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 18))),
                     SizedBox(
                         height: 200,
-                        child: _buildStatsBarChart(viewModel.mostSearchedSports)),
+                        child:
+                            _buildStatsBarChart(viewModel.mostSearchedSports)),
                     const Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
@@ -44,7 +45,8 @@ class StatsScreen extends StatelessWidget {
                     ),
                     SizedBox(
                         height: 200,
-                        child: _buildStatsBarChart(viewModel.mostFrequentHours)),
+                        child:
+                            _buildStatsBarChart(viewModel.mostFrequentHours)),
                     const Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
@@ -74,8 +76,7 @@ Widget _buildStatsBarChart(List<DataStats> data) {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 15,
-          )
-        ),
+          )),
     );
   }
   return Padding(

@@ -104,7 +104,8 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
       (index) => DataStats(
         id: index,
         label: sportHourCount.keys.elementAt(index),
-        yValue: double.parse(sportHourCount.values.elementAt(index).toStringAsFixed(3)),
+        yValue: double.parse(
+            sportHourCount.values.elementAt(index).toStringAsFixed(3)),
         color: lightColorScheme.tertiary,
       ),
     );

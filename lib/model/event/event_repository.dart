@@ -49,7 +49,8 @@ class EventRepository {
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
         .get();
-    List<DocumentSnapshot> allRecentEvents = ownedEvents.docs + joinedEvents.docs;
+    List<DocumentSnapshot> allRecentEvents =
+        ownedEvents.docs + joinedEvents.docs;
 
     return allRecentEvents
         .map((doc) => EventDTO.fromMap(doc).toModel())
