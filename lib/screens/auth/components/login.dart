@@ -24,51 +24,55 @@ class LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('  Email',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  Email',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
             controller: _email,
             decoration: InputDecoration(
-                filled: true,
-                fillColor: lightColorScheme.onPrimary,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                isDense: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                        width: 2.5, color: darkColorScheme.secondary))),
+              filled: true,
+              fillColor: lightColorScheme.onPrimary,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    BorderSide(width: 2.5, color: darkColorScheme.secondary),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
-          const Text('  Password',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  Password',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
             obscureText: true,
             controller: _password,
             decoration: InputDecoration(
-                filled: true,
-                fillColor: lightColorScheme.onPrimary,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                isDense: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                        width: 2.5, color: darkColorScheme.secondary))),
+              filled: true,
+              fillColor: lightColorScheme.onPrimary,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    BorderSide(width: 2.5, color: darkColorScheme.secondary),
+              ),
+            ),
           ),
           const SizedBox(height: 40),
           Center(
@@ -78,10 +82,11 @@ class LoginFormState extends State<LoginForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: lightColorScheme.scrim,
-                        foregroundColor: lightColorScheme.onSecondary,
-                        side: BorderSide(
-                            width: 0.5, color: lightColorScheme.onSecondary)),
+                      backgroundColor: lightColorScheme.scrim,
+                      foregroundColor: lightColorScheme.onSecondary,
+                      side: BorderSide(
+                          width: 0.5, color: lightColorScheme.onSecondary),
+                    ),
                     onPressed: () {
                       _loginUser(context);
                     },
@@ -109,10 +114,12 @@ class LoginFormState extends State<LoginForm> {
       MotionToast.error(
         position: MotionToastPosition.top,
         animationType: AnimationType.fromTop,
-        title: const Text("Error",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+        title: const Text(
+          "Error",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         description: const Text('Login failed'),
       ).show(context);
     }

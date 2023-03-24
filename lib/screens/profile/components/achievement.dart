@@ -14,13 +14,14 @@ class AchievementWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-            width: 112,
-            height: 112,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image:
-                  DecorationImage(image: CachedNetworkImageProvider(imagePath)),
-            )),
+          width: 112,
+          height: 112,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image:
+                DecorationImage(image: CachedNetworkImageProvider(imagePath)),
+          ),
+        ),
         const SizedBox(height: 8),
         SizedBox(
           width: 112,
@@ -31,7 +32,7 @@ class AchievementWidget extends StatelessWidget {
               fontWeight: FontWeight.w300,
               fontSize: 16,
               fontFamily: GoogleFonts.rubik().fontFamily,
-            )
+            ),
           ),
         )
       ],
