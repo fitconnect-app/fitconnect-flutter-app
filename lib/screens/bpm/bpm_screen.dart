@@ -13,7 +13,30 @@ class BPMScreen extends StatefulWidget {
 }
 
 class _BPMScreenState extends State<BPMScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  late BPMViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = BPMViewModel(this);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      _viewModel.untoggle();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +50,7 @@ class _BPMScreenState extends State<BPMScreen>
           centerTitle: true,
           leading: const BackButton(color: Colors.black)),
       body: ChangeNotifierProvider<BPMViewModel>(
-        create: (_) => BPMViewModel(this),
+        create: (_) => _viewModel,
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
