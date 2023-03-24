@@ -18,8 +18,7 @@ class ProfileViewModel extends ChangeNotifier {
     getProfile().then((_) {
       _state = ProfileState.completed;
       notifyListeners();
-    }
-    );
+    });
   }
 
   Future<void> getProfile() async {
