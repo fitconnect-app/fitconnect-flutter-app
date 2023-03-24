@@ -28,32 +28,35 @@ class SignupFormState extends State<SignupForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('  First Name',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  First Name',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: lightColorScheme.onPrimary,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  isDense: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary)),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          width: 2.5, color: Colors.redAccent))),
+                filled: true,
+                fillColor: lightColorScheme.onPrimary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                isDense: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      BorderSide(width: 2.5, color: darkColorScheme.secondary),
+                ),
+                errorBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      const BorderSide(width: 2.5, color: Colors.redAccent),
+                ),
+              ),
               controller: _firstName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -62,32 +65,35 @@ class SignupFormState extends State<SignupForm> {
                 return null;
               }),
           const SizedBox(height: 15),
-          const Text('  Last Name',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  Last Name',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: lightColorScheme.onPrimary,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  isDense: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary)),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          width: 2.5, color: Colors.redAccent))),
+                filled: true,
+                fillColor: lightColorScheme.onPrimary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                isDense: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      BorderSide(width: 2.5, color: darkColorScheme.secondary),
+                ),
+                errorBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      const BorderSide(width: 2.5, color: Colors.redAccent),
+                ),
+              ),
               controller: _lastName,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -96,32 +102,35 @@ class SignupFormState extends State<SignupForm> {
                 return null;
               }),
           const SizedBox(height: 15),
-          const Text('  Email',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  Email',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: lightColorScheme.onPrimary,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  isDense: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                          width: 2.5, color: darkColorScheme.secondary)),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                          width: 2.5, color: Colors.redAccent))),
+                filled: true,
+                fillColor: lightColorScheme.onPrimary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                isDense: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      BorderSide(width: 2.5, color: darkColorScheme.secondary),
+                ),
+                errorBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide:
+                      const BorderSide(width: 2.5, color: Colors.redAccent),
+                ),
+              ),
               controller: _email,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -136,32 +145,35 @@ class SignupFormState extends State<SignupForm> {
                 _formKey.currentState!.validate();
               }),
           const SizedBox(height: 15),
-          const Text('  Password',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            '  Password',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           const SizedBox(height: 5),
           TextFormField(
             decoration: InputDecoration(
-                filled: true,
-                fillColor: lightColorScheme.onPrimary,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                isDense: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                        width: 2.5, color: darkColorScheme.secondary)),
-                errorBorder:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide:
-                        const BorderSide(width: 2.5, color: Colors.redAccent))),
+              filled: true,
+              fillColor: lightColorScheme.onPrimary,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    BorderSide(width: 2.5, color: darkColorScheme.secondary),
+              ),
+              errorBorder:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide:
+                    const BorderSide(width: 2.5, color: Colors.redAccent),
+              ),
+            ),
             obscureText: true,
             controller: _password,
             validator: (value) {
@@ -196,10 +208,12 @@ class SignupFormState extends State<SignupForm> {
                         MotionToast.error(
                           position: MotionToastPosition.top,
                           animationType: AnimationType.fromTop,
-                          title: const Text("Error",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              )),
+                          title: const Text(
+                            "Error",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           description: const Text("There is some invalid data"),
                         ).show(context);
                       }
@@ -235,10 +249,12 @@ class SignupFormState extends State<SignupForm> {
         MotionToast.success(
           position: MotionToastPosition.top,
           animationType: AnimationType.fromTop,
-          title: const Text("Successful user registration",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              )),
+          title: const Text(
+            "Successful user registration",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           description: const Text('¡You are ready for fit connecting!'),
         ).show(context);
       }
@@ -252,10 +268,12 @@ class SignupFormState extends State<SignupForm> {
       MotionToast.error(
         position: MotionToastPosition.top,
         animationType: AnimationType.fromTop,
-        title: const Text("Error",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+        title: const Text(
+          "Error",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         description: Text(errorMessage),
       ).show(context);
     }
