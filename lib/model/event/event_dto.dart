@@ -45,7 +45,7 @@ class EventDTO {
     return EventDTO(
       id: document.id,
       sport: Sports.values
-          .firstWhere((e) => e.toString().split('.').last == data['sport']),
+          .firstWhere((e) => e.getString() == data['sport']),
       playersNeeded: data['playersNeeded'],
       playersBrought: data['playersBrought'],
       spotsAvailable: data['spotsAvailable'],

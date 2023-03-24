@@ -36,4 +36,23 @@ class EventRepository {
   Future<void> deleteEvent(String id) async {
     await events.doc(id).delete();
   }
+
+  Future<List<EventModel>> getMostRecentUserEvents(String userId) async {
+    final DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
+    var ownedEvents = await events
+        .where('eventOwner', isEqualTo: userId)
+        .where('startDate',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
+        .get();
+    var joinedEvents = await events
+        .where('participants', arrayContains: userId)
+        .where('startDate',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
+        .get();
+    List<DocumentSnapshot> allRecentEvents = ownedEvents.docs + joinedEvents.docs;
+
+    return allRecentEvents
+        .map((doc) => EventDTO.fromMap(doc).toModel())
+        .toList();
+  }
 }

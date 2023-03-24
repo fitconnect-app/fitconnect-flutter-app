@@ -54,8 +54,8 @@ class StatsBarChart extends StatelessWidget {
               axisNameSize: 0,
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 20,
-                interval: 1,
+                reservedSize: 30,
+                interval: 3,
               ),
             ),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
