@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
   final String id;
@@ -10,7 +10,7 @@ class EventCard extends StatelessWidget {
   final Timestamp startDate;
   final Timestamp endDate;
   final int spotsAvailable;
-  final String imageUrl;
+  final String image;
 
   const EventCard({
     Key? key,
@@ -20,7 +20,7 @@ class EventCard extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     required this.spotsAvailable,
-    required this.imageUrl,
+    required this.image,
   }) : super(key: key);
 
   bool _isActiveEvent() {
@@ -35,6 +35,18 @@ class EventCard extends StatelessWidget {
       return false;
     }
     return true;
+  }
+
+  String _getFormattedDate(DateTime date) {
+    // Format the date in the desired format
+    final formatter = DateFormat('EEEE MMMM d, h:mm a');
+    return formatter.format(date);
+  }
+
+  String _getFormattedHour(DateTime date) {
+    // Format the date in the desired format
+    final formatter = DateFormat('h:mm a');
+    return formatter.format(date);
   }
 
   @override
@@ -66,7 +78,7 @@ class EventCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: 140.0,
+              height: 160.0,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -76,9 +88,9 @@ class EventCard extends StatelessWidget {
                   bottomRight: Radius.circular(8.0),
                 ),
                 image: DecorationImage(
-                  image: CachedNetworkImageProvider(imageUrl),
+                  image: AssetImage(image),
                   fit: BoxFit.cover,
-                  opacity: 0.8,
+                  opacity: 0.5,
                 ),
               ),
             ),
@@ -91,20 +103,20 @@ class EventCard extends StatelessWidget {
                     sport,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                        fontSize: 20.0,
                         color: Colors.white),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 6.0),
                   Text(
                     location,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14.0, color: Colors.white),
+                    style: const TextStyle(fontSize: 16.0, color: Colors.white),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 2.0),
                   Text(
-                    '$startDate - $endDate',
+                    '${_getFormattedDate(startDate.toDate())} - ${_getFormattedHour(endDate.toDate())}',
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14.0, color: Colors.white),
+                    style: const TextStyle(fontSize: 16.0, color: Colors.white),
                   ),
                   const SizedBox(height: 14.0),
                   Align(
@@ -114,8 +126,8 @@ class EventCard extends StatelessWidget {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0)),
                         color: _isActiveEvent()
-                            ? darkColorScheme.tertiaryContainer
-                            : darkColorScheme.secondaryContainer,
+                            ? darkColorScheme.primaryContainer
+                            : lightColorScheme.error,
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 4.0, horizontal: 8.0),

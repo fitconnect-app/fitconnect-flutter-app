@@ -19,7 +19,7 @@ class EventsViewModel extends ChangeNotifier {
   }
 
   Future<void> getEvents() async {
-    _events = await _eventRepository.getEvents();
+    _events = await _eventRepository.getEvents(limit: 10);
   }
 }
 

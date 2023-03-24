@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:fit_connect/model/shared/sports.dart';
-import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/events_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +29,8 @@ class _EventsScreenState extends State<EventsScreen> {
         } else {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: lightColorScheme.primary,
-              foregroundColor: lightColorScheme.onPrimary,
-              title: const Text('Find a event'),
+              title: const Text('Find an event'),
+              centerTitle: true,
               automaticallyImplyLeading: false,
             ),
             body: Padding(
@@ -50,7 +48,8 @@ class _EventsScreenState extends State<EventsScreen> {
                       startDate: event?.startDate ?? Timestamp.now(),
                       endDate: event?.endDate ?? Timestamp.now(),
                       spotsAvailable: event?.spotsAvailable ?? 0,
-                      imageUrl: 'https://picsum.photos/300',
+                      image: event?.sport.getImage() ??
+                          'assets/images/events/other.jpeg',
                     ),
                   );
                 },
