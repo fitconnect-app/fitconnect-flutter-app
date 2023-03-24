@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/model/user/user_model.dart';
 
 class UserDTO {
-  String? id;
+  final String id;
   final String firstName;
   final String lastName;
   final String email;
@@ -12,6 +12,7 @@ class UserDTO {
   final List<String> achievements;
 
   UserDTO({
+    required this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -20,8 +21,6 @@ class UserDTO {
     required this.eventStreak,
     required this.achievements,
   });
-
-  set setId(String? id) => this.id = id;
 
   Map<String, dynamic> toMap() {
     return {
@@ -38,6 +37,7 @@ class UserDTO {
   factory UserDTO.fromMap(DocumentSnapshot document) {
     final data = document.data() as Map<String, dynamic>;
     return UserDTO(
+      id: document.id,
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
@@ -45,11 +45,12 @@ class UserDTO {
       fitconnectPoints: data['fitconnectPoints'],
       eventStreak: data['eventStreak'],
       achievements: List<String>.from(data['achievements']),
-    )..id = document.id;
+    );
   }
 
   UserModel toModel() {
     return UserModel(
+      id: id,
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -57,11 +58,12 @@ class UserDTO {
       fitconnectPoints: fitconnectPoints,
       eventStreak: eventStreak,
       achievementsIDs: achievements,
-    )..id = id;
+    );
   }
 
   factory UserDTO.fromModel(UserModel model) {
     return UserDTO(
+      id: model.id,
       firstName: model.firstName,
       lastName: model.lastName,
       email: model.email,
@@ -69,6 +71,6 @@ class UserDTO {
       fitconnectPoints: model.fitconnectPoints,
       eventStreak: model.eventStreak,
       achievements: model.achievementsIDs,
-    )..id = model.id;
+    );
   }
 }

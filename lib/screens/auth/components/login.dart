@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/theme/style.dart';
+import 'package:fit_connect/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -12,7 +12,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class LoginFormState extends State<LoginForm> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthViewModel viewModel = AuthViewModel();
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -104,8 +104,7 @@ class LoginFormState extends State<LoginForm> {
 
   Future<void> _loginUser(BuildContext context) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: _email.text, password: _password.text);
+      await viewModel.login(_email.text, _password.text);
 
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
