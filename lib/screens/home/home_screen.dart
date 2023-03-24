@@ -93,7 +93,9 @@ class HomeScreenState extends State<HomeScreen> {
                 FeatureButton(
                   icon: Icons.event,
                   label: 'Events',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/events');
+                  },
                 ),
                 FeatureButton(
                   icon: Icons.favorite,
