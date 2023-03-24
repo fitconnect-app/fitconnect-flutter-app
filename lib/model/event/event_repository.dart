@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_dto.dart';
+import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 
 class EventRepository {
@@ -15,8 +15,18 @@ class EventRepository {
     }
   }
 
-  Stream<List<EventModel>> getEvents({int? limit}) {
-    return events.limit(limit ?? 5).snapshots().map((snapshot) {
+  Stream<List<EventModel>> getEvents({int? limit, String? sport}) {
+    Query query = events;
+
+    if (sport != null) {
+      query = query.where('sport', isEqualTo: sport);
+    }
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+
+    return query.snapshots().map((snapshot) {
       return snapshot.docs
           .map((doc) => EventDTO.fromMap(doc).toModel())
           .toList();
