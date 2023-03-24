@@ -1,11 +1,11 @@
+import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/screens/home/components/feature_button.dart';
+import 'package:fit_connect/screens/home/components/sport_card.dart';
 import 'package:fit_connect/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fit_connect/components/bottom_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:fit_connect/screens/home/components/sport_card.dart';
-import 'package:fit_connect/screens/home/components/feature_button.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,22 +60,23 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ChangeNotifierProvider<HomeViewModel>(
-                create: (_) => HomeViewModel(),
-                child: Consumer<HomeViewModel>(
-                  builder: (_, model, __) {
-                    return Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        padding: const EdgeInsets.all(16),
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        scrollDirection: Axis.horizontal,
-                        childAspectRatio: 1 / 1.6,
-                        children: getSportWidgets(model.sports),
-                      ),
-                    );
-                  },
-                )),
+              create: (_) => HomeViewModel(),
+              child: Consumer<HomeViewModel>(
+                builder: (_, model, __) {
+                  return Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      padding: const EdgeInsets.all(16),
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      scrollDirection: Axis.horizontal,
+                      childAspectRatio: 1 / 1.6,
+                      children: getSportWidgets(model.sports),
+                    ),
+                  );
+                },
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/screens/profile/components/achievement.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/view_model/profile_view_model.dart';
-import 'package:fit_connect/screens/profile/components/achievement.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,18 +13,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ProfileViewModel>(
-        create: (context) => ProfileViewModel(),
-        child: Consumer<ProfileViewModel>(builder: (context, viewModel, child) {
-          if(viewModel.state == ProfileState.loading) {
-            return const Scaffold(
+      create: (context) => ProfileViewModel(),
+      child: Consumer<ProfileViewModel>(builder: (context, viewModel, child) {
+        if (viewModel.state == ProfileState.loading) {
+          return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),
-              bottomNavigationBar: BottomNavBar(selectedTab: 2)
-            );
-          }
-          else {
-            return Scaffold(
+              bottomNavigationBar: BottomNavBar(selectedTab: 2));
+        } else {
+          return Scaffold(
               appBar: AppBar(
                 centerTitle: true,
                 title: const Text(
@@ -69,9 +67,9 @@ class ProfileScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundImage: CachedNetworkImageProvider(
-                          viewModel.userData?.profilePicture ?? "https://via.placeholder.com/150"
-                        ),
-                      ),
+                          viewModel.userData?.profilePicture ??
+                              "https://via.placeholder.com/150"),
+                    ),
                     const SizedBox(height: 16),
                     const SizedBox(height: 16),
                     Text(
@@ -131,11 +129,9 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              bottomNavigationBar: const BottomNavBar(selectedTab: 2)
-            );
-          }
+              bottomNavigationBar: const BottomNavBar(selectedTab: 2));
         }
-      )
+      }),
     );
   }
 

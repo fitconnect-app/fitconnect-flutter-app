@@ -1,4 +1,4 @@
-import 'package:fit_connect/screens/profile/profile.dart';
+import 'package:fit_connect/screens/profile/profile_screen.dart';
 import 'package:fit_connect/screens/auth/auth_screen.dart';
 import 'package:fit_connect/screens/bpm/bpm_screen.dart';
 import 'package:fit_connect/screens/home/home_screen.dart';
