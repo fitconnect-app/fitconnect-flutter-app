@@ -15,8 +15,9 @@ class EventRepository {
     }
   }
 
-  Stream<List<EventModel>> getEvents({int? limit, String? sport}) {
-    Query query = events;
+  Future<List<EventModel>> getEvents({int? limit, String? sport}) async {
+    Query<Map<String, dynamic>> query =
+        FirebaseFirestore.instance.collection('events');
 
     if (sport != null) {
       query = query.where('sport', isEqualTo: sport);
@@ -26,11 +27,12 @@ class EventRepository {
       query = query.limit(limit);
     }
 
-    return query.snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => EventDTO.fromMap(doc).toModel())
-          .toList();
-    });
+    final snapshot = await query.get();
+    final List<EventModel> events = snapshot.docs
+        .map((doc) => EventDTO.fromMap(doc).toModel())
+        .toList();
+
+    return events;
   }
 
   Future<EventModel> createEvent(EventDTO event) async {
