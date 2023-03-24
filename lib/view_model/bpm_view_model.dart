@@ -172,9 +172,4 @@ class BPMViewModel extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    if (_toggled) untoggle();
-    super.dispose();
-  }
 }

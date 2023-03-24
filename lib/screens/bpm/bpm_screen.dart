@@ -25,7 +25,7 @@ class _BPMScreenState extends State<BPMScreen>
 
   @override
   void dispose() {
-    _viewModel.dispose();
+    _viewModel.untoggle();
     super.dispose();
   }
 
