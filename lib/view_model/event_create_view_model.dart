@@ -10,9 +10,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EventViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   final FirebaseAuth _auth = FirebaseInstance.auth;
+
   Future<void> createEvent(sport, playersNeeded, playersBrought, startDateTime,
       duration, location) async {
     var uid = _auth.currentUser?.uid ?? '';
+    if (sport == null ||
+        playersNeeded == null ||
+        playersBrought == null ||
+        startDateTime == null ||
+        duration == null ||
+        duration == const Duration() ||
+        location == null ||
+        location == "") {
+      throw Exception("Event fields cannot be empty");
+    }
     final startDate = Timestamp.fromDate(startDateTime);
     final endDate = Timestamp.fromDate(startDateTime.add(duration));
     final event = EventModel(

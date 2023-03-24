@@ -6,6 +6,8 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import "package:fit_connect/model/shared/sports.dart";
 import "package:fit_connect/view_model/event_create_view_model.dart";
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class SportFormScreen extends StatefulWidget {
   const SportFormScreen({super.key});
@@ -223,9 +225,43 @@ class SportFormState extends State<SportFormScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          _eventViewModel.createEvent(_selectedSport, _selectedPlayerCount,
-              _broughtPlayerCount, _selectedDateTime, _duration, "pista2");
+        onPressed: () async {
+          try {
+            await _eventViewModel.createEvent(
+                _selectedSport,
+                _selectedPlayerCount,
+                _broughtPlayerCount,
+                _selectedDateTime,
+                _duration,
+                "pista2");
+
+            if (context.mounted) {
+              Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+              MotionToast.success(
+                position: MotionToastPosition.top,
+                animationType: AnimationType.fromTop,
+                title: const Text(
+                  "Event Created Successfully",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                description: const Text('¡Your event has been created!'),
+              ).show(context);
+            }
+          } catch (e) {
+            MotionToast.error(
+              position: MotionToastPosition.top,
+              animationType: AnimationType.fromTop,
+              title: const Text(
+                "Error",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              description: Text(e.toString()),
+            ).show(context);
+          }
         },
         label: const Text('Create',
             style: TextStyle(
