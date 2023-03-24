@@ -102,9 +102,11 @@ class HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 FeatureButton(
-                  icon: Icons.settings,
-                  label: 'Settings',
-                  onPressed: () {},
+                  icon: Icons.query_stats,
+                  label: 'My Stats',
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/stats");
+                  },
                 ),
               ],
             ),
