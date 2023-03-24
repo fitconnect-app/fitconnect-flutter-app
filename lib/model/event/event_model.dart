@@ -11,6 +11,7 @@ class EventModel {
   Timestamp endDate;
   List<String> participants;
   String eventOwner;
+  String location;
 
   EventModel({
     required this.sport,
@@ -21,6 +22,7 @@ class EventModel {
     required this.endDate,
     required this.participants,
     required this.eventOwner,
+    required this.location
   });
 
   set setId(String? id) => this.id = id;

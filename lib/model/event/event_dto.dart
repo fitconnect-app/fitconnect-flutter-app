@@ -12,6 +12,7 @@ class EventDTO {
   final Timestamp endDate;
   final List<String> participants;
   final String eventOwner;
+  final String location;
 
   EventDTO({
     this.id,
@@ -23,6 +24,7 @@ class EventDTO {
     required this.endDate,
     required this.participants,
     required this.eventOwner,
+    required this.location,
   });
 
   set setId(String? id) => this.id = id;
@@ -37,6 +39,7 @@ class EventDTO {
       'endDate': endDate,
       'participants': participants,
       'eventOwner': eventOwner,
+      'location': location,
     };
   }
 
@@ -52,6 +55,7 @@ class EventDTO {
       endDate: data['endDate'],
       participants: List<String>.from(data['participants']),
       eventOwner: data['eventOwner'],
+      location: data['location'],
     );
   }
 
@@ -65,6 +69,7 @@ class EventDTO {
       endDate: endDate,
       participants: participants,
       eventOwner: eventOwner,
+      location: location,
     )..id = id;
   }
 
@@ -79,6 +84,7 @@ class EventDTO {
       endDate: model.endDate,
       participants: model.participants,
       eventOwner: model.eventOwner,
+      location: model.location,
     );
   }
 }
