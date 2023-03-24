@@ -44,30 +44,43 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
-              child: ListView.builder(
-                itemCount: viewModel.events?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) {
-                  final event = viewModel.events?[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: EventCard(
-                      id: event?.id ?? '',
-                      sport: event?.sport.getString() ?? '',
-                      location: event?.location ?? '',
-                      startDate: event?.startDate ?? Timestamp.now(),
-                      endDate: event?.endDate ?? Timestamp.now(),
-                      spotsAvailable: event?.spotsAvailable ?? 0,
-                      image: event?.sport.getImage() ??
-                          'assets/images/events/other.jpeg',
-                    ),
-                  );
-                },
-              ),
+              child: _buildEventList(viewModel, args.filter),
             ),
             bottomNavigationBar: const BottomNavBar(selectedTab: 1),
           );
         }
       }),
     );
+  }
+
+  Widget _buildEventList(EventsViewModel viewModel, String? sport) {
+    if (viewModel.events?.isEmpty ?? true) {
+      return Center(
+        child: Text(
+          sport != null ? 'No $sport events found' : 'No events found',
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: viewModel.events?.length ?? 0,
+        itemBuilder: (BuildContext context, int index) {
+          final event = viewModel.events?[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: EventCard(
+              id: event?.id ?? '',
+              sport: event?.sport.getString() ?? '',
+              location: event?.location ?? '',
+              startDate: event?.startDate ?? Timestamp.now(),
+              endDate: event?.endDate ?? Timestamp.now(),
+              spotsAvailable: event?.spotsAvailable ?? 0,
+              image:
+                  event?.sport.getImage() ?? 'assets/images/events/other.jpeg',
+            ),
+          );
+        },
+      );
+    }
   }
 }
