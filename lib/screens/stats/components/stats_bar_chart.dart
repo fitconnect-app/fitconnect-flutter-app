@@ -23,7 +23,7 @@ class StatsBarChart extends StatelessWidget {
               tooltipRoundedRadius: 15,
               getTooltipItem: (group, groupIndex, rod, rodIndex) => BarTooltipItem(
                   '${data.firstWhere((element) => element.id == group.x).label}\n${rod.toY}',
-                  const TextStyle(color: Colors.black))),
+                  const TextStyle(color: Colors.black),),),
         ),
         alignment: BarChartAlignment.spaceAround,
         maxY: data.map((e) => e.yValue).reduce((a, b) => a > b ? a : b),
