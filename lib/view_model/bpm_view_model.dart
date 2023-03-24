@@ -81,8 +81,8 @@ class BPMViewModel extends ChangeNotifier {
   }
 
   void untoggle({dispose = false}) {
-    if (_toggled){
-        _disposeController();
+    if (_toggled) {
+      _disposeController();
       Wakelock.disable();
       _animationController?.stop();
       _animationController?.value = 0.0;
@@ -171,5 +171,4 @@ class BPMViewModel extends ChangeNotifier {
       await Future.delayed(Duration(milliseconds: (1000 * windowLength ~/ fs)));
     }
   }
-
 }

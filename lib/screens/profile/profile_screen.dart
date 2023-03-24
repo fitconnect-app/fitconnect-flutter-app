@@ -64,6 +64,7 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 16),
                     CircleAvatar(
                       radius: 50,
                       backgroundImage: CachedNetworkImageProvider(
