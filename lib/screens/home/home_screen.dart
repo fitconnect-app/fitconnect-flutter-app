@@ -95,7 +95,7 @@ class HomeScreenState extends State<HomeScreen> {
                   icon: Icons.event,
                   label: 'Events',
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
+                    Navigator.pushNamed(
                       context,
                       '/events',
                       arguments: EventsScreenArguments(null),
@@ -131,7 +131,7 @@ class HomeScreenState extends State<HomeScreen> {
               imagePath: x.image,
               tag: x.tag,
               onTap: () {
-                Navigator.pushReplacementNamed(
+                Navigator.pushNamed(
                   context,
                   '/events',
                   arguments: EventsScreenArguments(x.title),
