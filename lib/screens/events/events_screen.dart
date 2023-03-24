@@ -7,6 +7,12 @@ import 'package:provider/provider.dart';
 
 import 'components/event_card.dart';
 
+class EventsScreenArguments {
+  final String? filter;
+
+  EventsScreenArguments(this.filter);
+}
+
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
 
@@ -17,8 +23,11 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as EventsScreenArguments;
+
     return ChangeNotifierProvider<EventsViewModel>(
-      create: (context) => EventsViewModel(),
+      create: (context) => EventsViewModel(args.filter),
       child: Consumer<EventsViewModel>(builder: (context, viewModel, child) {
         if (viewModel.state == EventState.loading) {
           return const Scaffold(

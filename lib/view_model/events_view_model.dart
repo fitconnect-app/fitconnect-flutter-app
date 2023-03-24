@@ -11,15 +11,15 @@ class EventsViewModel extends ChangeNotifier {
 
   List<EventModel>? get events => _events;
 
-  EventsViewModel() {
-    getEvents().then((_) {
+  EventsViewModel(filter) {
+    getEvents(filter).then((_) {
       _state = EventState.completed;
       notifyListeners();
     });
   }
 
-  Future<void> getEvents() async {
-    _events = await _eventRepository.getEvents(limit: 10);
+  Future<void> getEvents(String ?filter) async {
+    _events = await _eventRepository.getEvents(limit: 10, sport: filter);
   }
 }
 

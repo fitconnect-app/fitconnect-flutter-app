@@ -1,4 +1,5 @@
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/screens/events/events_screen.dart';
 import 'package:fit_connect/screens/home/components/feature_button.dart';
 import 'package:fit_connect/screens/home/components/sport_card.dart';
 import 'package:fit_connect/view_model/home_view_model.dart';
@@ -94,7 +95,11 @@ class HomeScreenState extends State<HomeScreen> {
                   icon: Icons.event,
                   label: 'Events',
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/events');
+                    Navigator.pushReplacementNamed(
+                      context,
+                      '/events',
+                      arguments: EventsScreenArguments(null),
+                    );
                   },
                 ),
                 FeatureButton(
@@ -125,7 +130,13 @@ class HomeScreenState extends State<HomeScreen> {
               title: x.title,
               imagePath: x.image,
               tag: x.tag,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/events',
+                  arguments: EventsScreenArguments(x.title),
+                );
+              },
             ))
         .toList();
   }
