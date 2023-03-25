@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/events/events_screen.dart';
+import '../screens/events/event_list_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int selectedTab;
