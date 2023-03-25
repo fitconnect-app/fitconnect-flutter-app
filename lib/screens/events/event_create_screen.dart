@@ -1,3 +1,4 @@
+import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -247,8 +248,9 @@ class SportFormState extends State<SportFormScreen> {
                 _locationController.text);
 
             if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/events', (_) => false);
+              Navigator.pushNamed(
+                  context, '/events',
+                  arguments: EventsScreenArguments(null));
               MotionToast.success(
                 position: MotionToastPosition.top,
                 animationType: AnimationType.fromTop,
