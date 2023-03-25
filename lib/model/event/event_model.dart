@@ -46,6 +46,14 @@ class EventModel {
     return this;
   }
 
+  Future<EventModel> removeParticipant(participantId) async {
+    final EventRepository eventRepository = EventRepository();
+    participantsIds.remove(participantId);
+    spotsAvailable++;
+    await eventRepository.updateEvent(EventDTO.fromModel(this));
+    return this;
+  }
+
   Future<List<UserModel?>> getParticipants() async {
     final UserRepository userRepository = UserRepository();
     for (String participantsId in participantsIds) {

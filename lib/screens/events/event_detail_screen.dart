@@ -146,54 +146,71 @@ class EventDetailScreen extends StatelessWidget {
               }
             }),
             floatingActionButton: FloatingActionButton.extended(
-              onPressed: () async {
-                try {
-                  await viewModel.joinEvent();
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EventDetailScreen(eventId: eventId),
-                      ),
-                    );
-                    MotionToast.success(
-                      position: MotionToastPosition.top,
-                      animationType: AnimationType.fromTop,
-                      title: const Text(
-                        "Joined Event Successfully",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      description: const Text('You joined this event'),
-                    ).show(context);
-                  }
-                } catch (e) {
-                  MotionToast.error(
-                    position: MotionToastPosition.top,
-                    animationType: AnimationType.fromTop,
-                    title: const Text(
-                      "Error",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    description: Text(e.toString()),
-                  ).show(context);
-                }
-              },
-              label: const Text('Join',
+              elevation: viewModel.isOwner ? 0 : 6,
+              label: Text(viewModel.hasJoined ? 'Leave event' : 'Join',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: viewModel.isOwner
+                        ? Colors.white.withOpacity(0.5)
+                        : Colors.white,
                   )),
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
+              icon: Icon(
+                viewModel.hasJoined ? Icons.exit_to_app : Icons.add,
+                color: viewModel.isOwner
+                    ? Colors.white.withOpacity(0.5)
+                    : Colors.white,
               ),
-              backgroundColor: lightColorScheme.primary,
+              backgroundColor: viewModel.isOwner
+                  ? lightColorScheme.primary.withOpacity(0.5)
+                  : (viewModel.hasJoined
+                      ? lightColorScheme.error
+                      : lightColorScheme.primary),
+              onPressed: viewModel.isOwner
+                  ? null
+                  : () async {
+                      try {
+                        viewModel.hasJoined
+                            ? await viewModel.leaveEvent()
+                            : await viewModel.joinEvent();
+                        if (context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EventDetailScreen(eventId: eventId),
+                            ),
+                          );
+                          MotionToast.success(
+                            position: MotionToastPosition.top,
+                            animationType: AnimationType.fromTop,
+                            title: Text(
+                              viewModel.hasJoined
+                                  ? "Event abandoned succesfully"
+                                  : "Joined Event Successfully",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            description: Text(viewModel.hasJoined
+                                ? 'You left this event'
+                                : 'You joined this event'),
+                          ).show(context);
+                        }
+                      } catch (e) {
+                        MotionToast.error(
+                          position: MotionToastPosition.top,
+                          animationType: AnimationType.fromTop,
+                          title: const Text(
+                            "Error",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          description: Text(e.toString()),
+                        ).show(context);
+                      }
+                    },
             ),
             bottomNavigationBar: const BottomNavBar(selectedTab: 1),
           );
