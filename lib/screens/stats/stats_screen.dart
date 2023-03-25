@@ -79,7 +79,7 @@ Widget _buildStatsBarChart(List<DataStats> data) {
     );
   }
   return Padding(
-    padding: const EdgeInsets.all(15),
+    padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
     child: StatsBarChart(
       data: data,
     ),

@@ -48,7 +48,7 @@ class StatsBarChart extends StatelessWidget {
                     ),
                   );
                 },
-                reservedSize: 42,
+                reservedSize: 50,
                 interval: 1,
               ),
             ),
