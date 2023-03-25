@@ -42,7 +42,9 @@ class _EventsScreenState extends State<EventsScreen> {
               centerTitle: true,
               automaticallyImplyLeading: false,
               actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                IconButton(onPressed: () {
+                  Navigator.pushNamed(context, '/createEvent');
+                }, icon: const Icon(Icons.add))
               ],
             ),
             body: Padding(
