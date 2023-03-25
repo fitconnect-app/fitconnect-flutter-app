@@ -1,6 +1,5 @@
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'components/stats_bar_chart.dart';
 import 'package:fit_connect/view_model/stats_view_model.dart';
