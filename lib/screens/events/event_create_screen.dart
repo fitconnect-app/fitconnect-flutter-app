@@ -251,7 +251,7 @@ class SportFormState extends State<SportFormScreen> {
                 _broughtPlayerCount,
                 _selectedDateTime,
                 _duration,
-                _locationController);
+                _locationController.text);
 
             if (context.mounted) {
               Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
