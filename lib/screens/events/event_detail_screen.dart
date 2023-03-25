@@ -1,3 +1,4 @@
+import 'package:fit_connect/model/shared/sports.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,8 @@ class EventDetailScreen extends StatelessWidget {
       create: (context) => EventDetailViewModel(eventId),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Event Details'),
+          title: const Text('Event Details'),
+          centerTitle: true,
         ),
         body: Consumer<EventDetailViewModel>(
             builder: (context, viewModel, child) {
@@ -25,7 +27,8 @@ class EventDetailScreen extends StatelessWidget {
             );
           } else {
             return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -39,7 +42,7 @@ class EventDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10.0),
                   Text(
-                    "Sport: ${viewModel.event!.sport}",
+                    "Sport: ${viewModel.event!.sport.getString()}",
                     style: const TextStyle(
                         fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
@@ -61,12 +64,7 @@ class EventDetailScreen extends StatelessWidget {
                   const SizedBox(height: 5.0),
                   const Text('Participants:', style: TextStyle(fontSize: 16.0)),
                   const SizedBox(height: 5.0),
-                  for (var participant in viewModel.event!.participants)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      child: Text(participant!.getNameString(),
-                          style: const TextStyle(fontSize: 14.0)),
-                    ),
+                  _getParticipantsWidget(viewModel.event!.participants)
                 ],
               ),
             );
@@ -77,6 +75,24 @@ class EventDetailScreen extends StatelessWidget {
     );
   }
 }
+
+
+Widget _getParticipantsWidget(participantsList) {
+  if (participantsList.length == 0) {
+    return const Text('No participants yet!');
+  } else {
+    return Column(
+      children: List.generate(participantsList.length, (index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2.0),
+          child: Text(participantsList[index].getNameString(),
+              style: const TextStyle(fontSize: 14.0)),
+        );
+      }),
+    );
+  }
+}
+
 
 String _getFormattedDate(DateTime date) {
   // Format the date in the desired format
