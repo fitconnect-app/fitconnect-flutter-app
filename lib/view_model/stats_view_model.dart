@@ -106,7 +106,6 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     }
 
     sportHourCount = sortMapByValueAndOrder(sportHourCount);
-
     hoursPracticed = List.generate(
       sportHourCount.length > 5 ? 5 : sportHourCount.length,
       (index) => DataStats(
@@ -120,6 +119,9 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   Map<String, double> sortMapByValueAndOrder(Map originalMap) {
+    if (originalMap.isEmpty) {
+      return {};
+    }
     var sortedMap = SplayTreeMap<dynamic, dynamic>();
     sortedMap.addAll(originalMap);
 
