@@ -248,8 +248,7 @@ class SportFormState extends State<SportFormScreen> {
                 _locationController.text);
 
             if (context.mounted) {
-              Navigator.pushNamed(
-                  context, '/events',
+              Navigator.pushNamed(context, '/events',
                   arguments: EventsScreenArguments(null));
               MotionToast.success(
                 position: MotionToastPosition.top,

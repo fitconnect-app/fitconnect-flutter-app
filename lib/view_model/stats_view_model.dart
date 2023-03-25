@@ -120,7 +120,6 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   Map<String, double> sortMapByValueAndOrder(Map originalMap) {
-    // Create a new SplayTreeMap and add the key-value pairs from the original map
     var sortedMap = SplayTreeMap<dynamic, dynamic>();
     sortedMap.addAll(originalMap);
 
