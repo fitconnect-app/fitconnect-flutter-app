@@ -33,6 +33,21 @@ class HomeViewModel extends ChangeNotifier {
         image: 'assets/images/tennis_card.jpg',
         tag: 'tennis_events',
       ),
+      SportCardInfo(
+        title: Sports.baseball.getString(),
+        image: 'assets/images/baseball_card.jpg',
+        tag: 'baseball_events',
+      ),
+      SportCardInfo(
+        title: Sports.hockey.getString(),
+        image: 'assets/images/hockey_card.jpg',
+        tag: 'hockey_events',
+      ),
+      SportCardInfo(
+        title: Sports.boxing.getString(),
+        image: 'assets/images/boxing_card.jpg',
+        tag: 'golf_events',
+      ),
     ];
   }
 }
