@@ -19,7 +19,7 @@ class SportFormScreen extends StatefulWidget {
 class SportFormState extends State<SportFormScreen> {
   final List<String> _sports = Sports.values.map((e) => e.getString()).toList();
 
-  final List<int> _playerCounts = List.generate(21, (index) => index + 1);
+  final List<int> _playerCounts = List.generate(11, (index) => index + 1);
 
   String? _selectedSport;
   int? _selectedPlayerCount;
@@ -30,6 +30,7 @@ class SportFormState extends State<SportFormScreen> {
 
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   TextInputFormatter _timeInputFormatter() {
     return FilteringTextInputFormatter.allow(RegExp(r'^\d{0,2}:\d{0,2}$'));
@@ -86,7 +87,7 @@ class SportFormState extends State<SportFormScreen> {
               DropdownButton<int>(
                 isExpanded: true,
                 value: _selectedPlayerCount,
-                hint: const Text('How many players are Needed?'),
+                hint: const Text('Select a number of players'),
                 onChanged: (int? newValue) {
                   setState(() {
                     _selectedPlayerCount = newValue;
@@ -220,6 +221,23 @@ class SportFormState extends State<SportFormScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 15),
+              const Text(
+                'Event Location',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 5),
+              TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Enter event location',
+                ),
+                controller: _locationController,
+              ),
+              const SizedBox(height: 15),
             ],
           ),
         ),
@@ -233,7 +251,7 @@ class SportFormState extends State<SportFormScreen> {
                 _broughtPlayerCount,
                 _selectedDateTime,
                 _duration,
-                "pista2");
+                _locationController);
 
             if (context.mounted) {
               Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
