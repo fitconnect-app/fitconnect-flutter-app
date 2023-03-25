@@ -7,7 +7,7 @@ enum Sports {
   volleyball,
   // swimming,
   // track,
-  // boxing,
+  boxing,
   // martialArts,
   other
 }
