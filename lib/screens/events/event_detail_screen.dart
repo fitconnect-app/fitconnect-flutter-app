@@ -151,17 +151,19 @@ class EventDetailScreen extends StatelessWidget {
                   viewModel.hasJoined
                       ? 'Leave event'
                       : (viewModel.isOwner
-                          ? 'Cannot join your own event'
+                          ? "Can't join your own event"
                           : 'Join'),
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: viewModel.isOwner
                         ? Colors.white.withOpacity(0.5)
                         : Colors.white,
                   )),
               icon: Icon(
-                viewModel.hasJoined ? Icons.exit_to_app : Icons.add,
+                viewModel.hasJoined
+                    ? Icons.exit_to_app
+                    : (viewModel.isOwner ? Icons.do_disturb : Icons.add),
                 color: viewModel.isOwner
                     ? Colors.white.withOpacity(0.5)
                     : Colors.white,
