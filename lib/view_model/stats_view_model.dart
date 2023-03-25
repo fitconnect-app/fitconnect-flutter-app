@@ -47,7 +47,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     Map<String, int> sportCount = {};
     for (EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
-        sportCount[event.sport.getString()] = sportCount[event.sport]! + 1;
+        sportCount[event.sport.getString()] = sportCount[event.sport.getString()]! + 1;
       } else {
         sportCount[event.sport.getString()] = 1;
       }
