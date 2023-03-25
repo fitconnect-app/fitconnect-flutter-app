@@ -2,7 +2,7 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:flutter/material.dart';
 
-class EventsViewModel extends ChangeNotifier {
+class EventsListViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   EventState _state = EventState.loading;
   List<EventModel>? _events;
@@ -11,7 +11,7 @@ class EventsViewModel extends ChangeNotifier {
 
   List<EventModel>? get events => _events;
 
-  EventsViewModel(filter) {
+  EventsListViewModel(filter) {
     getEvents(filter).then((_) {
       _state = EventState.completed;
       notifyListeners();

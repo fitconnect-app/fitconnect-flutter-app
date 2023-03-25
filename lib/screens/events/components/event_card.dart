@@ -154,10 +154,10 @@ class EventCard extends StatelessWidget {
 
   void _goToEventDetails(BuildContext context) {
     Navigator.push(
-       context,
-       MaterialPageRoute(
-         builder: (context) => EventDetailScreen(eventId: id),
-       ),
-     );
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventDetailScreen(eventId: id),
+      ),
+    );
   }
 }

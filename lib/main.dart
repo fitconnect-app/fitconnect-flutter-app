@@ -15,13 +15,13 @@ Future<void> main() async {
   String initialRoute = user == null ? '/auth' : '/home';
 
   // Run app
-  runApp(MyApp(initialRoute: initialRoute));
+  runApp(FitConnectApp(initialRoute: initialRoute));
 }
 
-class MyApp extends StatelessWidget {
+class FitConnectApp extends StatelessWidget {
   final String initialRoute;
 
-  const MyApp({Key? key, required this.initialRoute}) : super(key: key);
+  const FitConnectApp({Key? key, required this.initialRoute}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

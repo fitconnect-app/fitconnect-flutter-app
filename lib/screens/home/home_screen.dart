@@ -1,5 +1,5 @@
 import 'package:fit_connect/components/bottom_nav_bar.dart';
-import 'package:fit_connect/screens/events/events_screen.dart';
+import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/screens/home/components/feature_button.dart';
 import 'package:fit_connect/screens/home/components/sport_card.dart';
 import 'package:fit_connect/view_model/home_view_model.dart';
