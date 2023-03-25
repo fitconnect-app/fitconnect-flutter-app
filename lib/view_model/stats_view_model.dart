@@ -131,7 +131,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
 
     var top5Keys = originalMap.keys.toList()
       ..sort((a, b) => originalMap[b]!.compareTo(originalMap[a] as num));
-    top5Keys = top5Keys.sublist(0, 5);
+    top5Keys = top5Keys.sublist(0, top5Keys.length < 5 ? top5Keys.length : 5);
 
     var result = SplayTreeMap<String, double>.from(originalMap)
       ..removeWhere((key, value) => !top5Keys.contains(key))
