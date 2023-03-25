@@ -1,16 +1,18 @@
-# fit_connect
+<p align="center">
+  <p align="center">
+<img src="./assets/icon/icon.png" alt="Logo" style="border-radius: 25%; width: 150px; height: 150px;">
+  </p>
+  <h1 align="center">FitConnect</h1>
+  <p align="center">
+    Get Connected, Get Active!
+  </p>
+</p>
 
-A new Flutter project.
+FitConnect is a solution to address the challenge of being unable to find individuals or groups with whom to engage in physical activity or play a particular sport, by providing a platform for students to connect with like-minded individuals, checking sports availability in a facility, offer specific tools at the sports center, and notifying them about relevant preferences. This app can help users overcome logistical and social barriers, foster a sense of community, and encourage ongoing engagement in physical activity, promoting improved physical and mental health.
 
-## Getting Started
+## License
 
-This project is a starting point for a Flutter application.
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **[MIT license](LICENSE)**
+- Copyright 2023 © FitConnect

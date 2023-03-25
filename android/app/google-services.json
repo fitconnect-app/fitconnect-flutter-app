@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "169795872766",
+    "project_id": "fitconnect-be78b",
+    "storage_bucket": "fitconnect-be78b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169795872766:android:3ac60bcdd6b37cbb1202af",
+        "android_client_info": {
+          "package_name": "com.uniandes.fitconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169795872766-42cmnbtba22bgqvjhm0i270n21f7o4mf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI86tgrvX8EHe9HFj5Urjea_-J_jtHDmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169795872766-42cmnbtba22bgqvjhm0i270n21f7o4mf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "169795872766-ou4d7noenfgqep2ap60mu0603a0dtmij.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitConnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
