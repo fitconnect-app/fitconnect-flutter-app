@@ -18,154 +18,158 @@ class EventDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => EventDetailViewModel(eventId),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Event Details'),
-          centerTitle: true,
-        ),
-        body: Consumer<EventDetailViewModel>(
-            builder: (context, viewModel, child) {
-          if (viewModel.state == EventDetailState.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      'https://picsum.photos/500',
-                      height: 130.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Sport: ${viewModel.event!.sport.getString()}",
-                    style: const TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Text(
-                    'Time and Place:',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: GoogleFonts.rubik().fontFamily,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Text(
-                      '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
-                      style: const TextStyle(fontSize: 14.0)),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Organizer:',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: GoogleFonts.rubik().fontFamily,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            viewModel.event!.eventOwner?.getNameString() ?? '',
-                            style: const TextStyle(fontSize: 15.0),
-                          ),
+      child: Consumer<EventDetailViewModel>(
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Event Details'),
+              centerTitle: true,
+            ),
+            body: Consumer<EventDetailViewModel>(
+                builder: (context, viewModel, child) {
+              if (viewModel.state == EventDetailState.loading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          'https://picsum.photos/500',
+                          height: 130.0,
+                          fit: BoxFit.cover,
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        "Sport: ${viewModel.event!.sport.getString()}",
+                        style: const TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 5.0),
+                      Text(
+                        'Time and Place:',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: GoogleFonts.rubik().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                      Text(
+                          '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
+                          style: const TextStyle(fontSize: 14.0)),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        'Organizer:',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: GoogleFonts.rubik().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                viewModel.event!.eventOwner?.getNameString() ??
+                                    '',
+                                style: const TextStyle(fontSize: 15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        'Spots Available: ${viewModel.event!.spotsAvailable}',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: GoogleFonts.rubik().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Participants:',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: GoogleFonts.rubik().fontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      _getParticipantsWidget(viewModel.event!.participants)
+                    ],
                   ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Spots Available: ${viewModel.event!.spotsAvailable}',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: GoogleFonts.rubik().fontFamily,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Participants:',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: GoogleFonts.rubik().fontFamily,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _getParticipantsWidget(viewModel.event!.participants)
-                ],
-              ),
-            );
-          }
-        }),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            try {
-
-              if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (_) => false);
-                MotionToast.success(
-                  position: MotionToastPosition.top,
-                  animationType: AnimationType.fromTop,
-                  title: const Text(
-                    "Joined Event Successfully",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  description: const Text('You joined this event'),
-                ).show(context);
+                );
               }
-            } catch (e) {
-              MotionToast.error(
-                position: MotionToastPosition.top,
-                animationType: AnimationType.fromTop,
-                title: const Text(
-                  "Error",
+            }),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                try {
+                  if (context.mounted) {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/home', (_) => false);
+                    MotionToast.success(
+                      position: MotionToastPosition.top,
+                      animationType: AnimationType.fromTop,
+                      title: const Text(
+                        "Joined Event Successfully",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      description: const Text('You joined this event'),
+                    ).show(context);
+                  }
+                } catch (e) {
+                  MotionToast.error(
+                    position: MotionToastPosition.top,
+                    animationType: AnimationType.fromTop,
+                    title: const Text(
+                      "Error",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    description: Text(e.toString()),
+                  ).show(context);
+                }
+              },
+              label: const Text('Join',
                   style: TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                description: Text(e.toString()),
-              ).show(context);
-            }
-          },
-          label: const Text('Join',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  )),
+              icon: const Icon(
+                Icons.add,
                 color: Colors.white,
-              )),
-          icon: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          backgroundColor: lightColorScheme.primary,
-        ),
-        bottomNavigationBar: const BottomNavBar(selectedTab: 1),
+              ),
+              backgroundColor: lightColorScheme.primary,
+            ),
+            bottomNavigationBar: const BottomNavBar(selectedTab: 1),
+          );
+        },
       ),
     );
   }
