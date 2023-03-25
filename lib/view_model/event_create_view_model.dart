@@ -33,8 +33,8 @@ class EventViewModel extends ChangeNotifier {
         spotsAvailable: playersNeeded,
         startDate: startDate,
         endDate: endDate,
-        participants: <String>[],
-        eventOwner: uid,
+        participantsIds: <String>[],
+        eventOwnerId: uid,
         location: location);
     await _eventRepository.createEvent(EventDTO.fromModel(event));
   }

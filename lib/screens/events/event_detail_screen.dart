@@ -1,69 +1,163 @@
+import 'package:fit_connect/model/shared/sports.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import "package:fit_connect/view_model/event_detail_view_model.dart";
+import 'package:intl/intl.dart';
 
-class EventDetails extends StatelessWidget {
-  final String subtitle;
-  final String description;
-  final String organizer;
-  final String spotsAvailable;
-  final List<String> participants;
+class EventDetailScreen extends StatelessWidget {
+  final String eventId;
 
-  EventDetails({super.key, 
-    required this.subtitle,
-    required this.description,
-    required this.organizer,
-    required this.spotsAvailable,
-    required this.participants,
-  });
+  const EventDetailScreen({super.key, required this.eventId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Event Details'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                'https://picsum.photos/500',
-                height: 130.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              subtitle,
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5.0),
-            Text('Time and Place:', style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 5.0),
-            Text(description, style: TextStyle(fontSize: 14.0)),
-            SizedBox(height: 10.0),
-            Text('Organizer:', style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 5.0),
-            Text(organizer, style: TextStyle(fontSize: 14.0)),
-            SizedBox(height: 10.0),
-            Text('Spots Available:', style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 5.0),
-            Text(spotsAvailable, style: TextStyle(fontSize: 14.0)),
-            SizedBox(height: 10.0),
-            Text('Participants:', style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 5.0),
-            for (var participant in participants)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 2.0),
-                child: Text(participant, style: TextStyle(fontSize: 14.0)),
-              ),
-          ],
+    return ChangeNotifierProvider(
+      create: (context) => EventDetailViewModel(eventId),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Event Details'),
+          centerTitle: true,
         ),
+        body: Consumer<EventDetailViewModel>(
+            builder: (context, viewModel, child) {
+          if (viewModel.state == EventDetailState.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return SingleChildScrollView(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      'https://picsum.photos/500',
+                      height: 130.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Text(
+                    "Sport: ${viewModel.event!.sport.getString()}",
+                    style: const TextStyle(
+                        fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Text(
+                    'Time and Place:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Text(
+                      '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
+                      style: const TextStyle(fontSize: 14.0)),
+                  const SizedBox(height: 10.0),
+                  Text(
+                    'Organizer:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            viewModel.event!.eventOwner?.getNameString() ?? '',
+                            style: const TextStyle(fontSize: 15.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Text(
+                    'Spots Available: ${viewModel.event!.spotsAvailable}',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Participants:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _getParticipantsWidget(viewModel.event!.participants)
+                ],
+              ),
+            );
+          }
+        }),
+        bottomNavigationBar: const BottomNavBar(selectedTab: 1),
       ),
-      bottomNavigationBar: const BottomNavBar(selectedTab: 1),
     );
   }
+}
+
+Widget _getParticipantsWidget(List participantsList) {
+  if (participantsList.isEmpty) {
+    return const Text('No participants yet!');
+  } else {
+    return Column(
+      children: List.generate(participantsList.length, (index) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 2.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  participantsList[index].getNameString(),
+                  style: const TextStyle(fontSize: 15.0),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+}
+
+String _getFormattedDate(DateTime date) {
+  // Format the date in the desired format
+  final formatter = DateFormat('EEEE MMMM d, h:mm a');
+  return formatter.format(date);
 }

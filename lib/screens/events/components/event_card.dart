@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fit_connect/screens/events/event_detail_screen.dart';
 
 class EventCard extends StatelessWidget {
   final String id;
@@ -152,12 +153,11 @@ class EventCard extends StatelessWidget {
   }
 
   void _goToEventDetails(BuildContext context) {
-    // TODO: Add event details next screen
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => EventDetailScreen(eventId: id),
-    //   ),
-    // );
+    Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) => EventDetailScreen(eventId: id),
+       ),
+     );
   }
 }

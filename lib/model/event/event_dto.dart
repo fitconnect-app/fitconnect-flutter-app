@@ -67,8 +67,8 @@ class EventDTO {
       spotsAvailable: spotsAvailable,
       startDate: startDate,
       endDate: endDate,
-      participants: participants,
-      eventOwner: eventOwner,
+      participantsIds: participants,
+      eventOwnerId: eventOwner,
       location: location,
     )..id = id;
   }
@@ -82,8 +82,8 @@ class EventDTO {
       spotsAvailable: model.spotsAvailable,
       startDate: model.startDate,
       endDate: model.endDate,
-      participants: model.participants,
-      eventOwner: model.eventOwner,
+      participants: model.participantsIds,
+      eventOwner: model.eventOwnerId,
       location: model.location,
     );
   }
