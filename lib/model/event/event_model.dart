@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/user/user_repository.dart';
 import "../shared/sports.dart";
 import "package:fit_connect/model/user/user_model.dart";
+import "package:fit_connect/model/event/event_dto.dart";
 
 class EventModel {
   String? id;
@@ -34,6 +36,13 @@ class EventModel {
     final UserRepository userRepository = UserRepository();
     eventOwner = await userRepository.getUser(eventOwnerId);
     return eventOwner;
+  }
+
+  Future<EventModel> addParticipant(participantId) async {
+    final EventRepository eventRepository = EventRepository();
+    participantsIds.add(participantId);
+    await eventRepository.updateEvent(EventDTO.fromModel(this));
+    return this;
   }
 
   Future<List<UserModel?>> getParticipants() async {
