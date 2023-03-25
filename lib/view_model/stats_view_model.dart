@@ -4,6 +4,7 @@ import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'dart:collection';
 
 class DataStats {
   final int id;
@@ -44,14 +45,16 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   void getTopPlayedSports() {
-    Map<String, int> sportCount = {};
+    Map<String, double> sportCount = {};
     for (EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
-        sportCount[event.sport.getString()] = sportCount[event.sport]! + 1;
+        sportCount[event.sport.getString()] =
+            sportCount[event.sport.getString()]! + 1;
       } else {
         sportCount[event.sport.getString()] = 1;
       }
     }
+    sportCount = sortMapByValueAndOrder(sportCount);
     mostSearchedSports = List.generate(
       sportCount.length > 5 ? 5 : sportCount.length,
       (index) => DataStats(
@@ -64,7 +67,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   void getMostFrequentHours() {
-    Map<String, int> hourCount = {};
+    Map<String, double> hourCount = {};
 
     for (EventModel event in recentEvents) {
       String hour = "${event.startDate.toDate().hour}:00";
@@ -74,6 +77,9 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         hourCount[hour] = 1;
       }
     }
+
+    hourCount = sortMapByValueAndOrder(hourCount);
+
     mostFrequentHours = List.generate(
       hourCount.length > 5 ? 5 : hourCount.length,
       (index) => DataStats(
@@ -99,6 +105,8 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
       }
     }
 
+    sportHourCount = sortMapByValueAndOrder(sportHourCount);
+
     hoursPracticed = List.generate(
       sportHourCount.length > 5 ? 5 : sportHourCount.length,
       (index) => DataStats(
@@ -109,5 +117,21 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.tertiary,
       ),
     );
+  }
+
+  Map<String, double> sortMapByValueAndOrder(Map originalMap) {
+    var sortedMap = SplayTreeMap<dynamic, dynamic>();
+    sortedMap.addAll(originalMap);
+
+    var top5Keys = originalMap.keys.toList()
+      ..sort((a, b) => originalMap[b].compareTo(originalMap[a]));
+    top5Keys = top5Keys.sublist(0, 5);
+
+    var result = SplayTreeMap<String, double>.from(originalMap)
+      ..removeWhere((key, value) => !top5Keys.contains(key))
+      ..removeWhere((key, value) => value < top5Keys.length)
+      ..addAll({for (var key in top5Keys) key: originalMap[key]});
+
+    return result;
   }
 }
