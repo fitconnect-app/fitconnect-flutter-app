@@ -15,7 +15,7 @@ class EventViewModel extends ChangeNotifier {
   Future<void> createEvent(sport, playersNeeded, playersBrought, startDateTime,
       duration, location) async {
     Trace createEventTrace =
-        FirebasePerformance.instance.newTrace('_create_event');
+        FirebasePerformance.instance.newTrace('createEvent');
     createEventTrace.start();
     var uid = _auth.currentUser?.uid ?? '';
     if (sport == null ||

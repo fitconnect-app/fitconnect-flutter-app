@@ -21,7 +21,7 @@ class EventsListViewModel extends ChangeNotifier {
 
   Future<void> getEvents(String? filter) async {
     Trace eventListTrace =
-        FirebasePerformance.instance.newTrace('_get_event_list');
+        FirebasePerformance.instance.newTrace('getEventList');
     eventListTrace.start();
     _events = await _eventRepository.getEvents(limit: 10, sport: filter);
     eventListTrace.stop();

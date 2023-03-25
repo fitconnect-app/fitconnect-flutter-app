@@ -33,7 +33,7 @@ class EventDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> getEvent(id) async {
-    Trace eventTrace = FirebasePerformance.instance.newTrace('_get_event');
+    Trace eventTrace = FirebasePerformance.instance.newTrace('getEvent');
     eventTrace.start();
     _event = await _eventRepository.getEvent(id);
     await _event?.getOwner();

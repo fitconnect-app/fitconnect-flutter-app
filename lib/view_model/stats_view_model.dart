@@ -1,3 +1,4 @@
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
@@ -32,6 +33,8 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   StatsState get state => _state;
 
   MyPersonalStatisticsViewModel() {
+    Trace statseTrace = FirebasePerformance.instance.newTrace('getMyStats');
+    statseTrace.start();
     _eventRepository
         .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid)
         .then((value) {
@@ -41,6 +44,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
       getHoursPracticed();
       _state = StatsState.completed;
       notifyListeners();
+      statseTrace.stop();
     });
   }
 
@@ -106,7 +110,6 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     }
 
     sportHourCount = sortMapByValueAndOrder(sportHourCount);
-
     hoursPracticed = List.generate(
       sportHourCount.length > 5 ? 5 : sportHourCount.length,
       (index) => DataStats(
@@ -119,18 +122,21 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     );
   }
 
-  Map<String, double> sortMapByValueAndOrder(Map originalMap) {
+  Map<String, double> sortMapByValueAndOrder(Map<String, double> originalMap) {
+    if (originalMap.isEmpty) {
+      return originalMap;
+    }
     var sortedMap = SplayTreeMap<dynamic, dynamic>();
     sortedMap.addAll(originalMap);
 
     var top5Keys = originalMap.keys.toList()
-      ..sort((a, b) => originalMap[b].compareTo(originalMap[a]));
+      ..sort((a, b) => originalMap[b]!.compareTo(originalMap[a] as num));
     top5Keys = top5Keys.sublist(0, 5);
 
     var result = SplayTreeMap<String, double>.from(originalMap)
       ..removeWhere((key, value) => !top5Keys.contains(key))
       ..removeWhere((key, value) => value < top5Keys.length)
-      ..addAll({for (var key in top5Keys) key: originalMap[key]});
+      ..addAll({for (var key in top5Keys) key: originalMap[key] ?? 0});
 
     return result;
   }
