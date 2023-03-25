@@ -41,6 +41,7 @@ class EventModel {
   Future<EventModel> addParticipant(participantId) async {
     final EventRepository eventRepository = EventRepository();
     participantsIds.add(participantId);
+    spotsAvailable--;
     await eventRepository.updateEvent(EventDTO.fromModel(this));
     return this;
   }

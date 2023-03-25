@@ -22,7 +22,13 @@ class EventDetailScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Event Details'),
+              title: Text(
+                'Event Details',
+                style: TextStyle(
+                  fontFamily: GoogleFonts.rubik().fontFamily,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               centerTitle: true,
             ),
             body: Consumer<EventDetailViewModel>(
@@ -85,11 +91,10 @@ class EventDetailScreen extends StatelessWidget {
                       Text(
                         'Organizer:',
                         style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: GoogleFonts.rubik().fontFamily,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.grey[30]
-                        ),
+                            fontSize: 17,
+                            fontFamily: GoogleFonts.rubik().fontFamily,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey[30]),
                       ),
                       const SizedBox(height: 5.0),
                       Container(
@@ -145,6 +150,13 @@ class EventDetailScreen extends StatelessWidget {
                 try {
                   await viewModel.joinEvent();
                   if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EventDetailScreen(eventId: eventId),
+                      ),
+                    );
                     MotionToast.success(
                       position: MotionToastPosition.top,
                       animationType: AnimationType.fromTop,

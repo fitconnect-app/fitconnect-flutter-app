@@ -39,6 +39,6 @@ class UserModel {
   }
 
   String getNameString(){
-    return "${firstName} ${lastName}";
+    return "$firstName $lastName";
   }
 }

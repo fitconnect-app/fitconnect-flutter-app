@@ -155,7 +155,7 @@ class SportFormState extends State<SportFormScreen> {
                               DateTime.now().add(const Duration(days: 365)),
                         );
 
-                        if (pickedDate != null) {
+                        if (pickedDate != null && context.mounted) {
                           final TimeOfDay? pickedTime = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.now(),
@@ -249,7 +249,7 @@ class SportFormState extends State<SportFormScreen> {
                 _locationController.text);
 
             if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+              Navigator.pushNamedAndRemoveUntil(context, '/events', (_) => false);
               MotionToast.success(
                 position: MotionToastPosition.top,
                 animationType: AnimationType.fromTop,
