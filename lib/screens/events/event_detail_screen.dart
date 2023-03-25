@@ -51,13 +51,11 @@ class EventDetailScreen extends StatelessWidget {
                               bottomRight: Radius.circular(8.0),
                             ),
                             image: DecorationImage(
-                              image: AssetImage(
-                                viewModel.event?.sport.getImage() ??
-                                    'assets/images/events/other.jpeg',
-                              ),
-                              fit: BoxFit.cover,
-                              opacity: 0.5,
-                            ),
+                                image: AssetImage(
+                                  viewModel.event?.sport.getImage() ??
+                                      'assets/images/events/other.jpeg',
+                                ),
+                                fit: BoxFit.cover),
                           ),
                         ),
                       ),
@@ -197,18 +195,18 @@ Widget _getParticipantsWidget(List participantsList) {
       children: List.generate(
         participantsList.length,
         (index) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Column(
-              children: [
-                Row(
+          return Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
@@ -220,9 +218,9 @@ Widget _getParticipantsWidget(List participantsList) {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10.0),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10.0),
+            ],
           );
         },
       ),
