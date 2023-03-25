@@ -16,23 +16,60 @@ class EventRepository {
   }
 
   Future<List<EventModel>> getEvents({int? limit, String? sport}) async {
-    Query<Map<String, dynamic>> query = FirebaseFirestore.instance
-        .collection('events')
+    final now = DateTime.now();
+
+    var futureEventsQuery = events
+        .where('startDate', isGreaterThan: now)
+        .orderBy('startDate', descending: false);
+
+    var pastEventsQuery = events
+        .where('startDate', isLessThan: now)
         .orderBy('startDate', descending: true);
 
     if (sport != null) {
-      query = query.where('sport', isEqualTo: sport);
+      futureEventsQuery = futureEventsQuery.where('sport', isEqualTo: sport);
+      pastEventsQuery = pastEventsQuery.where('sport', isEqualTo: sport);
     }
 
     if (limit != null) {
-      query = query.limit(limit);
+      futureEventsQuery = futureEventsQuery.limit(limit);
+      pastEventsQuery = pastEventsQuery.limit(limit);
     }
 
-    final snapshot = await query.get();
-    final List<EventModel> events =
-        snapshot.docs.map((doc) => EventDTO.fromMap(doc).toModel()).toList();
+    final futureEvents = await futureEventsQuery.get();
+    final pastEvents = await pastEventsQuery.get();
 
-    return events;
+    final futureEventsList = futureEvents.docs
+        .map((doc) => EventDTO.fromMap(doc).toModel())
+        .toList();
+    final pastEventsList =
+        pastEvents.docs.map((doc) => EventDTO.fromMap(doc).toModel()).toList();
+
+    final orderedEvents = [
+      ...pastEventsList,
+      ...futureEventsList,
+    ].toList();
+
+    orderedEvents.sort((a, b) {
+      var aStartDate = a.startDate.toDate();
+      var bStartDate = b.startDate.toDate();
+      final diffA = aStartDate.difference(now).abs();
+      final diffB = bStartDate.difference(now).abs();
+
+      if (aStartDate.isAfter(now) && bStartDate.isBefore(now)) {
+        return -1;
+      } else if (aStartDate.isBefore(now) && bStartDate.isAfter(now)) {
+        return 1;
+      } else if (aStartDate.isAfter(now) && bStartDate.isAfter(now)) {
+        return aStartDate.compareTo(bStartDate);
+      } else if (aStartDate.isBefore(now) && bStartDate.isBefore(now)) {
+        return bStartDate.compareTo(aStartDate);
+      } else {
+        return diffA.compareTo(diffB);
+      }
+    });
+
+    return orderedEvents;
   }
 
   Future<EventModel> createEvent(EventDTO event) async {
