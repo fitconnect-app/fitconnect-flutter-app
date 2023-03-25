@@ -40,10 +40,25 @@ class EventDetailScreen extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          'https://picsum.photos/500',
-                          height: 130.0,
-                          fit: BoxFit.cover,
+                        child: Container(
+                          height: 160.0,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                viewModel.event?.sport.getImage() ??
+                                    'assets/images/events/other.jpeg',
+                              ),
+                              fit: BoxFit.cover,
+                              opacity: 0.5,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10.0),
@@ -179,30 +194,38 @@ Widget _getParticipantsWidget(List participantsList) {
     return const Text('No participants yet!');
   } else {
     return Column(
-      children: List.generate(participantsList.length, (index) {
-        return Container(
-          padding: const EdgeInsets.symmetric(vertical: 2.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
-            ),
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  participantsList[index].getNameString(),
-                  style: const TextStyle(fontSize: 15.0),
-                ),
+      children: List.generate(
+        participantsList.length,
+        (index) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.0,
               ),
-            ],
-          ),
-        );
-      }),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        participantsList[index].getNameString(),
+                        style: const TextStyle(fontSize: 15.0),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
