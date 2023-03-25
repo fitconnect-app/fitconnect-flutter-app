@@ -1,6 +1,7 @@
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import "package:fit_connect/view_model/event_detail_view_model.dart";
 import 'package:intl/intl.dart';
@@ -47,23 +48,69 @@ class EventDetailScreen extends StatelessWidget {
                         fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5.0),
-                  const Text('Time and Place:',
-                      style: TextStyle(fontSize: 16.0)),
+                  Text(
+                    'Time and Place:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   const SizedBox(height: 5.0),
                   Text(
                       '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
                       style: const TextStyle(fontSize: 14.0)),
                   const SizedBox(height: 10.0),
-                  const Text('Organizer:', style: TextStyle(fontSize: 16.0)),
+                  Text(
+                    'Organizer:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   const SizedBox(height: 5.0),
-                  Text(viewModel.event!.eventOwner!.getNameString(),
-                      style: const TextStyle(fontSize: 14.0)),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            viewModel.event!.eventOwner?.getNameString() ?? '',
+                            style: const TextStyle(fontSize: 15.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 10.0),
-                  Text('Spots Available: ${viewModel.event!.spotsAvailable}',
-                      style: const TextStyle(fontSize: 16.0)),
-                  const SizedBox(height: 5.0),
-                  const Text('Participants:', style: TextStyle(fontSize: 16.0)),
-                  const SizedBox(height: 5.0),
+                  Text(
+                    'Spots Available: ${viewModel.event!.spotsAvailable}',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Participants:',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: GoogleFonts.rubik().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   _getParticipantsWidget(viewModel.event!.participants)
                 ],
               ),
@@ -76,23 +123,38 @@ class EventDetailScreen extends StatelessWidget {
   }
 }
 
-
-Widget _getParticipantsWidget(participantsList) {
-  if (participantsList.length == 0) {
+Widget _getParticipantsWidget(List participantsList) {
+  if (participantsList.isEmpty) {
     return const Text('No participants yet!');
   } else {
     return Column(
       children: List.generate(participantsList.length, (index) {
-        return Padding(
+        return Container(
           padding: const EdgeInsets.symmetric(vertical: 2.0),
-          child: Text(participantsList[index].getNameString(),
-              style: const TextStyle(fontSize: 14.0)),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  participantsList[index].getNameString(),
+                  style: const TextStyle(fontSize: 15.0),
+                ),
+              ),
+            ],
+          ),
         );
       }),
     );
   }
 }
-
 
 String _getFormattedDate(DateTime date) {
   // Format the date in the desired format
