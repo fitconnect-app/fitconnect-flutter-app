@@ -45,10 +45,9 @@ class EventDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-    Future<void> leaveEvent() async {
+  Future<void> leaveEvent() async {
     var uid = _auth.currentUser?.uid ?? '';
     await _event?.removeParticipant(uid);
     notifyListeners();
   }
-
 }

@@ -38,7 +38,7 @@ class UserModel {
     return achievements;
   }
 
-  String getNameString(){
+  String getNameString() {
     return "$firstName $lastName";
   }
 }

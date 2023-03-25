@@ -207,7 +207,9 @@ class EventDetailScreen extends StatelessWidget {
                           ).show(context);
                         }
                       } catch (e) {
-                        if (e.toString().contains("User cancelled leave action")) {
+                        if (e
+                            .toString()
+                            .contains("User cancelled leave action")) {
                           return;
                         }
                         MotionToast.error(
