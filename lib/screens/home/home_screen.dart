@@ -17,12 +17,12 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    super.didChangeDependencies();
   }
 
   @override
@@ -46,6 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w700,
               )),
           centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

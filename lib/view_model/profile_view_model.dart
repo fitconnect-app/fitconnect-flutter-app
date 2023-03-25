@@ -23,7 +23,7 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future<void> getProfile() async {
-    Trace profileTrace = FirebasePerformance.instance.newTrace('_get_profile');
+    Trace profileTrace = FirebasePerformance.instance.newTrace('getProfile');
     profileTrace.start();
     _userData = await _userRepository.getUser(_user?.uid ?? '');
     await _userData?.getAchievements();
