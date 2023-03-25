@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:fit_connect/model/shared/sports.dart';
-import 'package:fit_connect/view_model/events_view_model.dart';
+import 'package:fit_connect/view_model/event_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +27,10 @@ class _EventsScreenState extends State<EventsListScreen> {
     final args =
         ModalRoute.of(context)!.settings.arguments as EventsScreenArguments;
 
-    return ChangeNotifierProvider<EventsViewModel>(
-      create: (context) => EventsViewModel(args.filter),
-      child: Consumer<EventsViewModel>(builder: (context, viewModel, child) {
+    return ChangeNotifierProvider<EventsListViewModel>(
+      create: (context) => EventsListViewModel(args.filter),
+      child:
+          Consumer<EventsListViewModel>(builder: (context, viewModel, child) {
         if (viewModel.state == EventState.loading) {
           return const Scaffold(
               body: Center(
@@ -67,7 +68,7 @@ class _EventsScreenState extends State<EventsListScreen> {
     );
   }
 
-  Widget _buildEventList(EventsViewModel viewModel, String? sport) {
+  Widget _buildEventList(EventsListViewModel viewModel, String? sport) {
     if (viewModel.events?.isEmpty ?? true) {
       return Center(
         child: Text(
