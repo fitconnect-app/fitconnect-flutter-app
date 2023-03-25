@@ -109,12 +109,12 @@ class SportFormState extends State<SportFormScreen> {
                 DropdownButton<int>(
                   isExpanded: true,
                   value:
-                      _broughtPlayerCount, // Actualizado a una segunda variable
+                      _broughtPlayerCount,
                   hint: const Text('Select the number of players'),
                   onChanged: (int? newValue) {
                     setState(() {
                       _broughtPlayerCount =
-                          newValue; // Actualizado a una segunda variable
+                          newValue;
                     });
                   },
                   items: _playerCounts.map<DropdownMenuItem<int>>((int value) {
