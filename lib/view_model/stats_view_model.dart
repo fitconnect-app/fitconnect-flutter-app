@@ -1,3 +1,4 @@
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
@@ -32,6 +33,8 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   StatsState get state => _state;
 
   MyPersonalStatisticsViewModel() {
+    Trace statseTrace = FirebasePerformance.instance.newTrace('getMyStats');
+    statseTrace.start();
     _eventRepository
         .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid)
         .then((value) {
@@ -41,6 +44,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
       getHoursPracticed();
       _state = StatsState.completed;
       notifyListeners();
+      statseTrace.stop();
     });
   }
 
