@@ -1,6 +1,5 @@
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
@@ -32,15 +31,11 @@ class SportFormState extends State<SportFormScreen> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
-  TextInputFormatter _timeInputFormatter() {
-    return FilteringTextInputFormatter.allow(RegExp(r'^\d{0,2}:\d{0,2}$'));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sport Form'),
+        title: const Text('Create an Event'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -176,13 +171,9 @@ class SportFormState extends State<SportFormScreen> {
                                 pickedTime.minute,
                               );
                             });
-
                             _dateController.text =
                                 DateFormat('yyyy-MM-dd HH:mm')
                                     .format(_selectedDateTime!);
-
-                            print(
-                                'Selected date and time: ${DateFormat('yyyy-MM-dd HH:mm').format(_selectedDateTime!)}');
                           }
                         }
                       },
