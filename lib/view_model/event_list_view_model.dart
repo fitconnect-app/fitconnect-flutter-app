@@ -1,3 +1,4 @@
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,11 @@ class EventsListViewModel extends ChangeNotifier {
   }
 
   Future<void> getEvents(String? filter) async {
+    Trace eventListTrace =
+        FirebasePerformance.instance.newTrace('_get_event_list');
+    eventListTrace.start();
     _events = await _eventRepository.getEvents(limit: 10, sport: filter);
+    eventListTrace.stop();
   }
 }
 

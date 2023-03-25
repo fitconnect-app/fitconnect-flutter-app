@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 enum EventDetailState { loading, completed, error }
 
@@ -15,8 +16,11 @@ class EventDetailViewModel extends ChangeNotifier {
   bool _isOwner = false;
 
   EventDetailState get state => _state;
+
   EventModel? get event => _event;
+
   bool get hasJoined => _hasJoined;
+
   bool get isOwner => _isOwner;
 
   EventDetailViewModel(id) {
@@ -29,9 +33,12 @@ class EventDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> getEvent(id) async {
+    Trace eventTrace = FirebasePerformance.instance.newTrace('_get_event');
+    eventTrace.start();
     _event = await _eventRepository.getEvent(id);
     await _event?.getOwner();
     await _event?.getParticipants();
+    eventTrace.stop();
   }
 
   Future<void> joinEvent() async {
