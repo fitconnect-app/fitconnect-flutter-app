@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import "package:fit_connect/view_model/event_detail_view_model.dart";
 import 'package:intl/intl.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
+import 'package:fit_connect/theme/style.dart';
 
 class EventDetailScreen extends StatelessWidget {
   final String eventId;
@@ -117,6 +120,51 @@ class EventDetailScreen extends StatelessWidget {
             );
           }
         }),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            try {
+
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/home', (_) => false);
+                MotionToast.success(
+                  position: MotionToastPosition.top,
+                  animationType: AnimationType.fromTop,
+                  title: const Text(
+                    "Joined Event Successfully",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  description: const Text('You joined this event'),
+                ).show(context);
+              }
+            } catch (e) {
+              MotionToast.error(
+                position: MotionToastPosition.top,
+                animationType: AnimationType.fromTop,
+                title: const Text(
+                  "Error",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                description: Text(e.toString()),
+              ).show(context);
+            }
+          },
+          label: const Text('Join',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          backgroundColor: lightColorScheme.primary,
+        ),
         bottomNavigationBar: const BottomNavBar(selectedTab: 1),
       ),
     );
