@@ -65,26 +65,30 @@ class EventDetailScreen extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 5.0),
+                      const SizedBox(height: 15.0),
                       Text(
                         'Time and Place:',
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           fontFamily: GoogleFonts.rubik().fontFamily,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 5.0),
+                      const SizedBox(height: 15.0),
                       Text(
                           '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
-                          style: const TextStyle(fontSize: 14.0)),
-                      const SizedBox(height: 10.0),
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontFamily: GoogleFonts.rubik().fontFamily,
+                          )),
+                      const SizedBox(height: 15.0),
                       Text(
                         'Organizer:',
                         style: TextStyle(
                           fontSize: 17,
                           fontFamily: GoogleFonts.rubik().fontFamily,
                           fontWeight: FontWeight.w700,
+                          color: Colors.grey[30]
                         ),
                       ),
                       const SizedBox(height: 5.0),
@@ -111,7 +115,7 @@ class EventDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10.0),
+                      const SizedBox(height: 15.0),
                       Text(
                         'Spots Available: ${viewModel.event!.spotsAvailable}',
                         style: TextStyle(
@@ -120,7 +124,7 @@ class EventDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 15),
                       Text(
                         'Participants:',
                         style: TextStyle(
@@ -129,7 +133,7 @@ class EventDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 15),
                       _getParticipantsWidget(viewModel.event!.participants)
                     ],
                   ),
@@ -213,7 +217,8 @@ Widget _getParticipantsWidget(List participantsList) {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         participantsList[index].getNameString(),
-                        style: const TextStyle(fontSize: 15.0),
+                        style:
+                            TextStyle(fontSize: 15.0, color: Colors.grey[30]),
                       ),
                     ),
                   ],
