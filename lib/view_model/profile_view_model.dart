@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fit_connect/model/user/user_repository.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/user/user_model.dart';
+import 'package:fit_connect/model/user/user_repository.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:flutter/material.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   final User? _user = FirebaseInstance.auth.currentUser;
@@ -22,8 +23,11 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future<void> getProfile() async {
+    Trace profileTrace = FirebasePerformance.instance.newTrace('_get_profile');
+    profileTrace.start();
     _userData = await _userRepository.getUser(_user?.uid ?? '');
     await _userData?.getAchievements();
+    profileTrace.stop();
   }
 }
 
