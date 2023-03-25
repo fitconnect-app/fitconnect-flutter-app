@@ -147,7 +147,12 @@ class EventDetailScreen extends StatelessWidget {
             }),
             floatingActionButton: FloatingActionButton.extended(
               elevation: viewModel.isOwner ? 0 : 6,
-              label: Text(viewModel.hasJoined ? 'Leave event' : 'Join',
+              label: Text(
+                  viewModel.hasJoined
+                      ? 'Leave event'
+                      : (viewModel.isOwner
+                          ? 'Cannot join your own event'
+                          : 'Join'),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -170,9 +175,13 @@ class EventDetailScreen extends StatelessWidget {
                   ? null
                   : () async {
                       try {
-                        viewModel.hasJoined
-                            ? await viewModel.leaveEvent()
-                            : await viewModel.joinEvent();
+                        if (viewModel.hasJoined) {
+                          await _leaveConfirmation(context, viewModel)
+                              ? await viewModel.leaveEvent()
+                              : throw Exception("User cancelled leave action");
+                        } else {
+                          await viewModel.joinEvent();
+                        }
                         if (context.mounted) {
                           Navigator.pushReplacement(
                             context,
@@ -198,6 +207,9 @@ class EventDetailScreen extends StatelessWidget {
                           ).show(context);
                         }
                       } catch (e) {
+                        if (e.toString().contains("User cancelled leave action")) {
+                          return;
+                        }
                         MotionToast.error(
                           position: MotionToastPosition.top,
                           animationType: AnimationType.fromTop,
@@ -218,6 +230,33 @@ class EventDetailScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> _leaveConfirmation(context, viewModel) async {
+  bool left = false;
+  await showDialog<String>(
+    context: context,
+    builder: ((BuildContext context) => AlertDialog(
+          title: const Text(
+            'Leave Event',
+          ),
+          content: const Text('Are you sure you want to leave this event?'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Cancel")),
+            TextButton(
+                onPressed: () async {
+                  left = true;
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: const Text("Leave"))
+          ],
+        )),
+  );
+  return left;
 }
 
 Widget _getParticipantsWidget(List participantsList) {
