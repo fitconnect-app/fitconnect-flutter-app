@@ -126,9 +126,8 @@ class EventDetailScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {
                 try {
+                  await viewModel.joinEvent();
                   if (context.mounted) {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/home', (_) => false);
                     MotionToast.success(
                       position: MotionToastPosition.top,
                       animationType: AnimationType.fromTop,
