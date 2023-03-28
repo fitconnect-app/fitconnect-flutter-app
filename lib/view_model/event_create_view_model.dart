@@ -8,9 +8,17 @@ import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:flutter/material.dart';
 
-class EventViewModel extends ChangeNotifier {
+class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   final FirebaseAuth _auth = FirebaseInstance.auth;
+  CreateState _state = CreateState.initial;
+
+  CreateState get state => _state;
+
+  set state(CreateState value) {
+    _state = value;
+    notifyListeners();
+  }
 
   Future<void> createEvent(sport, playersNeeded, playersBrought, startDateTime,
       duration, location) async {
@@ -43,4 +51,11 @@ class EventViewModel extends ChangeNotifier {
     await _eventRepository.createEvent(EventDTO.fromModel(event));
     createEventTrace.stop();
   }
+}
+
+enum CreateState {
+  initial,
+  loading,
+  success,
+  error,
 }
