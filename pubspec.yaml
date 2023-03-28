@@ -47,6 +47,7 @@ dependencies:
   google_fonts: ^4.0.3
   fl_chart: ^0.61.0
   intl: ^0.17.0
+  async: ^2.10.0
 
 
 dev_dependencies:

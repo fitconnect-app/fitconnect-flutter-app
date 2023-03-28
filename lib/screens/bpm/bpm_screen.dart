@@ -1,9 +1,11 @@
+import 'package:async/async.dart';
 import 'package:camera/camera.dart';
-import 'package:fit_connect/screens/bpm/components/chart.dart';
-import 'package:fit_connect/view_model/bpm_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import 'package:fit_connect/screens/bpm/components/chart.dart';
+import 'package:fit_connect/view_model/bpm_view_model.dart';
 
 class BPMScreen extends StatefulWidget {
   const BPMScreen({super.key});
@@ -15,6 +17,7 @@ class BPMScreen extends StatefulWidget {
 class _BPMScreenState extends State<BPMScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late BPMViewModel _viewModel;
+  RestartableTimer? _timer;
 
   @override
   void initState() {
@@ -79,8 +82,10 @@ class _BPMScreenState extends State<BPMScreen>
                                         ? AspectRatio(
                                             aspectRatio: model
                                                 .controller!.value.aspectRatio,
-                                            child: CameraPreview(
-                                                model.controller!),
+                                            child: model.controller == null
+                                                ? Container()
+                                                : CameraPreview(
+                                                    model.controller!),
                                           )
                                         : Container(
                                             padding: const EdgeInsets.all(12),
@@ -155,10 +160,16 @@ class _BPMScreenState extends State<BPMScreen>
                                 color: Colors.red,
                                 iconSize: 128,
                                 onPressed: () {
-                                  if (model.toggled) {
-                                    model.untoggle();
+                                  if ((_timer?.isActive ?? false)) {
+                                    _timer?.reset();
                                   } else {
-                                    model.toggle();
+                                    /*!model.toggled
+                                        ? _startMeasurement(model)
+                                        : null;*/
+                                    _timer = RestartableTimer(
+                                      const Duration(milliseconds: 1000),
+                                      _startMeasurement(model),
+                                    );
                                   }
                                 },
                               ),
@@ -202,5 +213,13 @@ class _BPMScreenState extends State<BPMScreen>
         ),
       ),
     );
+  }
+}
+
+_startMeasurement(model) {
+  if (model.toggled) {
+    model.untoggle();
+  } else {
+    model.toggle();
   }
 }
