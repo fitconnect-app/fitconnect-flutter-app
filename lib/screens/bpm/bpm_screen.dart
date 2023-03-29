@@ -78,14 +78,12 @@ class _BPMScreenState extends State<BPMScreen>
                                   fit: StackFit.expand,
                                   alignment: Alignment.center,
                                   children: <Widget>[
-                                    model.controller != null && model.toggled
+                                    (model.controller?.value.isInitialized ?? false) && model.toggled
                                         ? AspectRatio(
                                             aspectRatio: model
                                                 .controller!.value.aspectRatio,
-                                            child: model.controller == null
-                                                ? Container()
-                                                : CameraPreview(
-                                                    model.controller!),
+                                            child: CameraPreview(
+                                                model.controller!),
                                           )
                                         : Container(
                                             padding: const EdgeInsets.all(12),
@@ -163,9 +161,6 @@ class _BPMScreenState extends State<BPMScreen>
                                   if ((_timer?.isActive ?? false)) {
                                     _timer?.reset();
                                   } else {
-                                    /*!model.toggled
-                                        ? _startMeasurement(model)
-                                        : null;*/
                                     _timer = RestartableTimer(
                                       const Duration(milliseconds: 1000),
                                       _startMeasurement(model),
@@ -217,9 +212,13 @@ class _BPMScreenState extends State<BPMScreen>
 }
 
 _startMeasurement(model) {
-  if (model.toggled) {
-    model.untoggle();
-  } else {
-    model.toggle();
+  try {
+    if (model.toggled) {
+      model.untoggle();
+    } else {
+      model.toggle();
+    }
+  } catch (e) {
+    print(e);
   }
 }
