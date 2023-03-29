@@ -16,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +29,11 @@ class HomeScreenState extends State<HomeScreen> {
           automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
-          child: SizedBox(
-            height: 600,
-            child: Column(
+            child: SizedBox(
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? MediaQuery.of(context).size.height / 1.28
+              : MediaQuery.of(context).size.height / 0.5,
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -107,8 +108,7 @@ class HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 25),
             ],
           ),
-          )
-        ),
+        )),
         bottomNavigationBar: const BottomNavBar(selectedTab: 0));
   }
 
