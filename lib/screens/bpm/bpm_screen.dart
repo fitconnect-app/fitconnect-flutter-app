@@ -78,7 +78,9 @@ class _BPMScreenState extends State<BPMScreen>
                                   fit: StackFit.expand,
                                   alignment: Alignment.center,
                                   children: <Widget>[
-                                    (model.controller?.value.isInitialized ?? false) && model.toggled
+                                    (model.controller?.value.isInitialized ??
+                                                false) &&
+                                            model.toggled
                                         ? AspectRatio(
                                             aspectRatio: model
                                                 .controller!.value.aspectRatio,
@@ -162,8 +164,8 @@ class _BPMScreenState extends State<BPMScreen>
                                     _timer?.reset();
                                   } else {
                                     _timer = RestartableTimer(
-                                      const Duration(milliseconds: 1000),
-                                      _startMeasurement(model),
+                                      const Duration(milliseconds: 300),
+                                      () => model.toggled ? model.untoggle() : model.toggle(),
                                     );
                                   }
                                 },
@@ -208,17 +210,5 @@ class _BPMScreenState extends State<BPMScreen>
         ),
       ),
     );
-  }
-}
-
-_startMeasurement(model) {
-  try {
-    if (model.toggled) {
-      model.untoggle();
-    } else {
-      model.toggle();
-    }
-  } catch (e) {
-    print(e);
   }
 }
