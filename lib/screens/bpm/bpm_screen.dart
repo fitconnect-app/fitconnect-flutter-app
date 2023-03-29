@@ -117,26 +117,28 @@ class _BPMScreenState extends State<BPMScreen>
                         flex: 1,
                         child: Center(child: Consumer<BPMViewModel>(
                           builder: (_, model, __) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  model.toggled
-                                      ? "Estimated BPM\n (Measuring...)"
-                                      : "Estimated BPM",
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.grey),
-                                ),
-                                Text(
-                                  (model.bpm > 30 && model.bpm < 150
-                                      ? model.bpm.toString()
-                                      : "--"),
-                                  style: const TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            return SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    model.toggled
+                                        ? "Estimated BPM\n (Measuring...)"
+                                        : "Estimated BPM",
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.grey),
+                                  ),
+                                  Text(
+                                    (model.bpm > 30 && model.bpm < 150
+                                        ? model.bpm.toString()
+                                        : "--"),
+                                    style: const TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         )),
@@ -149,40 +151,44 @@ class _BPMScreenState extends State<BPMScreen>
                   child: Consumer<BPMViewModel>(
                     builder: (_, model, __) {
                       return Center(
-                        child: Column(
-                          children: [
-                            Transform.scale(
-                              scale: model.iconScale,
-                              child: IconButton(
-                                icon: Icon(model.toggled
-                                    ? Icons.favorite
-                                    : Icons.favorite_border),
-                                color: Colors.red,
-                                iconSize: 128,
-                                onPressed: () {
-                                  if ((_timer?.isActive ?? false)) {
-                                    _timer?.reset();
-                                  } else {
-                                    _timer = RestartableTimer(
-                                      const Duration(milliseconds: 300),
-                                      () => model.toggled ? model.untoggle() : model.toggle(),
-                                    );
-                                  }
-                                },
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Transform.scale(
+                                scale: model.iconScale,
+                                child: IconButton(
+                                  icon: Icon(model.toggled
+                                      ? Icons.favorite
+                                      : Icons.favorite_border),
+                                  color: Colors.red,
+                                  iconSize: 128,
+                                  onPressed: () {
+                                    if ((_timer?.isActive ?? false)) {
+                                      _timer?.reset();
+                                    } else {
+                                      _timer = RestartableTimer(
+                                        const Duration(milliseconds: 300),
+                                        () => model.toggled
+                                            ? model.untoggle()
+                                            : model.toggle(),
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              model.toggled
-                                  ? "Tap the heart to stop measuring"
-                                  : "Tap the heart to start measuring",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.red,
-                                fontFamily: GoogleFonts.rubik().fontFamily,
+                              const SizedBox(height: 5),
+                              Text(
+                                model.toggled
+                                    ? "Tap the heart to stop measuring"
+                                    : "Tap the heart to start measuring",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red,
+                                  fontFamily: GoogleFonts.rubik().fontFamily,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
