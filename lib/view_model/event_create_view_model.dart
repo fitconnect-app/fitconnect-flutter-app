@@ -30,11 +30,11 @@ class EventCreateViewModel extends ChangeNotifier {
     if (location.length > 50) {
       _state = CreateState.error;
       notifyListeners();
-      throw Exception("The event location cannot be longer than 50 characters");
+      throw const FormatException("The event location cannot be longer than 50 characters");
     } else if (RegExp(r'[^a-zA-Z0-9 -]').allMatches(location).isNotEmpty) {
       _state = CreateState.error;
       notifyListeners();
-      throw Exception("The event location only accepts letters, numbers, and spaces");
+      throw const FormatException("The event location only accepts letters, numbers, and spaces");
     } else if (sport == null ||
         playersNeeded == null ||
         playersBrought == null ||
@@ -45,7 +45,7 @@ class EventCreateViewModel extends ChangeNotifier {
         location == "") {
       _state = CreateState.error;
       notifyListeners();
-      throw Exception("Event fields cannot be empty");
+      throw const FormatException("Event fields cannot be empty");
     }
 
     final startDate = Timestamp.fromDate(startDateTime);
