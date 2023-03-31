@@ -26,7 +26,16 @@ class EventCreateViewModel extends ChangeNotifier {
         FirebasePerformance.instance.newTrace('createEvent');
     createEventTrace.start();
     var uid = _auth.currentUser?.uid ?? '';
-    if (sport == null ||
+
+    if (location.length > 50) {
+      _state = CreateState.error;
+      notifyListeners();
+      throw const FormatException("The event location cannot be longer than 50 characters");
+    } else if (RegExp(r'[^a-zA-Z0-9 -]').allMatches(location).isNotEmpty) {
+      _state = CreateState.error;
+      notifyListeners();
+      throw const FormatException("The event location only accepts letters, numbers, and spaces");
+    } else if (sport == null ||
         playersNeeded == null ||
         playersBrought == null ||
         startDateTime == null ||
@@ -34,8 +43,11 @@ class EventCreateViewModel extends ChangeNotifier {
         duration == const Duration() ||
         location == null ||
         location == "") {
-      throw Exception("Event fields cannot be empty");
+      _state = CreateState.error;
+      notifyListeners();
+      throw const FormatException("Event fields cannot be empty");
     }
+
     final startDate = Timestamp.fromDate(startDateTime);
     final endDate = Timestamp.fromDate(startDateTime.add(duration));
     final event = EventModel(
