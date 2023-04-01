@@ -45,30 +45,16 @@ class EventRepository {
     final pastEventsList =
         pastEvents.docs.map((doc) => EventDTO.fromMap(doc).toModel()).toList();
 
-    final orderedEvents = [
-      ...pastEventsList,
-      ...futureEventsList,
-    ].toList();
+    final today = futureEventsList.where(
+      (event) =>
+          event.startDate.toDate().day == now.day &&
+          event.startDate.toDate().month == now.month &&
+          event.startDate.toDate().year == now.year,
+    );
 
-    orderedEvents.sort((a, b) {
-      var aStartDate = a.startDate.toDate();
-      var bStartDate = b.startDate.toDate();
-      final diffA = aStartDate.difference(now).abs();
-      final diffB = bStartDate.difference(now).abs();
+    futureEventsList.removeWhere((element) => today.contains(element));
 
-      if (aStartDate.isAfter(now) && bStartDate.isBefore(now)) {
-        return -1;
-      } else if (aStartDate.isBefore(now) && bStartDate.isAfter(now)) {
-        return 1;
-      } else if (aStartDate.isAfter(now) && bStartDate.isAfter(now)) {
-        return aStartDate.compareTo(bStartDate);
-      } else if (aStartDate.isBefore(now) && bStartDate.isBefore(now)) {
-        return bStartDate.compareTo(aStartDate);
-      } else {
-        return diffA.compareTo(diffB);
-      }
-    });
-
+    final orderedEvents = [...today, ...futureEventsList, ...pastEventsList];
     return orderedEvents;
   }
 
