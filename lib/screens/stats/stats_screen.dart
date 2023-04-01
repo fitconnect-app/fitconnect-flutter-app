@@ -33,7 +33,7 @@ class StatsScreen extends StatelessWidget {
                             'Your Top Played Sports of the Week\n(Total Sport Count)',
                             style: TextStyle(fontSize: 18))),
                     SizedBox(
-                        height: 200,
+                        height: MediaQuery.of(context).size.height / 3.8,
                         child:
                             _buildStatsBarChart(viewModel.mostSearchedSports)),
                     const Padding(
@@ -43,7 +43,7 @@ class StatsScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18)),
                     ),
                     SizedBox(
-                        height: 200,
+                        height: MediaQuery.of(context).size.height / 3.8,
                         child:
                             _buildStatsBarChart(viewModel.mostFrequentHours)),
                     const Padding(
@@ -54,7 +54,7 @@ class StatsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
-                        height: 200,
+                        height: MediaQuery.of(context).size.height / 3.8,
                         child: _buildStatsBarChart(viewModel.hoursPracticed)),
                   ],
                 ),
