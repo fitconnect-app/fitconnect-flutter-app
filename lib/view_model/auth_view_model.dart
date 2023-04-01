@@ -44,14 +44,11 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   void _filterInvalidCharacters(String input, String fieldName) {
-  if (input.length > 50) {
-    throw FormatException("$fieldName cannot be longer than 50 characters");
-  } else if (RegExp(r'[^a-zA-Z0-9 -]').allMatches(input).isNotEmpty) {
-    throw FormatException(
-        "$fieldName only accepts letters, numbers, and spaces");
+    if (input.length > 50) {
+      throw FormatException("$fieldName cannot be longer than 50 characters");
+    } else if (RegExp(r'[^a-zA-Z0-9 -]').allMatches(input).isNotEmpty) {
+      throw FormatException(
+          "$fieldName only accepts letters, numbers, and spaces");
+    }
   }
 }
-
-}
-
-
