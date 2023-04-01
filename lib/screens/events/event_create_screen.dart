@@ -285,7 +285,8 @@ class SportFormState extends State<SportFormScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          description: Text(e is FormatException ? e.message : e.toString()),
+                          description: Text(
+                              e is FormatException ? e.message : e.toString()),
                         ).show(context);
                       }
                     },
