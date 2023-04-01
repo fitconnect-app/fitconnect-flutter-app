@@ -65,7 +65,9 @@ dev_dependencies:
 
 flutter_native_splash:
   color: '#091540'
-  image: assets/images/fitconnect-transparent-logo.png
+  image: assets/icon/splash.png
+  android_12:
+    image: assets/icon/splash.png
 
 flutter_icons:
   android: launcher_icon

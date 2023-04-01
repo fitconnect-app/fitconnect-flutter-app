@@ -15,8 +15,8 @@ Future<void> main() async {
   User? user = FirebaseInstance.auth.currentUser;
   String initialRoute = user == null ? '/auth' : '/home';
 
-  FlutterNativeSplash.remove();
   runApp(FitConnectApp(initialRoute: initialRoute));
+  FlutterNativeSplash.remove();
 }
 
 class FitConnectApp extends StatelessWidget {
