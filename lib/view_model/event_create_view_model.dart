@@ -8,17 +8,9 @@ import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:flutter/material.dart';
 
-class EventCreateViewModel extends ChangeNotifier {
+class EventViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   final FirebaseAuth _auth = FirebaseInstance.auth;
-  CreateState _state = CreateState.initial;
-
-  CreateState get state => _state;
-
-  set state(CreateState value) {
-    _state = value;
-    notifyListeners();
-  }
 
   Future<void> createEvent(sport, playersNeeded, playersBrought, startDateTime,
       duration, location) async {
@@ -26,18 +18,7 @@ class EventCreateViewModel extends ChangeNotifier {
         FirebasePerformance.instance.newTrace('createEvent');
     createEventTrace.start();
     var uid = _auth.currentUser?.uid ?? '';
-
-    if (location.length > 50) {
-      _state = CreateState.error;
-      notifyListeners();
-      throw const FormatException(
-          "The event location cannot be longer than 50 characters");
-    } else if (RegExp(r'[^a-zA-Z0-9 \-\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1]').allMatches(location).isNotEmpty) {
-      _state = CreateState.error;
-      notifyListeners();
-      throw const FormatException(
-          "The event location only accepts letters, numbers, and spaces");
-    } else if (sport == null ||
+    if (sport == null ||
         playersNeeded == null ||
         playersBrought == null ||
         startDateTime == null ||
@@ -45,11 +26,8 @@ class EventCreateViewModel extends ChangeNotifier {
         duration == const Duration() ||
         location == null ||
         location == "") {
-      _state = CreateState.error;
-      notifyListeners();
-      throw const FormatException("Event fields cannot be empty");
+      throw Exception("Event fields cannot be empty");
     }
-
     final startDate = Timestamp.fromDate(startDateTime);
     final endDate = Timestamp.fromDate(startDateTime.add(duration));
     final event = EventModel(
@@ -65,11 +43,4 @@ class EventCreateViewModel extends ChangeNotifier {
     await _eventRepository.createEvent(EventDTO.fromModel(event));
     createEventTrace.stop();
   }
-}
-
-enum CreateState {
-  initial,
-  loading,
-  success,
-  error,
 }

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import '/services/firebase/singleton.dart';
 import 'services/firebase/config.dart';
@@ -8,15 +7,15 @@ import 'theme/style.dart';
 import 'utils/routes.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
 
   await initializeFirebase();
+
   User? user = FirebaseInstance.auth.currentUser;
   String initialRoute = user == null ? '/auth' : '/home';
 
+  // Run app
   runApp(FitConnectApp(initialRoute: initialRoute));
-  FlutterNativeSplash.remove();
 }
 
 class FitConnectApp extends StatelessWidget {

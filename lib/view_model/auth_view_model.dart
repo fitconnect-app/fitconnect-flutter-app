@@ -19,8 +19,6 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> signup(firstName, lastName, email, password) async {
     Trace signupTrace = FirebasePerformance.instance.newTrace('signup');
-    _filterInvalidCharacters(firstName, 'First name');
-    _filterInvalidCharacters(lastName, 'Last name');
     signupTrace.start();
     await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -41,14 +39,5 @@ class AuthViewModel extends ChangeNotifier {
     );
     await _userRepository.createUser(UserDTO.fromModel(user));
     signupTrace.stop();
-  }
-
-  void _filterInvalidCharacters(String input, String fieldName) {
-    if (input.length > 50) {
-      throw FormatException("$fieldName cannot be longer than 50 characters");
-    } else if (RegExp(r'[^a-zA-Z0-9 \-\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1]').allMatches(input).isNotEmpty) {
-      throw FormatException(
-          "$fieldName only accepts letters, numbers, and spaces");
-    }
   }
 }
