@@ -32,7 +32,7 @@ class EventCreateViewModel extends ChangeNotifier {
       notifyListeners();
       throw const FormatException(
           "The event location cannot be longer than 50 characters");
-    } else if (RegExp(r'[^a-zA-Z0-9 -]').allMatches(location).isNotEmpty) {
+    } else if (RegExp(r'[^a-zA-Z0-9 \-\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1]').allMatches(location).isNotEmpty) {
       _state = CreateState.error;
       notifyListeners();
       throw const FormatException(
