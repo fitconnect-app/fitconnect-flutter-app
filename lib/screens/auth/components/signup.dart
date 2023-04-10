@@ -257,8 +257,6 @@ class SignupFormState extends State<SignupForm> {
       String errorMessage = '';
       if (e is FirebaseAuthException) {
         errorMessage = FirebaseExceptionHelper.getMessage(context, e);
-      } else if (e is FormatException) {
-        errorMessage = e.message;
       } else {
         errorMessage = 'An error has occurred. Please try again later';
       }

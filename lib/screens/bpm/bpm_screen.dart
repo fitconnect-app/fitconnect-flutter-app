@@ -1,11 +1,9 @@
-import 'package:async/async.dart';
 import 'package:camera/camera.dart';
+import 'package:fit_connect/screens/bpm/components/chart.dart';
+import 'package:fit_connect/view_model/bpm_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import 'package:fit_connect/screens/bpm/components/chart.dart';
-import 'package:fit_connect/view_model/bpm_view_model.dart';
 
 class BPMScreen extends StatefulWidget {
   const BPMScreen({super.key});
@@ -17,7 +15,6 @@ class BPMScreen extends StatefulWidget {
 class _BPMScreenState extends State<BPMScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late BPMViewModel _viewModel;
-  RestartableTimer? _timer;
 
   @override
   void initState() {
@@ -78,9 +75,7 @@ class _BPMScreenState extends State<BPMScreen>
                                   fit: StackFit.expand,
                                   alignment: Alignment.center,
                                   children: <Widget>[
-                                    (model.controller?.value.isInitialized ??
-                                                false) &&
-                                            model.toggled
+                                    model.controller != null && model.toggled
                                         ? AspectRatio(
                                             aspectRatio: model
                                                 .controller!.value.aspectRatio,
@@ -117,28 +112,26 @@ class _BPMScreenState extends State<BPMScreen>
                         flex: 1,
                         child: Center(child: Consumer<BPMViewModel>(
                           builder: (_, model, __) {
-                            return SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    model.toggled
-                                        ? "Estimated BPM\n (Measuring...)"
-                                        : "Estimated BPM",
-                                    style: const TextStyle(
-                                        fontSize: 18, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    (model.bpm > 30 && model.bpm < 150
-                                        ? model.bpm.toString()
-                                        : "--"),
-                                    style: const TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  model.toggled
+                                      ? "Estimated BPM\n (Measuring...)"
+                                      : "Estimated BPM",
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.grey),
+                                ),
+                                Text(
+                                  (model.bpm > 30 && model.bpm < 150
+                                      ? model.bpm.toString()
+                                      : "--"),
+                                  style: const TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             );
                           },
                         )),
@@ -151,44 +144,37 @@ class _BPMScreenState extends State<BPMScreen>
                   child: Consumer<BPMViewModel>(
                     builder: (_, model, __) {
                       return Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Transform.scale(
-                                scale: model.iconScale,
-                                child: IconButton(
-                                  icon: Icon(model.toggled
-                                      ? Icons.favorite
-                                      : Icons.favorite_border),
-                                  color: Colors.red,
-                                  iconSize: 128,
-                                  onPressed: () {
-                                    if ((_timer?.isActive ?? false)) {
-                                      _timer?.reset();
-                                    } else {
-                                      _timer = RestartableTimer(
-                                        const Duration(milliseconds: 300),
-                                        () => model.toggled
-                                            ? model.untoggle()
-                                            : model.toggle(),
-                                      );
-                                    }
-                                  },
-                                ),
+                        child: Column(
+                          children: [
+                            Transform.scale(
+                              scale: model.iconScale,
+                              child: IconButton(
+                                icon: Icon(model.toggled
+                                    ? Icons.favorite
+                                    : Icons.favorite_border),
+                                color: Colors.red,
+                                iconSize: 128,
+                                onPressed: () {
+                                  if (model.toggled) {
+                                    model.untoggle();
+                                  } else {
+                                    model.toggle();
+                                  }
+                                },
                               ),
-                              const SizedBox(height: 5),
-                              Text(
-                                model.toggled
-                                    ? "Tap the heart to stop measuring"
-                                    : "Tap the heart to start measuring",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.red,
-                                  fontFamily: GoogleFonts.rubik().fontFamily,
-                                ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              model.toggled
+                                  ? "Tap the heart to stop measuring"
+                                  : "Tap the heart to start measuring",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontFamily: GoogleFonts.rubik().fontFamily,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     },

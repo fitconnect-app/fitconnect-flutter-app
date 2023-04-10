@@ -7,14 +7,12 @@ class EventsListViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   EventState _state = EventState.loading;
   List<EventModel>? _events;
-  var _filter = '';
 
   EventState get state => _state;
 
   List<EventModel>? get events => _events;
 
-  EventsListViewModel(String? filter) {
-    _filter = filter ?? '';
+  EventsListViewModel(filter) {
     getEvents(filter).then((_) {
       _state = EventState.completed;
       notifyListeners();
@@ -27,17 +25,6 @@ class EventsListViewModel extends ChangeNotifier {
     eventListTrace.start();
     _events = await _eventRepository.getEvents(limit: 10, sport: filter);
     eventListTrace.stop();
-  }
-
-  Future<void> refreshEvents() async {
-    Trace eventListTrace =
-        FirebasePerformance.instance.newTrace('refreshEventList');
-    eventListTrace.start();
-    _events = _filter.isEmpty
-        ? await _eventRepository.getEvents(limit: 10)
-        : await _eventRepository.getEvents(limit: 10, sport: _filter);
-    eventListTrace.stop();
-    notifyListeners();
   }
 }
 

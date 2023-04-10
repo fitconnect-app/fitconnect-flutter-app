@@ -57,12 +57,9 @@ class _EventsScreenState extends State<EventsListScreen> {
                     icon: const Icon(Icons.add))
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: viewModel.refreshEvents,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
-                child: _buildEventList(viewModel, args.filter),
-              ),
+            body: Padding(
+              padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
+              child: _buildEventList(viewModel, args.filter),
             ),
             bottomNavigationBar: const BottomNavBar(selectedTab: 1),
           );
