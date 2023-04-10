@@ -48,6 +48,16 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     });
   }
 
+  Future<void> refreshStats() async {
+    recentEvents = await _eventRepository
+        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
+    getTopPlayedSports();
+    getMostFrequentHours();
+    getHoursPracticed();
+    _state = StatsState.completed;
+    notifyListeners();
+  }
+
   void getTopPlayedSports() {
     Map<String, double> sportCount = {};
     for (EventModel event in recentEvents) {

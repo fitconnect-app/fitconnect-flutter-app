@@ -23,41 +23,9 @@ class StatsScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                            'Your Top Played Sports of the Week\n(Total Sport Count)',
-                            style: TextStyle(fontSize: 18))),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height / 3.8,
-                        child:
-                            _buildStatsBarChart(viewModel.mostSearchedSports)),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                          "When are You Most Active During the Week?\n(Most frequent hours)",
-                          style: TextStyle(fontSize: 18)),
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height / 3.8,
-                        child:
-                            _buildStatsBarChart(viewModel.mostFrequentHours)),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                          'How Much Have You Practiced Your Favorite Sports?\n(Hours Practiced)',
-                          style: TextStyle(fontSize: 18)),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height / 3.8,
-                        child: _buildStatsBarChart(viewModel.hoursPracticed)),
-                  ],
-                ),
+              return RefreshIndicator(
+                onRefresh: viewModel.refreshStats,
+                child: _buildStats(context, viewModel),
               );
             }
           },
@@ -66,6 +34,43 @@ class StatsScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildStats(context, viewModel) {
+  return SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+                'Your Top Played Sports of the Week\n(Total Sport Count)',
+                style: TextStyle(fontSize: 18))),
+        SizedBox(
+            height: MediaQuery.of(context).size.height / 3.8,
+            child: _buildStatsBarChart(viewModel.mostSearchedSports)),
+        const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+              "When are You Most Active During the Week?\n(Most frequent hours)",
+              style: TextStyle(fontSize: 18)),
+        ),
+        SizedBox(
+            height: MediaQuery.of(context).size.height / 3.8,
+            child: _buildStatsBarChart(viewModel.mostFrequentHours)),
+        const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+              'How Much Have You Practiced Your Favorite Sports?\n(Hours Practiced)',
+              style: TextStyle(fontSize: 18)),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+            height: MediaQuery.of(context).size.height / 3.8,
+            child: _buildStatsBarChart(viewModel.hoursPracticed)),
+      ],
+    ),
+  );
 }
 
 Widget _buildStatsBarChart(List<DataStats> data) {
