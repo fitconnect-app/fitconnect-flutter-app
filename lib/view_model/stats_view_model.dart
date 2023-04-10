@@ -33,8 +33,8 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   StatsState get state => _state;
 
   MyPersonalStatisticsViewModel() {
-    Trace statseTrace = FirebasePerformance.instance.newTrace('getMyStats');
-    statseTrace.start();
+    Trace statsTrace = FirebasePerformance.instance.newTrace('getMyStats');
+    statsTrace.start();
     _eventRepository
         .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid)
         .then((value) {
@@ -44,8 +44,22 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
       getHoursPracticed();
       _state = StatsState.completed;
       notifyListeners();
-      statseTrace.stop();
+      statsTrace.stop();
     });
+  }
+
+  Future<void> refreshStats() async {
+    Trace refreshStatsTrace =
+        FirebasePerformance.instance.newTrace('refreshMyStats');
+    refreshStatsTrace.start();
+    recentEvents = await _eventRepository
+        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
+    getTopPlayedSports();
+    getMostFrequentHours();
+    getHoursPracticed();
+    _state = StatsState.completed;
+    notifyListeners();
+    refreshStatsTrace.stop();
   }
 
   void getTopPlayedSports() {
