@@ -8,5 +8,7 @@ void getMessageSnackBar(String message, context) {
       onPressed: () {},
     ),
   );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  ScaffoldMessenger.of(context).showSnackBar(snackBar).closed.then(
+    (value) => ScaffoldMessenger.of(context).clearSnackBars()
+  );
 }
