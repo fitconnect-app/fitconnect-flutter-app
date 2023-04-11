@@ -74,15 +74,18 @@ class EventRepository {
 
   Future<List<EventModel>> getMostRecentUserEvents(String userId) async {
     final DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
+    final Timestamp now = Timestamp.now();
     var ownedEvents = await events
         .where('eventOwner', isEqualTo: userId)
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
+        .where('startDate', isLessThan: now)
         .get();
     var joinedEvents = await events
         .where('participants', arrayContains: userId)
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
+        .where('startDate', isLessThan: now)
         .get();
     List<DocumentSnapshot> allRecentEvents =
         ownedEvents.docs + joinedEvents.docs;

@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 void getMessageSnackBar(String message, context) {
   final snackBar = SnackBar(
-    content: Text(message),
+    content: Text(
+      message,
+    ),
     action: SnackBarAction(
       label: 'Dismiss',
       onPressed: () {},
     ),
   );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  ScaffoldMessenger.of(context)
+      .showSnackBar(snackBar)
+      .closed
+      .then((value) => ScaffoldMessenger.of(context).clearSnackBars());
 }

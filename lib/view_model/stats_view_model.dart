@@ -5,6 +5,7 @@ import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:fit_connect/utils/connectivity.dart';
 import 'dart:collection';
 
 class DataStats {
@@ -29,37 +30,46 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   List<DataStats> mostFrequentHours = [];
   List<DataStats> hoursPracticed = [];
   StatsState _state = StatsState.loading;
+  bool _isOffline = false;
+
+  bool get isOffline => _isOffline;
 
   StatsState get state => _state;
 
   MyPersonalStatisticsViewModel() {
     Trace statsTrace = FirebasePerformance.instance.newTrace('getMyStats');
     statsTrace.start();
-    _eventRepository
-        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid)
-        .then((value) {
-      recentEvents = value;
-      getTopPlayedSports();
-      getMostFrequentHours();
-      getHoursPracticed();
-      _state = StatsState.completed;
-      notifyListeners();
-      statsTrace.stop();
-    });
+    _state = StatsState.completed;
+    retrieveStats().then(
+      (_) {
+        notifyListeners();
+        statsTrace.stop();
+      },
+    );
   }
 
   Future<void> refreshStats() async {
     Trace refreshStatsTrace =
         FirebasePerformance.instance.newTrace('refreshMyStats');
     refreshStatsTrace.start();
+    await retrieveStats();
+    _state = StatsState.completed;
+    notifyListeners();
+    refreshStatsTrace.stop();
+  }
+
+  Future<void> retrieveStats() async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
+    }
     recentEvents = await _eventRepository
         .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
     getTopPlayedSports();
     getMostFrequentHours();
     getHoursPracticed();
-    _state = StatsState.completed;
-    notifyListeners();
-    refreshStatsTrace.stop();
   }
 
   void getTopPlayedSports() {

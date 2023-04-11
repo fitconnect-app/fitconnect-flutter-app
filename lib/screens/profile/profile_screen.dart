@@ -3,6 +3,7 @@ import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:fit_connect/screens/profile/components/achievement.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/view_model/profile_view_model.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                 onRefresh: viewModel.refreshProfile,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(2, 8, 2, 8),
-                  child: _buildProfile(viewModel),
+                  child: _buildProfile(viewModel, context),
                 ),
               ),
               bottomNavigationBar: const BottomNavBar(selectedTab: 2),
@@ -75,7 +76,16 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfile(ProfileViewModel viewModel) {
+  Widget _buildProfile(ProfileViewModel viewModel, context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (viewModel.isOffline) {
+          getMessageSnackBar(
+              "There is no internet connection, showing your profile when it was last updated!",
+              context);
+        }
+      },
+    );
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
