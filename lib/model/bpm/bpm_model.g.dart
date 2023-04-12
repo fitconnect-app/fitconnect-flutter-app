@@ -8,22 +8,15 @@ part of 'bpm_model.dart';
 
 class BPMDataModel extends _BPMDataModel
     with RealmEntity, RealmObjectBase, RealmObject {
-  BPMDataModel(
-    String id, {
+  BPMDataModel({
     int? value,
     DateTime? date,
   }) {
-    RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'value', value);
     RealmObjectBase.set(this, 'date', date);
   }
 
   BPMDataModel._();
-
-  @override
-  String get id => RealmObjectBase.get<String>(this, 'id') as String;
-  @override
-  set id(String value) => throw RealmUnsupportedSetError();
 
   @override
   int? get value => RealmObjectBase.get<int>(this, 'value') as int?;
@@ -49,7 +42,6 @@ class BPMDataModel extends _BPMDataModel
     RealmObjectBase.registerFactory(BPMDataModel._);
     return const SchemaObject(
         ObjectType.realmObject, BPMDataModel, 'BPMDataModel', [
-      SchemaProperty('id', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('value', RealmPropertyType.int, optional: true),
       SchemaProperty('date', RealmPropertyType.timestamp, optional: true),
     ]);

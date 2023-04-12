@@ -9,7 +9,7 @@ class BPMDataRepository {
     final DateTime now = DateTime.now().toUtc();
     final DateTime lastWeek = now.subtract(const Duration(days: 7));
 
-    var list = _realm.query<BPMDataModel>('date BETWEEN {$lastWeek, $now}').toList();
+    var list = _realm.query<BPMDataModel>(r'date >= $0 AND date <= $1', [lastWeek, now]).toList();
     for (var item in list) {
       item.date = item.date!.toLocal();
     }

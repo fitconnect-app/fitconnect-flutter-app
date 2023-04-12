@@ -78,21 +78,37 @@ Widget _buildStats(context, viewModel) {
         ),
         const SizedBox(height: 10),
         SizedBox(
-            height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(
-                viewModel.hoursPracticed, viewModel.isOffline)),
+          height: MediaQuery.of(context).size.height / 3.8,
+          child: _buildStatsBarChart(
+              viewModel.hoursPracticed, viewModel.isOffline),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+              'Your heart rate measurements during the last week\n(Average Heart Rate)',
+              style: TextStyle(fontSize: 18)),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 3.8,
+          child: _buildStatsBarChart(viewModel.bpmAverages, viewModel.isOffline,
+              isBPM: true),
+        ),
       ],
     ),
   );
 }
 
-Widget _buildStatsBarChart(List<DataStats> data, bool isOffline) {
+Widget _buildStatsBarChart(List<DataStats> data, bool isOffline,
+    {bool isBPM = false}) {
   if (data.isEmpty) {
     return Center(
       child: Text(
           isOffline
               ? 'No data to display\nConnect to a network and try again'
-              : 'No data to display.\nTry participating in some events!',
+              : (isBPM
+                  ? 'No data to display\nTry measuring your heart rate!'
+                  : 'No data to display.\nTry participating in some events!'),
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 15,

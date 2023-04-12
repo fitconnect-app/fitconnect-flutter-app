@@ -1,4 +1,6 @@
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:fit_connect/model/bpm/bpm_model.dart';
+import 'package:fit_connect/model/bpm/bpm_repository.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
@@ -25,7 +27,10 @@ enum StatsState { loading, completed, error }
 
 class MyPersonalStatisticsViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
+  final BPMDataRepository _bpmDataRepository = BPMDataRepository();
   List<EventModel> recentEvents = [];
+  List<BPMDataModel> _bpmData = [];
+  List<DataStats> bpmAverages = [];
   List<DataStats> mostSearchedSports = [];
   List<DataStats> mostFrequentHours = [];
   List<DataStats> hoursPracticed = [];
@@ -67,13 +72,47 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     }
     recentEvents = await _eventRepository
         .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
+    _bpmData = _bpmDataRepository.getRecentBPMData();
+    getBPMAverages();
     getTopPlayedSports();
     getMostFrequentHours();
     getHoursPracticed();
   }
 
+  void getBPMAverages() {
+    Map<dynamic, dynamic> averages = {};
+    for (BPMDataModel bpmData in _bpmData) {
+      var date = DateUtils.dateOnly(bpmData.date!);
+      if (averages.containsKey(date)) {
+        averages[date]!.add(bpmData.value!);
+      } else {
+        averages[date] = [bpmData.value!];
+      }
+    }
+    averages.forEach((key, value) {
+      int sum = 0;
+      for (int i in value) {
+        sum += i;
+      }
+      averages[key] = sum ~/ value.length;
+    });
+    averages = sortMapByValueAndOrder(averages);
+    bpmAverages = List.generate(
+      averages.length > 5 ? 5 : averages.length,
+      (index) {
+        var datetime = averages.keys.elementAt(index);
+        return DataStats(
+          id: index,
+          label: "${datetime.day}/${datetime.month}",
+          yValue: averages.values.elementAt(index).toDouble(),
+          color: Colors.red,
+        );
+      },
+    );
+  }
+
   void getTopPlayedSports() {
-    Map<String, double> sportCount = {};
+    Map<dynamic, dynamic> sportCount = {};
     for (EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
         sportCount[event.sport.getString()] =
@@ -95,7 +134,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   void getMostFrequentHours() {
-    Map<String, double> hourCount = {};
+    Map<dynamic, dynamic> hourCount = {};
 
     for (EventModel event in recentEvents) {
       String hour = "${event.startDate.toDate().hour}:00";
@@ -120,7 +159,7 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
   }
 
   void getHoursPracticed() {
-    Map<String, double> sportHourCount = {};
+    Map<dynamic, dynamic> sportHourCount = {};
     for (EventModel event in recentEvents) {
       String sport = event.sport.getString();
       DateTime startDate = event.startDate.toDate();
@@ -146,18 +185,17 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     );
   }
 
-  Map<String, double> sortMapByValueAndOrder(Map<String, double> originalMap) {
+  Map<dynamic, dynamic> sortMapByValueAndOrder(
+      Map<dynamic, dynamic> originalMap) {
     if (originalMap.isEmpty) {
       return originalMap;
     }
-    var sortedMap = SplayTreeMap<dynamic, dynamic>();
-    sortedMap.addAll(originalMap);
 
     var top5Keys = originalMap.keys.toList()
       ..sort((a, b) => originalMap[b]!.compareTo(originalMap[a] as num));
     top5Keys = top5Keys.sublist(0, top5Keys.length < 5 ? top5Keys.length : 5);
 
-    var result = SplayTreeMap<String, double>.from(originalMap)
+    var result = SplayTreeMap<dynamic, dynamic>.from(originalMap)
       ..removeWhere((key, value) => !top5Keys.contains(key))
       ..removeWhere((key, value) => value < top5Keys.length)
       ..addAll({for (var key in top5Keys) key: originalMap[key] ?? 0});
