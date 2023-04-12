@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/user/user_repository.dart';
-import "../shared/sports.dart";
+import "package:fit_connect/model/shared/sports.dart";
 import "package:fit_connect/model/user/user_model.dart";
 import "package:fit_connect/model/event/event_dto.dart";
 

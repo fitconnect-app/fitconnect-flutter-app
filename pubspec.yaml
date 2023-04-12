@@ -50,6 +50,7 @@ dependencies:
   async: ^2.10.0
   flutter_native_splash: ^2.2.19
   connectivity_plus: ^3.0.3
+  realm: ^1.0.3
 
 dev_dependencies:
   flutter_test:
