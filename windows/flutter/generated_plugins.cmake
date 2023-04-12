@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
+  realm
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
