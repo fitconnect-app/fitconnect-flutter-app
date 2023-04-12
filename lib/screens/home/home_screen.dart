@@ -4,7 +4,6 @@ import 'package:fit_connect/screens/home/components/feature_button.dart';
 import 'package:fit_connect/screens/home/components/sport_card.dart';
 import 'package:fit_connect/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
