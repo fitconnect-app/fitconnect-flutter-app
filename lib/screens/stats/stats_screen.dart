@@ -1,4 +1,5 @@
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'components/stats_bar_chart.dart';
@@ -37,6 +38,15 @@ class StatsScreen extends StatelessWidget {
 }
 
 Widget _buildStats(context, viewModel) {
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) {
+      if (viewModel.isOffline) {
+        getMessageSnackBar(
+            "There is no internet connection, showing your latest updated stats!",
+            context);
+      }
+    },
+  );
   return SingleChildScrollView(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +58,8 @@ Widget _buildStats(context, viewModel) {
                 style: TextStyle(fontSize: 18))),
         SizedBox(
             height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(viewModel.mostSearchedSports)),
+            child: _buildStatsBarChart(
+                viewModel.mostSearchedSports, viewModel.isOffline)),
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
@@ -57,7 +68,8 @@ Widget _buildStats(context, viewModel) {
         ),
         SizedBox(
             height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(viewModel.mostFrequentHours)),
+            child: _buildStatsBarChart(
+                viewModel.mostFrequentHours, viewModel.isOffline)),
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
@@ -67,18 +79,22 @@ Widget _buildStats(context, viewModel) {
         const SizedBox(height: 10),
         SizedBox(
             height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(viewModel.hoursPracticed)),
+            child: _buildStatsBarChart(
+                viewModel.hoursPracticed, viewModel.isOffline)),
       ],
     ),
   );
 }
 
-Widget _buildStatsBarChart(List<DataStats> data) {
+Widget _buildStatsBarChart(List<DataStats> data, bool isOffline) {
   if (data.isEmpty) {
-    return const Center(
-      child: Text('No data to display.\nTry participating in some events!',
+    return Center(
+      child: Text(
+          isOffline
+              ? 'No data to display\nConnect to a network and try again'
+              : 'No data to display.\nTry participating in some events!',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
           )),
     );
