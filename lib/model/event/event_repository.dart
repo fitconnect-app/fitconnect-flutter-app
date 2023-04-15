@@ -72,7 +72,8 @@ class EventRepository {
     await events.doc(id).delete();
   }
 
-  Future<List<EventModel>> getMostRecentUserEvents(String userId) async {
+  Future<List<EventModel>> getMostRecentUserEvents(
+      String userId, bool getCache) async {
     final DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
     final Timestamp now = Timestamp.now();
     var ownedEvents = await events
@@ -80,7 +81,7 @@ class EventRepository {
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
         .where('startDate', isLessThan: now)
-        .get();
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
     var joinedEvents = await events
         .where('participants', arrayContains: userId)
         .where('startDate',

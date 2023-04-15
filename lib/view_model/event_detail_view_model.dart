@@ -14,6 +14,7 @@ class EventDetailViewModel extends ChangeNotifier {
   EventModel? _event;
   bool _hasJoined = false;
   bool _isOwner = false;
+  bool _isOffline = false;
 
   EventDetailState get state => _state;
 
@@ -22,6 +23,8 @@ class EventDetailViewModel extends ChangeNotifier {
   bool get hasJoined => _hasJoined;
 
   bool get isOwner => _isOwner;
+
+  bool get isOffline => _isOffline;
 
   EventDetailViewModel(id) {
     getEvent(id).then((_) {
@@ -36,8 +39,8 @@ class EventDetailViewModel extends ChangeNotifier {
     Trace eventTrace = FirebasePerformance.instance.newTrace('getEvent');
     eventTrace.start();
     _event = await _eventRepository.getEvent(id);
-    await _event?.getOwner();
-    await _event?.getParticipants();
+    await _event?.getOwner(_isOffline);
+    await _event?.getParticipants(_isOffline);
     eventTrace.stop();
   }
 

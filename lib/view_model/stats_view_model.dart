@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/bpm/bpm_model.dart';
 import 'package:fit_connect/model/bpm/bpm_repository.dart';
@@ -25,32 +27,41 @@ class DataStats {
 
 enum StatsState { loading, completed, error }
 
-class MyPersonalStatisticsViewModel extends ChangeNotifier {
+class StatsViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   final BPMDataRepository _bpmDataRepository = BPMDataRepository();
+  StreamController<void> asyncController = StreamController<void>();
   List<EventModel> recentEvents = [];
   List<BPMDataModel> _bpmData = [];
   List<DataStats> bpmAverages = [];
   List<DataStats> mostSearchedSports = [];
   List<DataStats> mostFrequentHours = [];
   List<DataStats> hoursPracticed = [];
-  StatsState _state = StatsState.loading;
+  StatsState _bpmState = StatsState.loading;
+  StatsState _topSportsState = StatsState.loading;
+  StatsState _mostFrequentHoursState = StatsState.loading;
+  StatsState _hoursPracticedState = StatsState.loading;
   bool _isOffline = false;
 
   bool get isOffline => _isOffline;
 
-  StatsState get state => _state;
+  StatsState get bpmState => _bpmState;
+  StatsState get topSportsState => _topSportsState;
+  StatsState get mostFrequentHoursState => _mostFrequentHoursState;
+  StatsState get hoursPracticedState => _hoursPracticedState;
 
-  MyPersonalStatisticsViewModel() {
+  StatsViewModel() {
     Trace statsTrace = FirebasePerformance.instance.newTrace('getMyStats');
     statsTrace.start();
-    _state = StatsState.completed;
     retrieveStats().then(
       (_) {
-        notifyListeners();
         statsTrace.stop();
       },
     );
+  }
+
+  void close() {
+    asyncController.close();
   }
 
   Future<void> refreshStats() async {
@@ -58,8 +69,6 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         FirebasePerformance.instance.newTrace('refreshMyStats');
     refreshStatsTrace.start();
     await retrieveStats();
-    _state = StatsState.completed;
-    notifyListeners();
     refreshStatsTrace.stop();
   }
 
@@ -70,16 +79,16 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
     } else {
       _isOffline = false;
     }
-    recentEvents = await _eventRepository
-        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
     _bpmData = _bpmDataRepository.getRecentBPMData();
     getBPMAverages();
+    recentEvents = await _eventRepository.getMostRecentUserEvents(
+        FirebaseInstance.auth.currentUser!.uid, _isOffline);
     getTopPlayedSports();
     getMostFrequentHours();
     getHoursPracticed();
   }
 
-  void getBPMAverages() {
+  void getBPMAverages() async {
     Map<dynamic, dynamic> averages = {};
     for (BPMDataModel bpmData in _bpmData) {
       var date = DateUtils.dateOnly(bpmData.date!);
@@ -109,9 +118,15 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         );
       },
     );
+    _bpmState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  void getTopPlayedSports() {
+  void getTopPlayedSports() async {
     Map<dynamic, dynamic> sportCount = {};
     for (EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
@@ -131,9 +146,15 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.primary,
       ),
     );
+    _topSportsState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  void getMostFrequentHours() {
+  void getMostFrequentHours() async {
     Map<dynamic, dynamic> hourCount = {};
 
     for (EventModel event in recentEvents) {
@@ -156,9 +177,15 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.secondary,
       ),
     );
+    _mostFrequentHoursState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  void getHoursPracticed() {
+  void getHoursPracticed() async {
     Map<dynamic, dynamic> sportHourCount = {};
     for (EventModel event in recentEvents) {
       String sport = event.sport.getString();
@@ -183,6 +210,12 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.tertiary,
       ),
     );
+    _hoursPracticedState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
   Map<dynamic, dynamic> sortMapByValueAndOrder(
