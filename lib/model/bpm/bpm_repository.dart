@@ -17,6 +17,14 @@ class BPMDataRepository {
     return list;
   }
 
+  List<BPMDataModel> getOldData() {
+    final DateTime now = DateTime.now().toUtc();
+    final DateTime lastWeek = now.subtract(const Duration(days: 15));
+
+    var list = _realm.query<BPMDataModel>(r'date < $0', [lastWeek]).toList();
+    return list;
+  }
+
   BPMDataModel createBPMData(BPMDataModel bpmData) {
     bpmData.date = bpmData.date!.toUtc();
     _realm.write(() => _realm.add(bpmData));
@@ -25,5 +33,9 @@ class BPMDataRepository {
 
   void deleteBPMData(BPMDataModel bpmData) {
     _realm.write(() => _realm.delete(bpmData));
+  }
+
+  void deleteManyBPMData(List<BPMDataModel> bpmData) {
+    _realm.write(() => _realm.deleteMany(bpmData));
   }
 }
