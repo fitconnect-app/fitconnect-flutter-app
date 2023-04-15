@@ -82,7 +82,7 @@ class ProfileScreen extends StatelessWidget {
         if (viewModel.isOffline) {
           getMessageSnackBar(
               "There is no internet connection, showing your profile when it was last updated!",
-              context);
+              ScaffoldMessenger.of(context));
         }
       },
     );
