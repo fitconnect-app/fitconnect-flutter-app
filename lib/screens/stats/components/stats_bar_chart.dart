@@ -58,7 +58,7 @@ class StatsBarChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 30,
-                interval: data[0].yValue > 30? 30 : 3,
+                interval: data[0].yValue > 30 ? 30 : 3,
               ),
             ),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

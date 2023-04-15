@@ -5,30 +5,43 @@ import 'package:provider/provider.dart';
 import 'components/stats_bar_chart.dart';
 import 'package:fit_connect/view_model/stats_view_model.dart';
 
-class StatsScreen extends StatelessWidget {
-  const StatsScreen({super.key});
+class StatsScreen extends StatefulWidget {
+  const StatsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StatsScreen> createState() => _StatsScreen();
+}
+
+class _StatsScreen extends State<StatsScreen> {
+  late StatsViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = StatsViewModel();
+  }
+
+  @override
+  void dispose() {
+    _viewModel.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyPersonalStatisticsViewModel(),
+      create: (context) => _viewModel,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Personal Statistics'),
           centerTitle: true,
         ),
-        body: Consumer<MyPersonalStatisticsViewModel>(
+        body: Consumer<StatsViewModel>(
           builder: (context, viewModel, child) {
-            if (viewModel.state == StatsState.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return RefreshIndicator(
-                onRefresh: viewModel.refreshStats,
-                child: _buildStats(context, viewModel),
-              );
-            }
+            return RefreshIndicator(
+              onRefresh: viewModel.refreshStats,
+              child: _buildStats(context, viewModel),
+            );
           },
         ),
         bottomNavigationBar: const BottomNavBar(selectedTab: 0),
@@ -43,7 +56,7 @@ Widget _buildStats(context, viewModel) {
       if (viewModel.isOffline) {
         getMessageSnackBar(
             "There is no internet connection, showing your latest updated stats!",
-            context);
+            ScaffoldMessenger.of(context));
       }
     },
   );
@@ -57,9 +70,10 @@ Widget _buildStats(context, viewModel) {
                 'Your Top Played Sports of the Week\n(Total Sport Count)',
                 style: TextStyle(fontSize: 18))),
         SizedBox(
-            height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(
-                viewModel.mostSearchedSports, viewModel.isOffline)),
+          height: MediaQuery.of(context).size.height / 3.8,
+          child: _buildStatsBarChart(viewModel.mostSearchedSports,
+              viewModel.isOffline, viewModel.topSportsState),
+        ),
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
@@ -67,9 +81,10 @@ Widget _buildStats(context, viewModel) {
               style: TextStyle(fontSize: 18)),
         ),
         SizedBox(
-            height: MediaQuery.of(context).size.height / 3.8,
-            child: _buildStatsBarChart(
-                viewModel.mostFrequentHours, viewModel.isOffline)),
+          height: MediaQuery.of(context).size.height / 3.8,
+          child: _buildStatsBarChart(viewModel.mostFrequentHours,
+              viewModel.isOffline, viewModel.mostFrequentHoursState),
+        ),
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
@@ -79,8 +94,8 @@ Widget _buildStats(context, viewModel) {
         const SizedBox(height: 10),
         SizedBox(
           height: MediaQuery.of(context).size.height / 3.8,
-          child: _buildStatsBarChart(
-              viewModel.hoursPracticed, viewModel.isOffline),
+          child: _buildStatsBarChart(viewModel.hoursPracticed,
+              viewModel.isOffline, viewModel.hoursPracticedState),
         ),
         const Padding(
           padding: EdgeInsets.all(10.0),
@@ -91,7 +106,8 @@ Widget _buildStats(context, viewModel) {
         const SizedBox(height: 10),
         SizedBox(
           height: MediaQuery.of(context).size.height / 3.8,
-          child: _buildStatsBarChart(viewModel.bpmAverages, viewModel.isOffline,
+          child: _buildStatsBarChart(
+              viewModel.bpmAverages, viewModel.isOffline, viewModel.bpmState,
               isBPM: true),
         ),
       ],
@@ -99,15 +115,27 @@ Widget _buildStats(context, viewModel) {
   );
 }
 
-Widget _buildStatsBarChart(List<DataStats> data, bool isOffline,
+Widget _buildStatsBarChart(
+    List<DataStats> data, bool isOffline, StatsState chartState,
     {bool isBPM = false}) {
-  if (data.isEmpty) {
+  if (chartState == StatsState.loading) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Center(
+          child: CircularProgressIndicator(),
+        ),
+        SizedBox(height: 10),
+        Text('Loading data...'),
+      ],
+    );
+  } else if (data.isEmpty) {
     return Center(
       child: Text(
-          isOffline
-              ? 'No data to display\nConnect to a network and try again'
-              : (isBPM
-                  ? 'No data to display\nTry measuring your heart rate!'
+          isBPM
+              ? 'No data to display\nTry measuring your heart rate!'
+              : ( isOffline
+                  ? 'No data to display\nConnect to a network and try again!'
                   : 'No data to display.\nTry participating in some events!'),
           textAlign: TextAlign.center,
           style: const TextStyle(
