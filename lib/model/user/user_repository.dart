@@ -6,8 +6,10 @@ import 'package:fit_connect/services/firebase/singleton.dart';
 class UserRepository {
   CollectionReference users = FirebaseInstance.firestore.collection('users');
 
-  Future<UserModel?> getUser(String id) async {
-    final doc = await users.doc(id).get();
+  Future<UserModel?> getUser(String id, bool getCache) async {
+    final doc = await users
+        .doc(id)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
     if (doc.exists) {
       return UserDTO.fromMap(doc).toModel();
     } else {

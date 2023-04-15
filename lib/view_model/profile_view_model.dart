@@ -33,8 +33,8 @@ class ProfileViewModel extends ChangeNotifier {
     } else {
       _isOffline = false;
     }
-    _userData = await _userRepository.getUser(_user?.uid ?? '');
-    await _userData?.getAchievements();
+    _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
+    await _userData?.getAchievements(_isOffline);
   }
 
   Future<void> getProfile() async {

@@ -60,7 +60,7 @@ class StatsViewModel extends ChangeNotifier {
     );
   }
 
-  void close(){
+  void close() {
     asyncController.close();
   }
 
@@ -81,8 +81,8 @@ class StatsViewModel extends ChangeNotifier {
     }
     _bpmData = _bpmDataRepository.getRecentBPMData();
     getBPMAverages();
-    recentEvents = await _eventRepository
-        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid);
+    recentEvents = await _eventRepository.getMostRecentUserEvents(
+        FirebaseInstance.auth.currentUser!.uid, _isOffline);
     getTopPlayedSports();
     getMostFrequentHours();
     getHoursPracticed();

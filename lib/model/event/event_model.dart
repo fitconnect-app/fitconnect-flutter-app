@@ -32,9 +32,9 @@ class EventModel {
 
   set setId(String? id) => this.id = id;
 
-  Future<UserModel?> getOwner() async {
+  Future<UserModel?> getOwner(bool isCache) async {
     final UserRepository userRepository = UserRepository();
-    eventOwner = await userRepository.getUser(eventOwnerId);
+    eventOwner = await userRepository.getUser(eventOwnerId, isCache);
     return eventOwner;
   }
 
@@ -54,10 +54,10 @@ class EventModel {
     return this;
   }
 
-  Future<List<UserModel?>> getParticipants() async {
+  Future<List<UserModel?>> getParticipants(getCache) async {
     final UserRepository userRepository = UserRepository();
     for (String participantsId in participantsIds) {
-      UserModel? user = await userRepository.getUser(participantsId);
+      UserModel? user = await userRepository.getUser(participantsId, getCache);
       var achievementAlreadyInsertedFound = participants
           .firstWhere((element) => element?.id == user?.id, orElse: () => null);
       if (user != null && achievementAlreadyInsertedFound == null) {

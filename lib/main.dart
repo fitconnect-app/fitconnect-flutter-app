@@ -7,7 +7,6 @@ import 'services/firebase/config.dart';
 import 'theme/style.dart';
 import 'utils/routes.dart';
 
-
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);

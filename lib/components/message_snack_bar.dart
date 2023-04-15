@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void getMessageSnackBar(String message, ScaffoldMessengerState scaffoldMessengerState) {
+void getMessageSnackBar(
+    String message, ScaffoldMessengerState scaffoldMessengerState) {
   final snackBar = SnackBar(
     content: Text(
       message,
