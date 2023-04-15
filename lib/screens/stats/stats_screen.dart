@@ -132,10 +132,10 @@ Widget _buildStatsBarChart(
   } else if (data.isEmpty) {
     return Center(
       child: Text(
-          isOffline
-              ? 'No data to display\nConnect to a network and try again'
-              : (isBPM
-                  ? 'No data to display\nTry measuring your heart rate!'
+          isBPM
+              ? 'No data to display\nTry measuring your heart rate!'
+              : ( isOffline
+                  ? 'No data to display\nConnect to a network and try again!'
                   : 'No data to display.\nTry participating in some events!'),
           textAlign: TextAlign.center,
           style: const TextStyle(

@@ -7,12 +7,16 @@ class UserRepository {
   CollectionReference users = FirebaseInstance.firestore.collection('users');
 
   Future<UserModel?> getUser(String id, bool getCache) async {
-    final doc = await users
-        .doc(id)
-        .get(getCache ? const GetOptions(source: Source.cache) : null);
-    if (doc.exists) {
-      return UserDTO.fromMap(doc).toModel();
-    } else {
+    try {
+      final doc = await users
+          .doc(id)
+          .get(getCache ? const GetOptions(source: Source.cache) : null);
+      if (doc.exists) {
+        return UserDTO.fromMap(doc).toModel();
+      } else {
+        return null;
+      }
+    } catch (e) {
       return null;
     }
   }

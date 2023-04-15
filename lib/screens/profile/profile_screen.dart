@@ -95,14 +95,12 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 16),
           CircleAvatar(
             radius: 50,
-            backgroundImage: CachedNetworkImageProvider(
-                viewModel.userData?.profilePicture ??
-                    "https://via.placeholder.com/150"),
+            backgroundImage: _buildProfileImage(viewModel),
           ),
           const SizedBox(height: 16),
           const SizedBox(height: 16),
           Text(
-            '${viewModel.userData?.firstName} ${viewModel.userData?.lastName}',
+            '${viewModel.userData?.firstName ?? "No data available"} ${viewModel.userData?.lastName ?? ""}',
             style: TextStyle(
               fontSize: 32,
               fontFamily: GoogleFonts.rubik().fontFamily,
@@ -133,7 +131,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "${viewModel.userData?.fitconnectPoints != 0 ? viewModel.userData?.fitconnectPoints : '0'}",
+            "${viewModel.userData?.fitconnectPoints != 0 ? (viewModel.userData?.fitconnectPoints ?? '0') : '0'}",
             style: TextStyle(
               fontSize: 24,
               fontFamily: GoogleFonts.rubik().fontFamily,
@@ -158,6 +156,15 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  dynamic _buildProfileImage(viewModel) {
+    if (viewModel.isOffline) {
+      return const AssetImage('assets/icon/icon.png');
+    } else {
+      return CachedNetworkImageProvider(viewModel.userData?.profilePicture ??
+          "https://via.placeholder.com/150");
+    }
   }
 
   Widget _buildAchievements(viewModel) {
