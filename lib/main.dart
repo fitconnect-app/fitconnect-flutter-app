@@ -1,12 +1,10 @@
-import 'dart:isolate';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fit_connect/services/init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'services/firebase/singleton.dart';
 import 'services/firebase/config.dart';
-import 'package:fit_connect/services/realm/cleanup.dart';
 import 'theme/style.dart';
 import 'utils/routes.dart';
 
@@ -15,10 +13,9 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await initializeFirebase();
+  OnInitService.init();
   User? user = FirebaseInstance.auth.currentUser;
   String initialRoute = user == null ? '/auth' : '/home';
-  Isolate.spawn(cleanOnStartup, ReceivePort().sendPort);
-
   runApp(FitConnectApp(initialRoute: initialRoute));
   FlutterNativeSplash.remove();
 }
