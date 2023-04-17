@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                     onSelected: (value) {
                       switch (value) {
                         case 0:
-                          //TODO: Navigate to settings if settings will be a thing
+                          Navigator.pushNamed(context, '/settings');
                           break;
                         case 1:
                           FirebaseInstance.auth.signOut();
