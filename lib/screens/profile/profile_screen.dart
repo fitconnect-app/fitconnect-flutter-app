@@ -95,7 +95,10 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 16),
           CircleAvatar(
             radius: 50,
-            backgroundImage: _buildProfileImage(viewModel),
+            backgroundImage: CachedNetworkImageProvider(
+                viewModel.userData?.profilePicture ??
+                    "https://via.placeholder.com/150"),
+            onBackgroundImageError: (exception, stackTrace) {},
           ),
           const SizedBox(height: 16),
           const SizedBox(height: 16),
@@ -156,15 +159,6 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  dynamic _buildProfileImage(viewModel) {
-    if (viewModel.isOffline) {
-      return const AssetImage('assets/icon/icon.png');
-    } else {
-      return CachedNetworkImageProvider(viewModel.userData?.profilePicture ??
-          "https://via.placeholder.com/150");
-    }
   }
 
   Widget _buildAchievements(viewModel) {
