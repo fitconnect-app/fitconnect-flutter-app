@@ -19,9 +19,9 @@ class BPMDataRepository {
 
   List<BPMDataModel> getOldData() {
     final DateTime now = DateTime.now().toUtc();
-    final DateTime lastWeek = now.subtract(const Duration(days: 15));
+    final DateTime lastMonth = now.subtract(const Duration(days: 31));
 
-    var list = _realm.query<BPMDataModel>(r'date < $0', [lastWeek]).toList();
+    var list = _realm.query<BPMDataModel>(r'date < $0', [lastMonth]).toList();
     return list;
   }
 
