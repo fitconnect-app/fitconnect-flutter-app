@@ -134,7 +134,7 @@ Widget _buildStatsBarChart(
       child: Text(
           isBPM
               ? 'No data to display\nTry measuring your heart rate!'
-              : ( isOffline
+              : (isOffline
                   ? 'No data to display\nConnect to a network and try again!'
                   : 'No data to display.\nTry participating in some events!'),
           textAlign: TextAlign.center,

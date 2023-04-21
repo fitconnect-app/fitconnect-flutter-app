@@ -10,15 +10,13 @@ class SettingsViewModel extends ChangeNotifier {
   bool get cleanOnStartup => _cleanOnStartup;
 
   SettingsViewModel() {
-    SharedPreferences.getInstance().then(
-      (preferences) {
-        _preferencesInstance = preferences;
-        _cleanOnStartup = _preferencesInstance.getBool('settingsCleanOnStartup') ?? true;
-        _state = SettingsState.complete;
-        notifyListeners();
-      }
-    )
-    ;
+    SharedPreferences.getInstance().then((preferences) {
+      _preferencesInstance = preferences;
+      _cleanOnStartup =
+          _preferencesInstance.getBool('settingsCleanOnStartup') ?? true;
+      _state = SettingsState.complete;
+      notifyListeners();
+    });
   }
 
   void toggle(bool value, String optionName) {
@@ -34,7 +32,4 @@ class SettingsViewModel extends ChangeNotifier {
   }
 }
 
-enum SettingsState {
-  loading,
-  complete
-}
+enum SettingsState { loading, complete }
