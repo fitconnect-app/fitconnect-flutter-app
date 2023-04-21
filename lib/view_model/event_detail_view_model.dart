@@ -14,9 +14,12 @@ class EventDetailViewModel extends ChangeNotifier {
   EventModel? _event;
   bool _hasJoined = false;
   bool _isOwner = false;
+  bool _isJoiningOrLeaving = false;
   bool _isOffline = false;
 
   EventDetailState get state => _state;
+
+  bool get isJoiningOrLeaving => _isJoiningOrLeaving;
 
   EventModel? get event => _event;
 
@@ -25,6 +28,11 @@ class EventDetailViewModel extends ChangeNotifier {
   bool get isOwner => _isOwner;
 
   bool get isOffline => _isOffline;
+
+  set isJoiningOrLeaving(bool value) {
+    _isJoiningOrLeaving = value;
+    notifyListeners();
+  }
 
   EventDetailViewModel(id) {
     getEvent(id).then((_) {
@@ -52,12 +60,14 @@ class EventDetailViewModel extends ChangeNotifier {
       throw Exception("You cannot join your own event!");
     }
     await _event?.addParticipant(uid);
+    _isJoiningOrLeaving = false;
     notifyListeners();
   }
 
   Future<void> leaveEvent() async {
     var uid = _auth.currentUser?.uid ?? '';
     await _event?.removeParticipant(uid);
+    _isJoiningOrLeaving = false;
     notifyListeners();
   }
 }
