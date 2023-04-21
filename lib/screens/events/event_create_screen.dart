@@ -294,12 +294,14 @@ class SportFormState extends State<SportFormScreen> {
                   ? lightColorScheme.primary.withOpacity(0.8)
                   : lightColorScheme.primary,
               label: viewModel.state == CreateState.loading
-                  ? Text('Creating...',
+                  ? Text(
+                      'Creating...',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white.withOpacity(0.8),
-                      ))
+                      ),
+                    )
                   : const Text('Create',
                       style: TextStyle(
                         fontSize: 16,
