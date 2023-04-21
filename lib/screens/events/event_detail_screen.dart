@@ -146,34 +146,50 @@ class EventDetailScreen extends StatelessWidget {
               }
             }),
             floatingActionButton: FloatingActionButton.extended(
-              elevation: viewModel.isOwner ? 0 : 6,
-              label: Text(
-                  viewModel.hasJoined
-                      ? 'Leave event'
-                      : (viewModel.isOwner
-                          ? "Can't join your own event"
-                          : 'Join'),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: viewModel.isOwner
-                        ? Colors.white.withOpacity(0.5)
-                        : Colors.white,
-                  )),
-              icon: Icon(
-                viewModel.hasJoined
-                    ? Icons.exit_to_app
-                    : (viewModel.isOwner ? Icons.do_disturb : Icons.add),
-                color: viewModel.isOwner
-                    ? Colors.white.withOpacity(0.5)
-                    : Colors.white,
-              ),
-              backgroundColor: viewModel.isOwner
+              elevation:
+                  viewModel.isOwner || viewModel.isJoiningOrLeaving ? 0 : 6,
+              label: (!viewModel.isJoiningOrLeaving
+                  ? Text(
+                      viewModel.hasJoined
+                          ? 'Leave event'
+                          : (viewModel.isOwner
+                              ? "Can't join your own event"
+                              : 'Join'),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: viewModel.isOwner
+                            ? Colors.white.withOpacity(0.5)
+                            : Colors.white,
+                      ),
+                    )
+                  : Text(
+                      !viewModel.hasJoined ? 'Joining...' : 'Leaving...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                    )),
+              icon: viewModel.isJoiningOrLeaving
+                  ? CircularProgressIndicator(
+                      color: Colors.white.withOpacity(0.8),
+                      strokeWidth: 3,
+                    )
+                  : Icon(
+                      (viewModel.hasJoined
+                          ? Icons.exit_to_app
+                          : (viewModel.isOwner ? Icons.do_disturb : Icons.add)),
+                      color: viewModel.isOwner
+                          ? Colors.white.withOpacity(0.5)
+                          : Colors.white,
+                    ),
+              backgroundColor: viewModel.isOwner || viewModel.isJoiningOrLeaving
                   ? lightColorScheme.primary.withOpacity(0.5)
                   : (viewModel.hasJoined
                       ? lightColorScheme.error
-                      : lightColorScheme.primary),
-              onPressed: viewModel.isOwner
+                      : (lightColorScheme.primary)),
+              onPressed: viewModel.isOwner || viewModel.isJoiningOrLeaving
                   ? null
                   : () async {
                       try {
@@ -182,6 +198,7 @@ class EventDetailScreen extends StatelessWidget {
                               ? await viewModel.leaveEvent()
                               : throw Exception("User cancelled leave action");
                         } else {
+                          viewModel.isJoiningOrLeaving = true;
                           await viewModel.joinEvent();
                         }
                         if (context.mounted) {
@@ -254,6 +271,7 @@ Future<bool> _leaveConfirmation(context, viewModel) async {
             TextButton(
                 onPressed: () async {
                   left = true;
+                  viewModel.isJoiningOrLeaving = true;
                   if (context.mounted) Navigator.pop(context);
                 },
                 child: const Text("Leave"))
