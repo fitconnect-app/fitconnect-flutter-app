@@ -1,34 +1,32 @@
 import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/auth_view_model.dart';
-import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  final AuthViewModel viewModel;
+
+  const LoginForm({super.key, required this.viewModel});
 
   @override
   LoginFormState createState() => LoginFormState();
 }
 
 class LoginFormState extends State<LoginForm> {
-  final AuthViewModel viewModel = AuthViewModel();
+  late AuthViewModel viewModel;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    viewModel = widget.viewModel;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        if (viewModel.isOffline) {
-          getMessageSnackBar(
-              "Please check your internet connection and try again.",
-              ScaffoldMessenger.of(context));
-        }
-      },
-    );
     return Form(
       key: _formKey,
       child: Column(
@@ -113,24 +111,26 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _loginUser(BuildContext context) async {
-    try {
-      await viewModel.login(_email.text, _password.text);
+    if (!viewModel.isOffline) {
+      try {
+        await viewModel.login(_email.text, _password.text);
 
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-      }
-    } catch (e) {
-      MotionToast.error(
-        position: MotionToastPosition.top,
-        animationType: AnimationType.fromTop,
-        title: const Text(
-          "Error",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+        }
+      } catch (e) {
+        MotionToast.error(
+          position: MotionToastPosition.top,
+          animationType: AnimationType.fromTop,
+          title: const Text(
+            "Error",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        description: const Text('Login failed'),
-      ).show(context);
+          description: const Text('Login failed'),
+        ).show(context);
+      }
     }
   }
 }

@@ -2,20 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/firebase/errors.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/auth_view_model.dart';
-import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final AuthViewModel viewModel;
+
+  const SignupForm({super.key, required this.viewModel});
 
   @override
   SignupFormState createState() => SignupFormState();
 }
 
 class SignupFormState extends State<SignupForm> {
-  final AuthViewModel viewModel = AuthViewModel();
+  late AuthViewModel viewModel;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -23,16 +24,13 @@ class SignupFormState extends State<SignupForm> {
   final _lastName = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    viewModel = widget.viewModel;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        if (viewModel.isOffline) {
-          getMessageSnackBar(
-              "Please check your internet connection and try again.",
-              ScaffoldMessenger.of(context));
-        }
-      },
-    );
     return Form(
       key: _formKey,
       child: Column(
@@ -241,48 +239,50 @@ class SignupFormState extends State<SignupForm> {
   }
 
   Future<void> _registerUser(BuildContext context) async {
-    try {
-      await viewModel.signup(
-        _firstName.text,
-        _lastName.text,
-        _email.text,
-        _password.text,
-      );
+    if (!viewModel.isOffline) {
+      try {
+        await viewModel.signup(
+          _firstName.text,
+          _lastName.text,
+          _email.text,
+          _password.text,
+        );
 
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-        MotionToast.success(
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+          MotionToast.success(
+            position: MotionToastPosition.top,
+            animationType: AnimationType.fromTop,
+            title: const Text(
+              "Successful user registration",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            description: const Text('¡You are ready for fit connecting!'),
+          ).show(context);
+        }
+      } catch (e) {
+        String errorMessage = '';
+        if (e is FirebaseAuthException) {
+          errorMessage = FirebaseExceptionHelper.getMessage(context, e);
+        } else if (e is FormatException) {
+          errorMessage = e.message;
+        } else {
+          errorMessage = 'An error has occurred. Please try again later';
+        }
+        MotionToast.error(
           position: MotionToastPosition.top,
           animationType: AnimationType.fromTop,
           title: const Text(
-            "Successful user registration",
+            "Error",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
-          description: const Text('¡You are ready for fit connecting!'),
+          description: Text(errorMessage),
         ).show(context);
       }
-    } catch (e) {
-      String errorMessage = '';
-      if (e is FirebaseAuthException) {
-        errorMessage = FirebaseExceptionHelper.getMessage(context, e);
-      } else if (e is FormatException) {
-        errorMessage = e.message;
-      } else {
-        errorMessage = 'An error has occurred. Please try again later';
-      }
-      MotionToast.error(
-        position: MotionToastPosition.top,
-        animationType: AnimationType.fromTop,
-        title: const Text(
-          "Error",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        description: Text(errorMessage),
-      ).show(context);
     }
   }
 }

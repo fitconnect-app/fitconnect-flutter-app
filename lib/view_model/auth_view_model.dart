@@ -20,11 +20,12 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
     } else {
       _isOffline = false;
+      notifyListeners();
+      Trace loginTrace = FirebasePerformance.instance.newTrace('login');
+      loginTrace.start();
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      loginTrace.stop();
     }
-    Trace loginTrace = FirebasePerformance.instance.newTrace('login');
-    loginTrace.start();
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
-    loginTrace.stop();
   }
 
   Future<void> signup(firstName, lastName, email, password) async {
@@ -33,30 +34,30 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
     } else {
       _isOffline = false;
+      Trace signupTrace = FirebasePerformance.instance.newTrace('signup');
+      _filterInvalidCharacters(firstName, 'First name');
+      _filterInvalidCharacters(lastName, 'Last name');
+      signupTrace.start();
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Store user in Firestore
+      var uid = _auth.currentUser?.uid ?? '';
+      final user = UserModel(
+        id: uid,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        profilePicture:
+            'https://api.dicebear.com/5.x/bottts-neutral/png?seed=$firstName$lastName',
+        fitconnectPoints: 0,
+        eventStreak: 0,
+        achievementsIDs: <String>[],
+      );
+      await _userRepository.createUser(UserDTO.fromModel(user));
+      signupTrace.stop();
     }
-    Trace signupTrace = FirebasePerformance.instance.newTrace('signup');
-    _filterInvalidCharacters(firstName, 'First name');
-    _filterInvalidCharacters(lastName, 'Last name');
-    signupTrace.start();
-    await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    // Store user in Firestore
-    var uid = _auth.currentUser?.uid ?? '';
-    final user = UserModel(
-      id: uid,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      profilePicture:
-          'https://api.dicebear.com/5.x/bottts-neutral/png?seed=$firstName$lastName',
-      fitconnectPoints: 0,
-      eventStreak: 0,
-      achievementsIDs: <String>[],
-    );
-    await _userRepository.createUser(UserDTO.fromModel(user));
-    signupTrace.stop();
   }
 
   void _filterInvalidCharacters(String input, String fieldName) {
