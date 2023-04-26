@@ -233,6 +233,7 @@ Widget _buildDetails(EventDetailViewModel viewModel, context) {
     },
   );
   return SingleChildScrollView(
+    physics: const AlwaysScrollableScrollPhysics(),
     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
