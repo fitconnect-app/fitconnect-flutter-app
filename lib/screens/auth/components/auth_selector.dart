@@ -1,11 +1,14 @@
 import 'package:fit_connect/theme/style.dart';
+import 'package:fit_connect/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
 import 'signup.dart';
 
 class AuthSelector extends StatefulWidget {
-  const AuthSelector({super.key});
+  final AuthViewModel viewModel;
+
+  const AuthSelector({super.key, required this.viewModel});
 
   @override
   AuthSelectorState createState() => AuthSelectorState();
@@ -27,11 +30,11 @@ class AuthSelectorState extends State<AuthSelector> {
   }
 
   Widget _buildLoginWidget() {
-    return const LoginForm();
+    return LoginForm(viewModel: widget.viewModel);
   }
 
   Widget _buildSignupWidget() {
-    return const SignupForm();
+    return SignupForm(viewModel: widget.viewModel);
   }
 
   @override
