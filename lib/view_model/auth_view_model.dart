@@ -18,6 +18,7 @@ class AuthViewModel extends ChangeNotifier {
     if (!await checkConnectivity()) {
       _isOffline = true;
       notifyListeners();
+      throw Exception('App is offline');
     } else {
       _isOffline = false;
       notifyListeners();
@@ -32,6 +33,7 @@ class AuthViewModel extends ChangeNotifier {
     if (!await checkConnectivity()) {
       _isOffline = true;
       notifyListeners();
+      throw Exception('App is offline');
     } else {
       _isOffline = false;
       Trace signupTrace = FirebasePerformance.instance.newTrace('signup');

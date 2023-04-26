@@ -239,30 +239,30 @@ class SignupFormState extends State<SignupForm> {
   }
 
   Future<void> _registerUser(BuildContext context) async {
-    if (!viewModel.isOffline) {
-      try {
-        await viewModel.signup(
-          _firstName.text,
-          _lastName.text,
-          _email.text,
-          _password.text,
-        );
+    try {
+      await viewModel.signup(
+        _firstName.text,
+        _lastName.text,
+        _email.text,
+        _password.text,
+      );
 
-        if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-          MotionToast.success(
-            position: MotionToastPosition.top,
-            animationType: AnimationType.fromTop,
-            title: const Text(
-              "Successful user registration",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+        MotionToast.success(
+          position: MotionToastPosition.top,
+          animationType: AnimationType.fromTop,
+          title: const Text(
+            "Successful user registration",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
-            description: const Text('¡You are ready for fit connecting!'),
-          ).show(context);
-        }
-      } catch (e) {
+          ),
+          description: const Text('¡You are ready for fit connecting!'),
+        ).show(context);
+      }
+    } catch (e) {
+      if (!viewModel.isOffline) {
         String errorMessage = '';
         if (e is FirebaseAuthException) {
           errorMessage = FirebaseExceptionHelper.getMessage(context, e);

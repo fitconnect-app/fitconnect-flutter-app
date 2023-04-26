@@ -111,14 +111,14 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _loginUser(BuildContext context) async {
-    if (!viewModel.isOffline) {
-      try {
-        await viewModel.login(_email.text, _password.text);
+    try {
+      await viewModel.login(_email.text, _password.text);
 
-        if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-        }
-      } catch (e) {
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+      }
+    } catch (e) {
+      if (!viewModel.isOffline) {
         MotionToast.error(
           position: MotionToastPosition.top,
           animationType: AnimationType.fromTop,
