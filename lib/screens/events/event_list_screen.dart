@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/message_snack_bar.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'components/event_card.dart';
 
 class EventsScreenArguments {
