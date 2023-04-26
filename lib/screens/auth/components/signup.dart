@@ -22,6 +22,13 @@ class SignupFormState extends State<SignupForm> {
   final _password = TextEditingController();
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
+  bool _isLoading = false;
+
+  void _setLoading(bool isLoading) {
+    setState(() {
+      _isLoading = isLoading;
+    });
+  }
 
   @override
   void initState() {
@@ -205,28 +212,44 @@ class SignupFormState extends State<SignupForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: lightColorScheme.scrim,
-                        foregroundColor: lightColorScheme.onSecondary,
-                        side: BorderSide(
-                            width: 0.5, color: lightColorScheme.onSecondary)),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _registerUser(context);
-                      } else {
-                        MotionToast.error(
-                          position: MotionToastPosition.top,
-                          animationType: AnimationType.fromTop,
-                          title: const Text(
-                            "Error",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                      backgroundColor: lightColorScheme.scrim,
+                      foregroundColor: lightColorScheme.onSecondary,
+                      side: BorderSide(
+                        width: 0.5,
+                        color: lightColorScheme.onSecondary,
+                      ),
+                    ),
+                    onPressed: _isLoading
+                        ? null
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              _registerUser(context);
+                            } else {
+                              MotionToast.error(
+                                position: MotionToastPosition.top,
+                                animationType: AnimationType.fromTop,
+                                title: const Text(
+                                  "Error",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                description:
+                                    const Text("There is some invalid data"),
+                              ).show(context);
+                            }
+                          },
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                lightColorScheme.onSecondary,
+                              ),
                             ),
-                          ),
-                          description: const Text("There is some invalid data"),
-                        ).show(context);
-                      }
-                    },
-                    child: const Text('SIGN UP'),
+                          )
+                        : const Text('SIGN UP'),
                   ),
                 ),
                 const SizedBox(height: 2)
@@ -240,6 +263,7 @@ class SignupFormState extends State<SignupForm> {
 
   Future<void> _registerUser(BuildContext context) async {
     try {
+      _setLoading(true);
       await viewModel.signup(
         _firstName.text,
         _lastName.text,
@@ -283,6 +307,8 @@ class SignupFormState extends State<SignupForm> {
           description: Text(errorMessage),
         ).show(context);
       }
+    } finally {
+      _setLoading(false);
     }
   }
 }
