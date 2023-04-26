@@ -1,3 +1,4 @@
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
@@ -38,111 +39,9 @@ class EventDetailScreen extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Container(
-                          height: 160.0,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(8.0),
-                              bottomRight: Radius.circular(8.0),
-                            ),
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  viewModel.event?.sport.getImage() ??
-                                      'assets/images/events/other.jpeg',
-                                ),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        "Sport: ${viewModel.event!.sport.getString()}",
-                        style: const TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 15.0),
-                      Text(
-                        'Time and Place:',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: GoogleFonts.rubik().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 15.0),
-                      Text(
-                          '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontFamily: GoogleFonts.rubik().fontFamily,
-                          )),
-                      const SizedBox(height: 15.0),
-                      Text(
-                        'Organizer:',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontFamily: GoogleFonts.rubik().fontFamily,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.grey[30]),
-                      ),
-                      const SizedBox(height: 5.0),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                viewModel.event!.eventOwner?.getNameString() ??
-                                    '',
-                                style: const TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 15.0),
-                      Text(
-                        'Spots Available: ${viewModel.event!.spotsAvailable}',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: GoogleFonts.rubik().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        'Participants:',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: GoogleFonts.rubik().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      _getParticipantsWidget(viewModel.event!.participants)
-                    ],
-                  ),
-                );
+                return RefreshIndicator(
+                    onRefresh: () => viewModel.getEvent(eventId),
+                    child: _buildDetails(viewModel, context));
               }
             }),
             floatingActionButton: FloatingActionButton.extended(
@@ -321,6 +220,122 @@ Widget _getParticipantsWidget(List participantsList) {
       ),
     );
   }
+}
+
+Widget _buildDetails(EventDetailViewModel viewModel, context) {
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) {
+      if (viewModel.isOffline) {
+        getMessageSnackBar(
+            "There is no internet connection, showing the event details when it was last updated!",
+            ScaffoldMessenger.of(context));
+      }
+    },
+  );
+  return SingleChildScrollView(
+    physics: const AlwaysScrollableScrollPhysics(),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            height: 160.0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+                bottomLeft: Radius.circular(8.0),
+                bottomRight: Radius.circular(8.0),
+              ),
+              image: DecorationImage(
+                  image: AssetImage(
+                    viewModel.event?.sport.getImage() ??
+                        'assets/images/events/other.jpeg',
+                  ),
+                  fit: BoxFit.cover),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10.0),
+        Text(
+          "Sport: ${viewModel.event!.sport.getString()}",
+          style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 15.0),
+        Text(
+          'Time and Place:',
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: GoogleFonts.rubik().fontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 15.0),
+        Text(
+            '${_getFormattedDate(viewModel.event!.startDate.toDate())} // ${viewModel.event!.location}',
+            style: TextStyle(
+              fontSize: 15.0,
+              fontFamily: GoogleFonts.rubik().fontFamily,
+            )),
+        const SizedBox(height: 15.0),
+        Text(
+          'Organizer:',
+          style: TextStyle(
+              fontSize: 17,
+              fontFamily: GoogleFonts.rubik().fontFamily,
+              fontWeight: FontWeight.w700,
+              color: Colors.grey[30]),
+        ),
+        const SizedBox(height: 5.0),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 2.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  viewModel.event!.eventOwner?.getNameString() ??
+                      'No organizer, Please connect to the internet',
+                  style: const TextStyle(fontSize: 15.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15.0),
+        Text(
+          'Spots Available: ${viewModel.event!.spotsAvailable}',
+          style: TextStyle(
+            fontSize: 17,
+            fontFamily: GoogleFonts.rubik().fontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 15),
+        Text(
+          'Participants:',
+          style: TextStyle(
+            fontSize: 17,
+            fontFamily: GoogleFonts.rubik().fontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 15),
+        _getParticipantsWidget(viewModel.event!.participants)
+      ],
+    ),
+  );
 }
 
 String _getFormattedDate(DateTime date) {
