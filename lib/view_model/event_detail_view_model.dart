@@ -4,6 +4,7 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:flutter/material.dart';
+import 'package:fit_connect/utils/connectivity.dart';
 
 enum EventDetailState { loading, completed, error }
 
@@ -37,19 +38,25 @@ class EventDetailViewModel extends ChangeNotifier {
   EventDetailViewModel(id) {
     getEvent(id).then((_) {
       _state = EventDetailState.completed;
-      _hasJoined = _event!.participantsIds.contains(_auth.currentUser?.uid);
-      _isOwner = _event!.eventOwnerId == _auth.currentUser?.uid;
       notifyListeners();
     });
   }
 
   Future<void> getEvent(id) async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
+    }
     Trace eventTrace = FirebasePerformance.instance.newTrace('getEvent');
     eventTrace.start();
-    _event = await _eventRepository.getEvent(id);
+    _event = await _eventRepository.getEvent(id, _isOffline);
     await _event?.getOwner(_isOffline);
     await _event?.getParticipants(_isOffline);
     eventTrace.stop();
+    _hasJoined = _event!.participantsIds.contains(_auth.currentUser?.uid);
+    _isOwner = _event!.eventOwnerId == _auth.currentUser?.uid;
   }
 
   Future<void> joinEvent() async {
