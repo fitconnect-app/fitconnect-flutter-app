@@ -94,7 +94,12 @@ class EventDetailScreen extends StatelessWidget {
                       try {
                         if (viewModel.isOffline && viewModel.hasJoined) {
                           getMessageSnackBar(
-                              "There is no internet connection, cannot leave event",
+                              "There is no internet connection, cannot leave event. Try again later",
+                              ScaffoldMessenger.of(context));
+                        } else if (viewModel.isOffline &&
+                            !viewModel.hasJoined) {
+                          getMessageSnackBar(
+                              "There is no internet connection, cannot join event. Try again later",
                               ScaffoldMessenger.of(context));
                         } else if (viewModel.hasJoined) {
                           await _leaveConfirmation(context, viewModel)

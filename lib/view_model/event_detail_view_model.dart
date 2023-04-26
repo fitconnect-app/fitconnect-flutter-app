@@ -61,10 +61,7 @@ class EventDetailViewModel extends ChangeNotifier {
 
   Future<void> joinEvent() async {
     var uid = _auth.currentUser?.uid ?? '';
-    if (_isOffline) {
-      _isJoiningOrLeaving = false;
-      throw Exception("There is no internet connection, try again later");
-    } else if (_event!.participantsIds.contains(uid)) {
+    if (_event!.participantsIds.contains(uid)) {
       throw Exception("You already joined this event!");
     } else if (_event!.eventOwnerId == uid) {
       throw Exception("You cannot join your own event!");
