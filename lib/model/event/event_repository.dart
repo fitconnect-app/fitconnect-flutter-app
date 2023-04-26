@@ -15,7 +15,8 @@ class EventRepository {
     }
   }
 
-  Future<List<EventModel>> getEvents({int? limit, String? sport}) async {
+  Future<List<EventModel>> getEvents(
+      {int? limit, String? sport, required bool getCache}) async {
     final now = DateTime.now();
 
     var futureEventsQuery = events
@@ -36,8 +37,10 @@ class EventRepository {
       pastEventsQuery = pastEventsQuery.limit(limit);
     }
 
-    final futureEvents = await futureEventsQuery.get();
-    final pastEvents = await pastEventsQuery.get();
+    final futureEvents = await futureEventsQuery
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    final pastEvents = await pastEventsQuery
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
 
     final futureEventsList = futureEvents.docs
         .map((doc) => EventDTO.fromMap(doc).toModel())
