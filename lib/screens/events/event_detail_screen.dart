@@ -227,7 +227,7 @@ Widget _buildDetails(EventDetailViewModel viewModel, context) {
     (_) {
       if (viewModel.isOffline) {
         getMessageSnackBar(
-            "There is no internet connection, showing your profile when it was last updated!",
+            "There is no internet connection, showing the event details when it was last updated!",
             ScaffoldMessenger.of(context));
       }
     },
@@ -306,7 +306,7 @@ Widget _buildDetails(EventDetailViewModel viewModel, context) {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   viewModel.event!.eventOwner?.getNameString() ??
-                      'Cannot obtain organizer name, please connect to the internet',
+                      'No organizer, Please connect to the internet',
                   style: const TextStyle(fontSize: 15.0),
                 ),
               ),
