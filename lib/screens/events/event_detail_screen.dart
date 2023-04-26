@@ -92,7 +92,11 @@ class EventDetailScreen extends StatelessWidget {
                   ? null
                   : () async {
                       try {
-                        if (viewModel.hasJoined) {
+                        if (viewModel.isOffline) {
+                          getMessageSnackBar(
+                              "There is no internet connection, cannot leave event",
+                              ScaffoldMessenger.of(context));
+                        } else if (viewModel.hasJoined) {
                           await _leaveConfirmation(context, viewModel)
                               ? await viewModel.leaveEvent()
                               : throw Exception("User cancelled leave action");
@@ -100,7 +104,7 @@ class EventDetailScreen extends StatelessWidget {
                           viewModel.isJoiningOrLeaving = true;
                           await viewModel.joinEvent();
                         }
-                        if (context.mounted) {
+                        if (context.mounted && !viewModel.isOffline) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
