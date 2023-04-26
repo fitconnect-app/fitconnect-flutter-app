@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/message_snack_bar.dart';
 import 'components/event_card.dart';
 
 class EventsScreenArguments {
@@ -72,6 +73,16 @@ class _EventsScreenState extends State<EventsListScreen> {
   }
 
   Widget _buildEventList(EventsListViewModel viewModel, String? sport) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (viewModel.isOffline) {
+          getMessageSnackBar(
+              "There is no internet connection, showing the events when there were last updated!",
+              ScaffoldMessenger.of(context));
+        }
+      },
+    );
+
     if (viewModel.events?.isEmpty ?? true) {
       return Center(
         child: Text(
