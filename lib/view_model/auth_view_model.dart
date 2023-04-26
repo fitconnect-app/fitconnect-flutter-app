@@ -4,13 +4,23 @@ import 'package:fit_connect/model/user/user_dto.dart';
 import 'package:fit_connect/model/user/user_model.dart';
 import 'package:fit_connect/model/user/user_repository.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseInstance.auth;
   final UserRepository _userRepository = UserRepository();
+  bool _isOffline = false;
+
+  bool get isOffline => _isOffline;
 
   Future<void> login(email, password) async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
+    }
     Trace loginTrace = FirebasePerformance.instance.newTrace('login');
     loginTrace.start();
     await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -18,6 +28,12 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> signup(firstName, lastName, email, password) async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
+    }
     Trace signupTrace = FirebasePerformance.instance.newTrace('signup');
     _filterInvalidCharacters(firstName, 'First name');
     _filterInvalidCharacters(lastName, 'Last name');

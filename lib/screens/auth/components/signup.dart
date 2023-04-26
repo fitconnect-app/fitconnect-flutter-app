@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/firebase/errors.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/auth_view_model.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -23,6 +24,15 @@ class SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (viewModel.isOffline) {
+          getMessageSnackBar(
+              "Please check your internet connection and try again.",
+              ScaffoldMessenger.of(context));
+        }
+      },
+    );
     return Form(
       key: _formKey,
       child: Column(
