@@ -53,6 +53,7 @@ dependencies:
   realm: ^1.0.3
   settings_ui: ^2.0.2
   shared_preferences: ^2.1.0
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
