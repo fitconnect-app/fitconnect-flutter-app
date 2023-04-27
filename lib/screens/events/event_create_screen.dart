@@ -1,3 +1,4 @@
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
@@ -32,16 +33,96 @@ class SportFormState extends State<SportFormScreen> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
+  late EventCreateViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = EventCreateViewModel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => EventCreateViewModel(),
+      create: (context) => _viewModel,
       child: Consumer<EventCreateViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Create an Event'),
               centerTitle: true,
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) => [
+                    const PopupMenuItem(
+                      value: 0,
+                      child: Text('Save event as template'),
+                    ),
+                    const PopupMenuItem(
+                      value: 1,
+                      child: Text('Load event template'),
+                    )
+                  ],
+                  onSelected: (value) async {
+                    switch (value) {
+                      case 0:
+                        // Stores form data in Shared Preferences
+                        await viewModel.saveFormData(
+                            _selectedSport,
+                            _selectedPlayerCount,
+                            _broughtPlayerCount,
+                            _selectedDateTime,
+                            _duration,
+                            _locationController.text);
+                        if (context.mounted) {
+                          getMessageSnackBar(
+                              "Event Template Saved Successfully!",
+                              ScaffoldMessenger.of(context));
+                        }
+                        break;
+                      case 1:
+                        var data = await _viewModel.loadFormData();
+                        setState(
+                          () {
+                            _selectedSport = data['selectedSport'].isEmpty
+                                ? null
+                                : data['selectedSport'];
+                            _selectedPlayerCount =
+                                data['selectedPlayerCount'] == 0
+                                    ? null
+                                    : data['selectedPlayerCount'];
+                            _broughtPlayerCount =
+                                data['broughtPlayerCount'] == 0
+                                    ? null
+                                    : data['broughtPlayerCount'];
+                            _selectedDateTime = data['selectedDateTime'].isEmpty
+                                ? null
+                                : DateTime.parse(data['selectedDateTime']);
+                            _duration = data['duration'].isEmpty
+                                ? null
+                                : Duration(
+                                    seconds: int.parse(data['duration']));
+                            _locationController.text = data['location'];
+                          },
+                        );
+                        if (_selectedDateTime != null) {
+                          _dateController.text = DateFormat('yyyy-MM-dd HH:mm')
+                              .format(_selectedDateTime!);
+                        }
+                        if (_duration != null) {
+                          _durationController.text =
+                              '${_duration!.inHours.toString().padLeft(2, '0')}:${(_duration!.inMinutes % 60).toString().padLeft(2, '0')}';
+                        }
+                        if (context.mounted) {
+                          getMessageSnackBar(
+                              "Event Template Loaded Successfully!",
+                              ScaffoldMessenger.of(context));
+                        }
+                        break;
+                    }
+                  },
+                ),
+              ],
             ),
             body: SingleChildScrollView(
               child: Padding(
@@ -237,8 +318,7 @@ class SportFormState extends State<SportFormScreen> {
                           hintText: 'Enter event location',
                         ),
                         controller: _locationController,
-                      ),
-                      const SizedBox(height: 15),
+                      )
                     ],
                   ),
                 ),

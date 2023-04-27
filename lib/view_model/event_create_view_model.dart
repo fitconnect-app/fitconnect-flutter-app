@@ -7,6 +7,7 @@ import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
@@ -66,6 +67,36 @@ class EventCreateViewModel extends ChangeNotifier {
         location: location);
     await _eventRepository.createEvent(EventDTO.fromModel(event));
     createEventTrace.stop();
+  }
+
+  Future<void> saveFormData(
+    String? selectedSport,
+    int? selectedPlayerCount,
+    int? broughtPlayerCount,
+    DateTime? selectedDateTime,
+    Duration? duration,
+    String location,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedSport', selectedSport ?? '');
+    prefs.setInt('selectedPlayerCount', selectedPlayerCount ?? 0);
+    prefs.setInt('broughtPlayerCount', broughtPlayerCount ?? 0);
+    prefs.setString(
+        'selectedDateTime', selectedDateTime?.toIso8601String() ?? '');
+    prefs.setString('duration', duration?.inSeconds.toString() ?? '');
+    prefs.setString('location', location);
+  }
+
+  Future<Map<String, dynamic>> loadFormData() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      'selectedSport': prefs.getString('selectedSport') ?? '',
+      'selectedPlayerCount': prefs.getInt('selectedPlayerCount') ?? 0,
+      'broughtPlayerCount': prefs.getInt('broughtPlayerCount') ?? 0,
+      'selectedDateTime': prefs.getString('selectedDateTime') ?? '',
+      'duration': prefs.getString('duration') ?? '',
+      'location': prefs.getString('location') ?? '',
+    };
   }
 }
 
