@@ -32,44 +32,51 @@ class SportFormState extends State<SportFormScreen> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
+  late EventCreateViewModel _viewModel;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      final data =
-          await Provider.of<EventCreateViewModel>(context, listen: false)
-              .loadFormData();
-      setState(() {
-        _selectedSport =
-            data['selectedSport'].isEmpty ? null : data['selectedSport'];
-        _selectedPlayerCount = data['selectedPlayerCount'] == 0
-            ? null
-            : data['selectedPlayerCount'];
-        _broughtPlayerCount =
-            data['broughtPlayerCount'] == 0 ? null : data['broughtPlayerCount'];
-        _selectedDateTime = data['selectedDateTime'].isEmpty
-            ? null
-            : DateTime.parse(data['selectedDateTime']);
-        _duration = data['duration'].isEmpty
-            ? null
-            : Duration(seconds: int.parse(data['duration']));
-        _locationController.text = data['location'];
-      });
-      if (_selectedDateTime != null) {
-        _dateController.text =
-            DateFormat('yyyy-MM-dd HH:mm').format(_selectedDateTime!);
-      }
-      if (_duration != null) {
-        _durationController.text =
-            '${_duration!.inHours.toString().padLeft(2, '0')}:${(_duration!.inMinutes % 60).toString().padLeft(2, '0')}';
-      }
-    });
+    _viewModel = EventCreateViewModel();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        final data = await _viewModel.loadFormData();
+        setState(
+          () {
+            _selectedSport =
+                data['selectedSport'].isEmpty ? null : data['selectedSport'];
+            _selectedPlayerCount = data['selectedPlayerCount'] == 0
+                ? null
+                : data['selectedPlayerCount'];
+            _broughtPlayerCount = data['broughtPlayerCount'] == 0
+                ? null
+                : data['broughtPlayerCount'];
+            _selectedDateTime = data['selectedDateTime'].isEmpty
+                ? null
+                : DateTime.parse(data['selectedDateTime']);
+            _duration = data['duration'].isEmpty
+                ? null
+                : Duration(seconds: int.parse(data['duration']));
+            _locationController.text = data['location'];
+          },
+        );
+        if (_selectedDateTime != null) {
+          _dateController.text =
+              DateFormat('yyyy-MM-dd HH:mm').format(_selectedDateTime!);
+        }
+        if (_duration != null) {
+          _durationController.text =
+              '${_duration!.inHours.toString().padLeft(2, '0')}:${(_duration!.inMinutes % 60).toString().padLeft(2, '0')}';
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => EventCreateViewModel(),
+      create: (context) => _viewModel,
       child: Consumer<EventCreateViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -293,7 +300,7 @@ class SportFormState extends State<SportFormScreen> {
                             _locationController.text);
                         viewModel.state = CreateState.success;
 
-                        // Guarda los datos del formulario en SharedPreferences
+                        // Stores form data in Shared Preferences
                         await viewModel.saveFormData(
                             _selectedSport,
                             _selectedPlayerCount,
