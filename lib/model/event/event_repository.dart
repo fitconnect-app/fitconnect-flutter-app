@@ -7,15 +7,15 @@ class EventRepository {
   CollectionReference events = FirebaseInstance.firestore.collection('events');
 
   Future<EventModel?> getEvent(String id, bool getCache) async {
-  final doc = await events
-      .doc(id)
-      .get(getCache ? const GetOptions(source: Source.cache) : null);
-  if (doc.exists) {
-    return EventDTO.fromMap(doc).toModel();
-  } else {
-    return null;
+    final doc = await events
+        .doc(id)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    if (doc.exists) {
+      return EventDTO.fromMap(doc).toModel();
+    } else {
+      return null;
+    }
   }
-}
 
   Future<List<EventModel>> getEvents(
       {int? limit, String? sport, required bool getCache}) async {

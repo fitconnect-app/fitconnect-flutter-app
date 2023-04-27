@@ -1,17 +1,11 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
 import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/view_model/event_list_view_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
 import 'components/event_card.dart';
 
 class EventsScreenArguments {
@@ -28,56 +22,11 @@ class EventsListScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsListScreen> {
-  String _currentTime = '';
-  Timer? _timer;
-
-  void _getCurrentTime() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://worldtimeapi.org/api/ip'),
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final datetime = data['datetime'];
-        var hour = int.parse(datetime.substring(11, 13));
-        final minute = datetime.substring(14, 16);
-        String amPm = '';
-        if (hour >= 12) {
-          amPm = 'PM';
-          hour -= 12;
-        } else {
-          amPm = 'AM';
-        }
-        if (hour == 0) {
-          hour = 12;
-        }
-        setState(() {
-          _currentTime = '$hour:$minute $amPm';
-        });
-      } else {
-        throw Exception('Failed to load data of current time');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error: $e');
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentTime();
-
-    // Set up a timer to update the current time every minute
-    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
-      _getCurrentTime();
-    });
-  }
+  late EventsListViewModel _viewModel;
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _viewModel.cancelTimer();
     super.dispose();
   }
 
@@ -86,8 +35,14 @@ class _EventsScreenState extends State<EventsListScreen> {
     final args =
         ModalRoute.of(context)!.settings.arguments as EventsScreenArguments;
 
+    if (mounted) {
+      setState(() {
+        _viewModel = EventsListViewModel(args.filter);
+      });
+    }
+
     return ChangeNotifierProvider<EventsListViewModel>(
-      create: (context) => EventsListViewModel(args.filter),
+      create: (context) => _viewModel,
       child:
           Consumer<EventsListViewModel>(builder: (context, viewModel, child) {
         if (viewModel.state == EventState.loading) {
@@ -152,7 +107,7 @@ class _EventsScreenState extends State<EventsListScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (_currentTime.isNotEmpty)
+          if (viewModel.currentTime.isNotEmpty)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: RichText(
@@ -166,7 +121,7 @@ class _EventsScreenState extends State<EventsListScreen> {
                   ),
                   children: [
                     TextSpan(
-                      text: _currentTime.substring(0, 5),
+                      text: viewModel.currentTime.substring(0, 5),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -174,7 +129,7 @@ class _EventsScreenState extends State<EventsListScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: _currentTime.substring(5),
+                      text: viewModel.currentTime.substring(5),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
