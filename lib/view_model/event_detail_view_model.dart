@@ -61,6 +61,12 @@ class EventDetailViewModel extends ChangeNotifier {
 
   Future<void> joinEvent() async {
     var uid = _auth.currentUser?.uid ?? '';
+    if (!await checkConnectivity()) {
+      _isJoiningOrLeaving = false;
+      _isOffline = true;
+      notifyListeners();
+      return;
+    }
     if (_event!.participantsIds.contains(uid)) {
       throw Exception("You already joined this event!");
     } else if (_event!.eventOwnerId == uid) {
@@ -72,9 +78,20 @@ class EventDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> leaveEvent() async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      _isJoiningOrLeaving = false;
+      notifyListeners();
+      return;
+    }
     var uid = _auth.currentUser?.uid ?? '';
     await _event?.removeParticipant(uid);
     _isJoiningOrLeaving = false;
+    notifyListeners();
+  }
+
+  Future<void> checkConnection() async {
+    _isOffline = !await checkConnectivity();
     notifyListeners();
   }
 }

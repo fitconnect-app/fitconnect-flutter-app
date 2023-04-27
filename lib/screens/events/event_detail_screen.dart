@@ -92,14 +92,15 @@ class EventDetailScreen extends StatelessWidget {
                   ? null
                   : () async {
                       try {
-                        if (viewModel.isOffline && viewModel.hasJoined) {
+                        await viewModel.checkConnection();
+                        if (viewModel.isOffline && viewModel.hasJoined && context.mounted) {
                           getMessageSnackBar(
-                              "There is no internet connection, cannot leave event. Try again later",
+                              "There is no internet connection, cannot leave event. Try again later!",
                               ScaffoldMessenger.of(context));
                         } else if (viewModel.isOffline &&
                             !viewModel.hasJoined) {
                           getMessageSnackBar(
-                              "There is no internet connection, cannot join event. Try again later",
+                              "There is no internet connection, cannot join event. Try again later!",
                               ScaffoldMessenger.of(context));
                         } else if (viewModel.hasJoined) {
                           await _leaveConfirmation(context, viewModel)
@@ -236,7 +237,7 @@ Widget _buildDetails(EventDetailViewModel viewModel, context) {
     (_) {
       if (viewModel.isOffline) {
         getMessageSnackBar(
-            "There is no internet connection, showing the event details when it was last updated!",
+            "There is no internet connection, showing the last updated details!\nYou won't be able to join or leave the event.",
             ScaffoldMessenger.of(context));
       }
     },
