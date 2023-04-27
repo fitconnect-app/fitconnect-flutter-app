@@ -5,6 +5,7 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -109,12 +110,28 @@ class EventsListViewModel extends ChangeNotifier {
         _currentTime = '$hour:$minute $amPm';
         notifyListeners();
       } else {
-        throw Exception('Failed to load data of current time');
+        throw Exception('Failed to load data of current time from internet');
       }
     } catch (e) {
       if (kDebugMode) {
         print('Error: $e');
       }
+      TimeOfDay now = TimeOfDay.now();
+      var hour = now.hour;
+      final minute = now.minute;
+      String amPm = '';
+      if (hour >= 12) {
+        amPm = 'PM';
+        hour -= 12;
+      } else {
+        amPm = 'AM';
+      }
+      if (hour == 0) {
+        hour = 12;
+      }
+
+      _currentTime = '$hour:${minute.toString().padLeft(2, '0')} $amPm';
+      notifyListeners();
     }
   }
 }
