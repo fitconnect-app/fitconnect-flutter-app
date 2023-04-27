@@ -90,7 +90,7 @@ class EventDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkConnection() async {
+  Future<void> checkConnectionFromView() async {
     _isOffline = !await checkConnectivity();
     notifyListeners();
   }

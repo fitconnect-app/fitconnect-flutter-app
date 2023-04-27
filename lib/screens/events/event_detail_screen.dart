@@ -92,7 +92,7 @@ class EventDetailScreen extends StatelessWidget {
                   ? null
                   : () async {
                       try {
-                        await viewModel.checkConnection();
+                        await viewModel.checkConnectionFromView();
                         if (viewModel.isOffline && viewModel.hasJoined && context.mounted) {
                           getMessageSnackBar(
                               "There is no internet connection, cannot leave event. Try again later!",
