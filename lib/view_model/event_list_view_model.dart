@@ -33,7 +33,6 @@ class EventsListViewModel extends ChangeNotifier {
       notifyListeners();
     });
     getCurrentTime();
-    initTimer();
   }
 
   Future<void> getEvents(String? filter) async {
@@ -85,14 +84,17 @@ class EventsListViewModel extends ChangeNotifier {
 
   void cancelTimer() {
     _timer?.cancel();
+    _timer = null;
   }
 
   void getCurrentTime() async {
+    _timer == null ? initTimer() : null; // Init timer if null
     try {
       final response = await http.get(
         Uri.parse('http://worldtimeapi.org/api/ip'),
       );
       if (response.statusCode == 200) {
+        _isOffline = false;
         final data = jsonDecode(response.body);
         final datetime = data['datetime'];
         var hour = int.parse(datetime.substring(11, 13));
