@@ -8,12 +8,12 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:fit_connect/utils/connectivity.dart';
 
 class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
@@ -71,8 +71,9 @@ class EventCreateViewModel extends ChangeNotifier {
 
     final startDate = Timestamp.fromDate(startDateTime);
     final endDate = Timestamp.fromDate(startDateTime.add(duration));
+    final sportName = Sports.values.firstWhere((e) => e.getString() == sport);
     final event = EventModel(
-        sport: Sports.values.firstWhere((e) => e.getString() == sport),
+        sport: sportName,
         playersNeeded: playersNeeded,
         playersBrought: playersBrought,
         spotsAvailable: playersNeeded,
@@ -97,10 +98,11 @@ class EventCreateViewModel extends ChangeNotifier {
 
       // Listen for humidity value from isolate
       receivePort.listen((humidity) {
-        if (humidity != null) {
-          print("Humidity: $humidity");
-        } else {
-          print("Failed to fetch humidity");
+        if (humidity != null && humidity) {
+          NotificationService.showNotification(
+              title: "Weather Forcast",
+              body:
+                  "There's a probability that your $sportName event will have rain");
         }
       });
 
