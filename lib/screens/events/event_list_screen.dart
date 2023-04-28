@@ -6,6 +6,7 @@ import 'package:fit_connect/view_model/event_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'components/event_card.dart';
 
 class EventsScreenArguments {
@@ -27,6 +28,7 @@ class _EventsScreenState extends State<EventsListScreen> {
   @override
   void dispose() {
     _viewModel.cancelTimer();
+    _viewModel.closeNewEventStream();
     super.dispose();
   }
 
@@ -93,6 +95,14 @@ class _EventsScreenState extends State<EventsListScreen> {
           getMessageSnackBar(
               "There is no internet connection, showing the events when there were last updated!",
               ScaffoldMessenger.of(context));
+        }
+      },
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (viewModel.needReload) {
+          viewModel.refreshEvents();
         }
       },
     );

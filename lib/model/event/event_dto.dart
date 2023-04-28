@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import "../shared/sports.dart";
 import 'event_model.dart';
 
@@ -40,6 +41,7 @@ class EventDTO {
       'participants': participants,
       'eventOwner': eventOwner,
       'location': location,
+      'createdAt': Timestamp.now(),
     };
   }
 

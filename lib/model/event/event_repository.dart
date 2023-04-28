@@ -17,6 +17,23 @@ class EventRepository {
     }
   }
 
+  Future<EventModel?> getLastEvent(
+      {int? limit, String? sport, required bool getCache}) async {
+    var query = events.orderBy('createdAt', descending: true);
+    if (sport != '') {
+      query = query.where('sport', isEqualTo: sport);
+    }
+    final event = await query
+        .limit(1)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    if (event.docs.isNotEmpty) {
+      final lastEvent = EventDTO.fromMap(event.docs.first).toModel();
+      return lastEvent;
+    } else {
+      return null;
+    }
+  }
+
   Future<List<EventModel>> getEvents(
       {int? limit, String? sport, required bool getCache}) async {
     final now = DateTime.now();
