@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/init.dart';
+import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -11,6 +12,7 @@ import 'utils/routes.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  NotificationService().initNotification();
 
   await initializeFirebase();
   OnInitService.init();
@@ -18,6 +20,7 @@ Future<void> main() async {
   String initialRoute = user == null ? '/auth' : '/home';
   runApp(FitConnectApp(initialRoute: initialRoute));
   FlutterNativeSplash.remove();
+  NotificationService().showNotification(title: "Hola", body: "Hola2");
 }
 
 class FitConnectApp extends StatelessWidget {
