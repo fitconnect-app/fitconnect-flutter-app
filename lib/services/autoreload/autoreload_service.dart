@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AutoreloadService {
   var _filter = '';
+  bool _running = true;
   static late SharedPreferences preferences;
   static final StreamController<String> _eventStreamController =
       StreamController.broadcast();
@@ -44,7 +45,7 @@ class AutoreloadService {
     );
     String? lastEventID = lastEvent?.id;
 
-    while (true) {
+    while (_running) {
       await Future.delayed(const Duration(seconds: 10));
 
       bool isOffline = !await checkConnectivity();
@@ -65,5 +66,6 @@ class AutoreloadService {
 
   void dispose() {
     _eventStreamController.close();
+    _running = false;
   }
 }

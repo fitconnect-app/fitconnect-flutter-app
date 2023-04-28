@@ -39,8 +39,8 @@ class EventsListViewModel extends ChangeNotifier {
       _state = EventState.completed;
       notifyListeners();
     });
-    _autoreloadService = AutoreloadService(_filter);
     getCurrentTime();
+    _autoreloadService = AutoreloadService(_filter);
     listenNewEventStream();
   }
 

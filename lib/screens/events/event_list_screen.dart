@@ -99,7 +99,7 @@ class _EventsScreenState extends State<EventsListScreen> {
       },
     );
 
-        WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         if (viewModel.needReload) {
           viewModel.refreshEvents();

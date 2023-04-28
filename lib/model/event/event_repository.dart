@@ -19,8 +19,11 @@ class EventRepository {
 
   Future<EventModel?> getLastEvent(
       {int? limit, String? sport, required bool getCache}) async {
-    final event = await events
-        .orderBy('createdAt', descending: true)
+    var query = events.orderBy('createdAt', descending: true);
+    if (sport != '') {
+      query = query.where('sport', isEqualTo: sport);
+    }
+    final event = await query
         .limit(1)
         .get(getCache ? const GetOptions(source: Source.cache) : null);
     if (event.docs.isNotEmpty) {
