@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_performance/firebase_performance.dart';
@@ -6,9 +8,12 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
@@ -66,8 +71,9 @@ class EventCreateViewModel extends ChangeNotifier {
 
     final startDate = Timestamp.fromDate(startDateTime);
     final endDate = Timestamp.fromDate(startDateTime.add(duration));
+    final sportName = Sports.values.firstWhere((e) => e.getString() == sport);
     final event = EventModel(
-        sport: Sports.values.firstWhere((e) => e.getString() == sport),
+        sport: sportName,
         playersNeeded: playersNeeded,
         playersBrought: playersBrought,
         spotsAvailable: playersNeeded,
@@ -78,6 +84,34 @@ class EventCreateViewModel extends ChangeNotifier {
         location: location);
     await _eventRepository.createEvent(EventDTO.fromModel(event));
     createEventTrace.stop();
+
+    if (!_isOffline) {
+      // Create isolate for fetching humidity
+      final receivePort = ReceivePort();
+      final isolate = await Isolate.spawn(
+        getHumidity,
+        {
+          'sendPort': receivePort.sendPort,
+          'startDateTime': startDateTime,
+        },
+      );
+
+      // Listen for humidity value from isolate
+      receivePort.listen((humidity) {
+        if (humidity != null && humidity) {
+          NotificationService.showNotification(
+              title: "Weather Forcast",
+              body:
+                  "There's a probability that your ${sportName.getString().toLowerCase()} event will have rain");
+        }
+      });
+
+      // Cancel isolate if it doesn't finish within 10 seconds
+      Future.delayed(const Duration(seconds: 10), () {
+        isolate.kill(priority: Isolate.immediate);
+        receivePort.close();
+      });
+    }
   }
 
   Future<void> saveFormData(
@@ -104,7 +138,7 @@ class EventCreateViewModel extends ChangeNotifier {
       'selectedSport': prefs.getString('selectedSport') ?? '',
       'selectedPlayerCount': prefs.getInt('selectedPlayerCount') ?? 0,
       'broughtPlayerCount': prefs.getInt('broughtPlayerCount') ?? 0,
-      'selectedDateTime': prefs.getString('selectedDateTime') ?? '',
+      'selectedDateTime': DateTime.now().toIso8601String(),
       'duration': prefs.getString('duration') ?? '',
       'location': prefs.getString('location') ?? '',
     };
@@ -116,4 +150,35 @@ enum CreateState {
   loading,
   success,
   error,
+}
+
+// The getHumidity function for the isolate
+void getHumidity(Map<String, dynamic> args) async {
+  SendPort sendPort = args['sendPort'];
+  DateTime dateTime = args['startDateTime'];
+
+  const String apiKey = '3db658571158dea7845186f549b77f21';
+  const String lat = '4.7110';
+  const String lon = '-74.0721';
+  const String url =
+      'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
+
+  http.Response response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> data = jsonDecode(response.body);
+    List<dynamic> forecasts = data['list'];
+
+    for (var forecast in forecasts) {
+      DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
+      if (forecastDateTime.year == dateTime.year &&
+          forecastDateTime.month == dateTime.month &&
+          forecastDateTime.day == dateTime.day &&
+          forecastDateTime.hour >= dateTime.hour) {
+        sendPort.send(forecast['weather'][0]['main'] == "Rain" ? true : false);
+        return;
+      }
+    }
+  }
+
+  sendPort.send(null);
 }
