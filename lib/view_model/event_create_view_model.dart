@@ -8,6 +8,7 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -18,8 +19,10 @@ class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
   final FirebaseAuth _auth = FirebaseInstance.auth;
   CreateState _state = CreateState.initial;
+  bool _isOffline = false;
 
   CreateState get state => _state;
+  bool get isOffline => _isOffline;
 
   set state(CreateState value) {
     _state = value;
@@ -49,13 +52,21 @@ class EventCreateViewModel extends ChangeNotifier {
         playersNeeded == null ||
         playersBrought == null ||
         startDateTime == null ||
-        duration == null ||
-        duration == const Duration() ||
         location == null ||
         location == "") {
       _state = CreateState.error;
       notifyListeners();
       throw const FormatException("Event fields cannot be empty");
+    } else if (duration == null || duration == const Duration()) {
+      _state = CreateState.error;
+      notifyListeners();
+      throw const FormatException("Duration cannot be empty or 0:0");
+    }
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
     }
 
     final startDate = Timestamp.fromDate(startDateTime);

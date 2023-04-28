@@ -71,6 +71,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _firstName,
               validator: (value) {
@@ -108,6 +109,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _lastName,
               validator: (value) {
@@ -145,6 +147,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _email,
               validator: (value) {
@@ -188,6 +191,7 @@ class SignupFormState extends State<SignupForm> {
                 borderSide:
                     const BorderSide(width: 2.5, color: Colors.redAccent),
               ),
+              errorStyle: TextStyle(color: darkColorScheme.error),
             ),
             obscureText: true,
             controller: _password,
@@ -196,7 +200,7 @@ class SignupFormState extends State<SignupForm> {
                 return 'The password is required';
               }
               if (value.length < 6) {
-                return 'The password must have at least 6 characters';
+                return 'Must have at least 6 characters';
               }
               return null;
             },
