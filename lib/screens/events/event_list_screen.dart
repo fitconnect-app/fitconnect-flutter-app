@@ -28,6 +28,7 @@ class _EventsScreenState extends State<EventsListScreen> {
   @override
   void dispose() {
     _viewModel.cancelTimer();
+    _viewModel.closeNewEventStream();
     super.dispose();
   }
 
@@ -98,12 +99,10 @@ class _EventsScreenState extends State<EventsListScreen> {
       },
     );
 
-    WidgetsBinding.instance.addPostFrameCallback(
+        WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        if (viewModel.askReload) {
-          getMessageSnackBar(
-              "There are new events available, you should reload the list.",
-              ScaffoldMessenger.of(context));
+        if (viewModel.needReload) {
+          viewModel.refreshEvents();
         }
       },
     );

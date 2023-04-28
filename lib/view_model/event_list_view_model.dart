@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
-import 'package:fit_connect/services/notifications/notification_service.dart';
+import 'package:fit_connect/services/autoreload/autoreload_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +16,10 @@ class EventsListViewModel extends ChangeNotifier {
   List<EventModel>? _events;
   var _filter = '';
   bool _isOffline = false;
-  bool _askReload = false;
+  bool _needReload = false;
   String _currentTime = '';
   Timer? _timer;
+  late AutoreloadService _autoreloadService;
 
   EventState get state => _state;
 
@@ -27,9 +27,11 @@ class EventsListViewModel extends ChangeNotifier {
 
   bool get isOffline => _isOffline;
 
-  String get currentTime => _currentTime;
+  bool get needReload => _needReload;
 
-  bool get askReload => _askReload;
+  Stream<String> get autoreloadServiceStream => _autoreloadService.eventStream;
+
+  String get currentTime => _currentTime;
 
   EventsListViewModel(String? filter) {
     _filter = filter ?? '';
@@ -37,8 +39,9 @@ class EventsListViewModel extends ChangeNotifier {
       _state = EventState.completed;
       notifyListeners();
     });
+    _autoreloadService = AutoreloadService(_filter);
     getCurrentTime();
-    listenNotifications();
+    listenNewEventStream();
   }
 
   Future<void> getEvents(String? filter) async {
@@ -78,6 +81,7 @@ class EventsListViewModel extends ChangeNotifier {
           );
     eventListTrace.stop();
     getCurrentTime();
+    _needReload = false;
     notifyListeners();
   }
 
@@ -143,16 +147,18 @@ class EventsListViewModel extends ChangeNotifier {
     }
   }
 
-  void listenNotifications() {
-    NotificationService notificationService = NotificationService();
-    ReceivePort receivePort = ReceivePort();
-    notificationService.init(receivePort);
-    receivePort.listen((message) {
-      if (message == 'new-events-available') {
-        _askReload = true;
-        notifyListeners();
-      }
-    });
+  void listenNewEventStream() {
+    _autoreloadService.init();
+    _autoreloadService.eventStream.listen(_onStreamValueAdded);
+  }
+
+  void _onStreamValueAdded(String value) {
+    _needReload = true;
+    notifyListeners();
+  }
+
+  void closeNewEventStream() {
+    _autoreloadService.dispose();
   }
 }
 

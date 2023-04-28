@@ -7,13 +7,18 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AutoreloadService {
+  var _filter = '';
   static late SharedPreferences preferences;
-
-  final StreamController<String> _eventStreamController =
+  static final StreamController<String> _eventStreamController =
       StreamController.broadcast();
 
-  Stream<String> get eventStream =>
-      _eventStreamController.stream;
+  StreamController<String> get eventStreamController => _eventStreamController;
+
+  Stream<String> get eventStream => _eventStreamController.stream;
+
+  AutoreloadService(String? filter) {
+    _filter = filter ?? '';
+  }
 
   void init() async {
     SharedPreferences.getInstance().then(
@@ -33,28 +38,28 @@ class AutoreloadService {
   void _startListeningForNewEvents() async {
     final EventRepository eventRepository = EventRepository();
     bool isOffline = !await checkConnectivity();
-    List<EventModel> initialEvents = await eventRepository.getEvents(
+    EventModel? lastEvent = await eventRepository.getLastEvent(
       getCache: isOffline,
+      sport: _filter,
     );
-    int initialEventCount = initialEvents.length;
+    String? lastEventID = lastEvent?.id;
 
     while (true) {
-              await Future.delayed(const Duration(seconds: 10));
+      await Future.delayed(const Duration(seconds: 10));
 
       bool isOffline = !await checkConnectivity();
-      List<EventModel> currentEvents = await eventRepository.getEvents(
+      EventModel? currentLastEvent = await eventRepository.getLastEvent(
         getCache: isOffline,
+        sport: _filter,
       );
-      int currentEventCount = currentEvents.length;
+      String? currentLastEventID = currentLastEvent?.id;
 
-      if (currentEventCount > initialEventCount + 2) {
-        // Send notification asking the user to reload the list of events
+      if (currentLastEventID != lastEventID) {
+        // Send data for reloading the list of events
         _eventStreamController.add("new-events-available");
-        break;
       }
 
-      initialEvents = currentEvents.take(3).toList();
-      initialEventCount = initialEvents.length;
+      lastEventID = currentLastEventID;
     }
   }
 
