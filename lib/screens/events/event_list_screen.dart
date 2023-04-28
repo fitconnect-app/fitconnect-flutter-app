@@ -66,6 +66,7 @@ class _EventsScreenState extends State<EventsListScreen> {
               actions: [
                 IconButton(
                     onPressed: () {
+                      _viewModel.cancelTimer();
                       Navigator.pushNamed(context, '/createEvent');
                     },
                     icon: const Icon(Icons.add))
