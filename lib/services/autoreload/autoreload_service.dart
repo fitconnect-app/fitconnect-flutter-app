@@ -28,7 +28,7 @@ class AutoreloadService {
       (prefs) {
         preferences = prefs;
         bool eventAutoreloadPreference =
-            preferences.getBool("eventAutoreload") ?? true;
+            preferences.getBool("settingsEventAutoreload") ?? true;
         if (eventAutoreloadPreference) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _startListeningForNewEvents();
@@ -47,7 +47,7 @@ class AutoreloadService {
     );
     String? lastEventID = lastEvent?.id;
 
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) async {
       bool isOffline = !await checkConnectivity();
       EventModel? currentLastEvent = await eventRepository.getLastEvent(
         getCache: isOffline,
