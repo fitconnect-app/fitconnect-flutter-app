@@ -8,17 +8,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AutoreloadService {
   var _filter = '';
-  bool _running = true;
+  Timer? _timer;
   static late SharedPreferences preferences;
-  static final StreamController<String> _eventStreamController =
-      StreamController.broadcast();
+  late StreamController<String> _eventStreamController;
+  late Stream<String> _eventStream;
 
   StreamController<String> get eventStreamController => _eventStreamController;
 
-  Stream<String> get eventStream => _eventStreamController.stream;
+  Stream<String> get eventStream => _eventStream;
 
   AutoreloadService(String? filter) {
     _filter = filter ?? '';
+    _eventStreamController = StreamController.broadcast();
+    _eventStream = _eventStreamController.stream;
   }
 
   void init() async {
@@ -45,9 +47,7 @@ class AutoreloadService {
     );
     String? lastEventID = lastEvent?.id;
 
-    while (_running) {
-      await Future.delayed(const Duration(seconds: 10));
-
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
       bool isOffline = !await checkConnectivity();
       EventModel? currentLastEvent = await eventRepository.getLastEvent(
         getCache: isOffline,
@@ -61,11 +61,11 @@ class AutoreloadService {
       }
 
       lastEventID = currentLastEventID;
-    }
+    });
   }
 
   void dispose() {
     _eventStreamController.close();
-    _running = false;
+    _timer?.cancel();
   }
 }
