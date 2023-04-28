@@ -18,7 +18,7 @@ Future<int> getHumidity(DateTime dateTime) async {
       if (forecastDateTime.year == dateTime.year &&
           forecastDateTime.month == dateTime.month &&
           forecastDateTime.day == dateTime.day &&
-          forecastDateTime.hour == dateTime.hour) {
+          forecastDateTime.hour >= dateTime.hour) {
         return forecast['main']['humidity'];
       }
     }
