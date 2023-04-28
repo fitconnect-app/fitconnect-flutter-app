@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
+import 'package:fit_connect/services/notifications/notification_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EventsListViewModel extends ChangeNotifier {
@@ -15,6 +17,7 @@ class EventsListViewModel extends ChangeNotifier {
   List<EventModel>? _events;
   var _filter = '';
   bool _isOffline = false;
+  bool _askReload = false;
   String _currentTime = '';
   Timer? _timer;
 
@@ -26,6 +29,8 @@ class EventsListViewModel extends ChangeNotifier {
 
   String get currentTime => _currentTime;
 
+  bool get askReload => _askReload;
+
   EventsListViewModel(String? filter) {
     _filter = filter ?? '';
     getEvents(filter).then((_) {
@@ -33,6 +38,7 @@ class EventsListViewModel extends ChangeNotifier {
       notifyListeners();
     });
     getCurrentTime();
+    listenNotifications();
   }
 
   Future<void> getEvents(String? filter) async {
@@ -135,6 +141,18 @@ class EventsListViewModel extends ChangeNotifier {
       _currentTime = '$hour:${minute.toString().padLeft(2, '0')} $amPm';
       notifyListeners();
     }
+  }
+
+  void listenNotifications() {
+    NotificationService notificationService = NotificationService();
+    ReceivePort receivePort = ReceivePort();
+    notificationService.init(receivePort);
+    receivePort.listen((message) {
+      if (message == 'new-events-available') {
+        _askReload = true;
+        notifyListeners();
+      }
+    });
   }
 }
 
