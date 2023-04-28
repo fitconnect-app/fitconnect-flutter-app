@@ -7,7 +7,7 @@ class HelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return ChangeNotifierProvider<HelpViewModel>(
       create: (context) => HelpViewModel(),
       child: Scaffold(
         appBar: AppBar(
@@ -15,106 +15,111 @@ class HelpScreen extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Which sport do you want us to add?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Martial Arts',
-                    child: Text('Martial Arts'),
+          child: Consumer<HelpViewModel>(
+            builder: (context, viewModel, child) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Which sport do you want us to add?',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  DropdownMenuItem(
-                    value: 'Swimming',
-                    child: Text('Swimming'),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField(
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Martial Arts',
+                        child: Text('Martial Arts'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Swimming',
+                        child: Text('Swimming'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Ping Pong',
+                        child: Text('Ping Pong'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Athletics',
+                        child: Text('Athletics'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Padel',
+                        child: Text('Padel'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      viewModel.selectedSport = value;
+                    },
+                    value: viewModel.selectedSport,
                   ),
-                  DropdownMenuItem(
-                    value: 'Ping Pong',
-                    child: Text('Ping Pong'),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Which feature do you want us to add?',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  DropdownMenuItem(
-                    value: 'Athletics',
-                    child: Text('Athletics'),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField(
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Map with location',
+                        child: Text('Map with location'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'QR code to see exercise guides',
+                        child: Text('QR code to see exercise guides'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Find people near you',
+                        child: Text('Find people near you'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      viewModel.selectedFeature = value;
+                    },
+                    value: viewModel.selectedFeature,
                   ),
-                  DropdownMenuItem(
-                    value: 'Padel',
-                    child: Text('Padel'),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Please provide details about your request',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ],
-                onChanged: (value) {
-                  context.read<HelpViewModel>().selectedSport = value;
-                },
-                value: context.watch<HelpViewModel>().selectedSport,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Which feature do you want us to add?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Map with location',
-                    child: Text('Map with location'),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Which sport do you want us to add?',
+                    ),
+                    onChanged: (value) {
+                      viewModel.sportDetails = value;
+                    },
                   ),
-                  DropdownMenuItem(
-                    value: 'QR code to see exercise guides',
-                    child: Text('QR code to see exercise guides'),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Which feature do you want us to add?',
+                    ),
+                    onChanged: (value) {
+                      viewModel.featureDetails = value;
+                    },
                   ),
-                  DropdownMenuItem(
-                    value: 'Find people near you',
-                    child: Text('Find people near you'),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Help and Requests',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      viewModel.helpDetails = value;
+                    },
+                    maxLines: null,
                   ),
-                ],
-                onChanged: (value) {
-                  context.read<HelpViewModel>().selectedFeature = value;
-                },
-                value: context.watch<HelpViewModel>().selectedFeature,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Please provide details about your request',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Which sport do you want us to add?',
-                ),
-                onChanged: (value) {
-                  context.read<HelpViewModel>().sportDetails = value;
-                },
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Which feature do you want us to add?',
-                ),
-                onChanged: (value) {
-                  context.read<HelpViewModel>().featureDetails = value;
-                },
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Help and Requests',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  context.read<HelpViewModel>().helpDetails = value;
-                },
-                maxLines: null,
-              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  context.read<HelpViewModel>().submitRequest();
+                  viewModel.submitRequest();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
