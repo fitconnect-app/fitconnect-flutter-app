@@ -84,7 +84,7 @@ class EventCreateViewModel extends ChangeNotifier {
     await _eventRepository.createEvent(EventDTO.fromModel(event));
     createEventTrace.stop();
 
-    if (await checkConnectivity()) {
+    if (!_isOffline) {
 // Create isolate for fetching humidity
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(
