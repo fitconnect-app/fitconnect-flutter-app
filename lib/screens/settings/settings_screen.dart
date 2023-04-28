@@ -46,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 sections: [
                   SettingsSection(
                     title: Text(
-                      'Local Data',
+                      'General',
                       style: TextStyle(
                         fontFamily: GoogleFonts.rubik().fontFamily,
                       ),
@@ -61,6 +61,16 @@ class SettingsScreenState extends State<SettingsScreen> {
                         title: const Text('Delete old data on Startup'),
                         description: const Text(
                             'Deletes old local data when the app starts to keep your phone clean'),
+                      ),
+                      SettingsTile.switchTile(
+                        onToggle: (value) {
+                          viewModel.toggle(value, "eventAutoreload");
+                        },
+                        initialValue: viewModel.eventAutoreload,
+                        leading: const Icon(Icons.refresh),
+                        title: const Text('Autoreload'),
+                        description: const Text(
+                            'Automatically reload event data when changes are detected'),
                       ),
                     ],
                   ),
