@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<int> getHumidity(DateTime dateTime) async {
+Future<Object> getHumidity(DateTime dateTime) async {
   const String apiKey = '3db658571158dea7845186f549b77f21';
   const String lat = '4.7110';
   const String lon = '-74.0721';
@@ -19,7 +19,7 @@ Future<int> getHumidity(DateTime dateTime) async {
           forecastDateTime.month == dateTime.month &&
           forecastDateTime.day == dateTime.day &&
           forecastDateTime.hour >= dateTime.hour) {
-        return forecast['main']['humidity'];
+        return forecast['weather'][0]['main'] == "Rain" ? true : false ;
       }
     }
   } else {
