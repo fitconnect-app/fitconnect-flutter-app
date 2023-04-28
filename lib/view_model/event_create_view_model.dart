@@ -85,7 +85,7 @@ class EventCreateViewModel extends ChangeNotifier {
     createEventTrace.stop();
 
     if (!_isOffline) {
-// Create isolate for fetching humidity
+      // Create isolate for fetching humidity
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(
         getHumidity,
@@ -154,7 +154,7 @@ enum CreateState {
 // The getHumidity function for the isolate
 void getHumidity(Map<String, dynamic> args) async {
   SendPort sendPort = args['sendPort'];
-  DateTime dateTime = args['dateTime'];
+  DateTime dateTime = args['startDateTime'];
 
   const String apiKey = '3db658571158dea7845186f549b77f21';
   const String lat = '4.7110';
@@ -177,8 +177,6 @@ void getHumidity(Map<String, dynamic> args) async {
         return;
       }
     }
-  } else {
-    // print('Error al obtener los datos del pronóstico del tiempo: ${response.statusCode}');
   }
 
   sendPort.send(null);
