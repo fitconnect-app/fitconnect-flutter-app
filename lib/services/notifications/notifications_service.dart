@@ -14,7 +14,6 @@ class NotificationService {
         requestSoundPermission: true,
         onDidReceiveLocalNotification:
             (int id, String? title, String? body, String? payload) async {});
-    notificationsPlugin.resolvePlatformSpecificImplementation();
 
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
