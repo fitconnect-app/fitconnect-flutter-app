@@ -1,33 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 
-Future<int> getTomorrowHumidityInBogota() async {
-  final String apiKey = 'YOUR_API_KEY';
-  final double latitude = 4.7110;
-  final double longitude = -74.0721;
-  final String units = 'metric';
+Future<int> getHumidity(DateTime dateTime) async {
+  const String apiKey = '3db658571158dea7845186f549b77f21';
+  const String lat = '4.7110';
+  const String lon = '-74.0721';
+  const String url =
+      'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
 
-  final tomorrow = DateTime.now().add(Duration(days: 1));
-  final tomorrowDate = DateFormat('yyyy-MM-dd').format(tomorrow);
-
-  final response = await http.get(Uri.parse(
-      'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey&units=$units'));
-
+  http.Response response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
-    final parsedJson = jsonDecode(response.body);
-    final forecasts = parsedJson['list'];
+    Map<String, dynamic> data = jsonDecode(response.body);
+    List<dynamic> forecasts = data['list'];
 
-    for (final forecast in forecasts) {
-      final forecastDate = forecast['dt_txt'].substring(0, 10);
-
-      if (forecastDate == tomorrowDate) {
+    for (var forecast in forecasts) {
+      DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
+      if (forecastDateTime.year == dateTime.year &&
+          forecastDateTime.month == dateTime.month &&
+          forecastDateTime.day == dateTime.day &&
+          forecastDateTime.hour == dateTime.hour) {
         return forecast['main']['humidity'];
       }
     }
-    throw Exception('No se encontró el pronóstico para mañana en Bogotá');
   } else {
-    throw Exception('Error al cargar la información del clima');
+    // print('Error al obtener los datos del pronóstico del tiempo: ${response.statusCode}');
   }
-}
 
+  return Future.error(
+      'No se encontró la humedad para la fecha y hora proporcionada');
+}
