@@ -102,15 +102,14 @@ class EventCreateViewModel extends ChangeNotifier {
           NotificationService.showNotification(
               title: "Weather Forcast",
               body:
-                  "There's a probability that your $sportName event will have rain");
+                  "There's a probability that your ${sportName.getString().toLowerCase()} event will have rain");
         }
       });
 
-      // Cancel isolate if it doesn't finish within 5 seconds
-      Future.delayed(const Duration(seconds: 5), () {
+      // Cancel isolate if it doesn't finish within 10 seconds
+      Future.delayed(const Duration(seconds: 10), () {
         isolate.kill(priority: Isolate.immediate);
         receivePort.close();
-        print("Isolate terminated");
       });
     }
   }
@@ -139,7 +138,7 @@ class EventCreateViewModel extends ChangeNotifier {
       'selectedSport': prefs.getString('selectedSport') ?? '',
       'selectedPlayerCount': prefs.getInt('selectedPlayerCount') ?? 0,
       'broughtPlayerCount': prefs.getInt('broughtPlayerCount') ?? 0,
-      'selectedDateTime': prefs.getString('selectedDateTime') ?? '',
+      'selectedDateTime': DateTime.now().toIso8601String(),
       'duration': prefs.getString('duration') ?? '',
       'location': prefs.getString('location') ?? '',
     };
