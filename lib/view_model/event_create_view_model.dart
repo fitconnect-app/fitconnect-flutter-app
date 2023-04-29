@@ -101,7 +101,7 @@ class EventCreateViewModel extends ChangeNotifier {
       receivePort.listen((humidity) {
         if (humidity != null && humidity) {
           NotificationService.showNotification(
-              title: "Weather Forcast",
+              title: "Weather Forecast",
               body:
                   "There's a probability that your ${sportName.getString().toLowerCase()} event will have rain");
         }
@@ -169,8 +169,21 @@ void getHumidity(Map<String, dynamic> args) async {
   DateTime dateTime = args['startDateTime'];
 
   const String apiKey = '3db658571158dea7845186f549b77f21';
-  const String lat = '4.7110';
-  const String lon = '-74.0721';
+
+// Get current location
+  Position position;
+  try {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  } catch (e) {
+    print('Error getting location: $e');
+    sendPort.send(null);
+    return;
+  }
+
+  String lat = position.latitude.toString();
+  String lon = position.longitude.toString();
+
   const String url =
       'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
 
@@ -189,7 +202,7 @@ void getHumidity(Map<String, dynamic> args) async {
         return;
       }
     }
-  }
 
-  sendPort.send(null);
+    sendPort.send(null);
+  }
 }
