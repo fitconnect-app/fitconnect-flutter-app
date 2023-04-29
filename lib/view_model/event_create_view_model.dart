@@ -8,6 +8,7 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/services/geolocalizator/geolocalizator.dart';
 import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -163,8 +164,7 @@ void getHumidity(Map<String, dynamic> args) async {
 // Get current location
   Position position;
   try {
-    position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    position = await determinePosition();
   } catch (e) {
     print('Error getting location: $e');
     sendPort.send(null);
