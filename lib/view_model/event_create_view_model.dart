@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
@@ -150,6 +151,16 @@ enum CreateState {
   loading,
   success,
   error,
+}
+
+Future<void> _getLocation() async {
+  try {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
+  } catch (e) {
+    print('Error getting location: $e');
+  }
 }
 
 // The getHumidity function for the isolate
