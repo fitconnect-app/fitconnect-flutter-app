@@ -158,7 +158,6 @@ class HelpScreenState extends State<HelpScreen> {
                       description:
                           Text(e is FormatException ? e.message : e.toString()),
                     ).show(context);
-                    rethrow;
                   }
                 },
           label: viewModel.state == HelpState.loading
