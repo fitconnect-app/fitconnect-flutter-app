@@ -88,6 +88,14 @@ class EventCreateViewModel extends ChangeNotifier {
     createEventTrace.stop();
 
     if (!_isOffline) {
+      Position position;
+      try {
+        position = await determinePosition();
+      } catch (e) {
+        print('Error getting location: $e');
+        return;
+      }
+
       // Create isolate for fetching humidity
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(
@@ -95,6 +103,8 @@ class EventCreateViewModel extends ChangeNotifier {
         {
           'sendPort': receivePort.sendPort,
           'startDateTime': startDateTime,
+          'latitude': position.latitude,
+          'longitude': position.longitude,
         },
       );
 
@@ -158,21 +168,13 @@ enum CreateState {
 void getHumidity(Map<String, dynamic> args) async {
   SendPort sendPort = args['sendPort'];
   DateTime dateTime = args['startDateTime'];
+  double latitude = args['latitude'];
+  double longitude = args['longitude'];
 
   const String apiKey = '3db658571158dea7845186f549b77f21';
 
-// Get current location
-  Position position;
-  try {
-    position = await determinePosition();
-  } catch (e) {
-    print('Error getting location: $e');
-    sendPort.send(null);
-    return;
-  }
-
-  String lat = position.latitude.toString();
-  String lon = position.longitude.toString();
+  String lat = latitude.toString();
+  String lon = longitude.toString();
 
   String url =
       'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
