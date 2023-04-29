@@ -44,6 +44,9 @@ class SheetsFlutter {
   }
 
   static Future insert(List<Map<String, dynamic>> rowList) async {
+    if (_userSheet == null) {
+      await init();
+    }
     _userSheet!.values.map.appendRows(rowList);
   }
 }

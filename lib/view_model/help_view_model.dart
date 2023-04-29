@@ -23,6 +23,8 @@ class HelpViewModel extends ChangeNotifier {
       _state = HelpState.error;
       notifyListeners();
       return;
+    } else {
+      _isOffline = false;
     }
 
     if (selectedSport == null || selectedFeature == null) {
@@ -39,9 +41,4 @@ class HelpViewModel extends ChangeNotifier {
   }
 }
 
-enum HelpState{
-  initial,
-  loading,
-  success,
-  error
-}
+enum HelpState { initial, loading, success, error }
