@@ -6,6 +6,7 @@ import 'package:fit_connect/screens/home/home_screen.dart';
 import 'package:fit_connect/screens/profile/profile_screen.dart';
 import 'package:fit_connect/screens/settings/settings_screen.dart';
 import 'package:fit_connect/screens/stats/stats_screen.dart';
+import 'package:fit_connect/screens/help/help_screen.dart';
 import 'package:flutter/widgets.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
@@ -13,6 +14,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/home": (BuildContext context) => const HomeScreen(),
   "/profile": (BuildContext context) => const ProfileScreen(),
   "/settings": (BuildContext context) => const SettingsScreen(),
+  "/help": (BuildContext context) => const HelpScreen(),
   // TODO: "/profile-edit": (BuildContext context) => ProfileEditScreen(),
   "/bpm": (BuildContext context) => const BPMScreen(),
   "/stats": (BuildContext context) => const StatsScreen(),
