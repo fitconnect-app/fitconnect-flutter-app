@@ -7,16 +7,20 @@ class HelpViewModel extends ChangeNotifier {
   String? selectedFeature;
   String? feedback;
   bool _isOffline = false;
+  HelpState _state = HelpState.initial;
 
   bool get isOffline => _isOffline;
+  HelpState get state => _state;
 
   HelpViewModel() {
     SheetsFlutter.init();
   }
 
   Future<void> sendFeedback() async {
+    _state = HelpState.loading;
     if (!await checkConnectivity()) {
       _isOffline = true;
+      _state = HelpState.error;
       notifyListeners();
       return;
     }
@@ -31,5 +35,13 @@ class HelpViewModel extends ChangeNotifier {
         'Feedback': feedback ?? '',
       }
     ]);
+    _state = HelpState.success;
   }
+}
+
+enum HelpState{
+  initial,
+  loading,
+  success,
+  error
 }

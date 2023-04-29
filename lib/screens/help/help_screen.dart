@@ -121,48 +121,58 @@ class HelpScreenState extends State<HelpScreen> {
           }),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            try {
-              await viewModel.sendFeedback();
-              if (viewModel.isOffline && context.mounted) {
-                getMessageSnackBar(
-                  "There is no internet connection, can't send feedback!",
-                  ScaffoldMessenger.of(context),
-                );
-              } else {
-                Navigator.pushReplacementNamed(context, "/home");
-                MotionToast.success(
-                  position: MotionToastPosition.top,
-                  animationType: AnimationType.fromTop,
-                  title: const Text(
-                    "Success",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  description: const Text("Feedback sent successfully!"),
-                ).show(context);
-              }
-            } catch (e) {
-              MotionToast.error(
-                position: MotionToastPosition.top,
-                animationType: AnimationType.fromTop,
-                title: const Text(
-                  "Error",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                description:
-                    Text(e is FormatException ? e.message : e.toString()),
-              ).show(context);
-              rethrow;
-            }
-          },
-          label: const Text("Send Feedback"),
-          icon: const Icon(Icons.send),
-          backgroundColor: lightColorScheme.primary,
-          foregroundColor: Colors.white,
+          onPressed: viewModel.state == HelpState.loading
+              ? null
+              : () async {
+                  try {
+                    await viewModel.sendFeedback();
+                    if (viewModel.isOffline && context.mounted) {
+                      getMessageSnackBar(
+                        "There is no internet connection, can't send feedback!",
+                        ScaffoldMessenger.of(context),
+                      );
+                    } else {
+                      Navigator.pushReplacementNamed(context, "/home");
+                      MotionToast.success(
+                        position: MotionToastPosition.top,
+                        animationType: AnimationType.fromTop,
+                        title: const Text(
+                          "Success",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        description: const Text("Feedback sent successfully!"),
+                      ).show(context);
+                    }
+                  } catch (e) {
+                    MotionToast.error(
+                      position: MotionToastPosition.top,
+                      animationType: AnimationType.fromTop,
+                      title: const Text(
+                        "Error",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      description:
+                          Text(e is FormatException ? e.message : e.toString()),
+                    ).show(context);
+                    rethrow;
+                  }
+                },
+          label: viewModel.state == HelpState.loading
+              ? const Text("Sending...")
+              : const Text("Send Feedback"),
+          icon: viewModel.state == HelpState.loading
+              ? const CircularProgressIndicator()
+              : const Icon(Icons.send),
+          backgroundColor: viewModel.state == HelpState.loading
+              ? lightColorScheme.primary.withOpacity(0.8)
+              : lightColorScheme.primary,
+          foregroundColor: viewModel.state == HelpState.loading
+              ? Colors.white.withOpacity(0.8)
+              : Colors.white,
         ),
         bottomNavigationBar: const BottomNavBar(selectedTab: 2),
       ),
