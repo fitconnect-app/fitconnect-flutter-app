@@ -1,5 +1,9 @@
+import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:provider/provider.dart';
 import 'package:fit_connect/view_model/help_view_model.dart';
 
@@ -118,13 +122,35 @@ class HelpScreenState extends State<HelpScreen> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            viewModel.sendFeedback();
+            try {
+              await viewModel.sendFeedback();
+              if (viewModel.isOffline && context.mounted) {
+                getMessageSnackBar(
+                  "There is no internet connection, can't send feedback!",
+                  ScaffoldMessenger.of(context),
+                );
+              }
+            } catch (e) {
+              MotionToast.error(
+                position: MotionToastPosition.top,
+                animationType: AnimationType.fromTop,
+                title: const Text(
+                  "Error",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                description:
+                    Text(e is FormatException ? e.message : e.toString()),
+              ).show(context);
+            }
           },
           label: const Text("Send Feedback"),
           icon: const Icon(Icons.send),
           backgroundColor: lightColorScheme.primary,
           foregroundColor: Colors.white,
         ),
+        bottomNavigationBar: const BottomNavBar(selectedTab: 2),
       ),
     );
   }

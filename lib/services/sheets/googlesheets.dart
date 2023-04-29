@@ -28,7 +28,7 @@ class SheetsFlutter {
       final firstRow = SheetsColumn.getColumns();
       _userSheet!.values.insertRow(1, firstRow);
     } catch (e) {
-      print(e);
+      return;
     }
   }
 
