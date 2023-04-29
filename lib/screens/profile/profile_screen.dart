@@ -33,8 +33,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {},
+                    icon: const Icon(Icons.help),
+                    onPressed: () {
+                      // TODO: handle Help button
+                    },
                   ),
                   PopupMenuButton(
                     itemBuilder: (BuildContext context) => [
@@ -44,10 +46,6 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       const PopupMenuItem(
                         value: 1,
-                        child: Text('Help'),
-                      ),
-                      const PopupMenuItem(
-                        value: 2,
                         child: Text('Logout'),
                       ),
                     ],
@@ -57,19 +55,10 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.pushNamed(context, '/settings');
                           break;
                         case 1:
-                          // TODO: handle Help button
-                          break;
-                        case 2:
                           FirebaseInstance.auth.signOut();
                           Navigator.pushReplacementNamed(context, '/auth');
                           break;
                       }
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.help),
-                    onPressed: () {
-                      // TODO: handle Help button
                     },
                   ),
                 ],
