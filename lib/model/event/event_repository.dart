@@ -6,8 +6,10 @@ import 'package:fit_connect/services/firebase/singleton.dart';
 class EventRepository {
   CollectionReference events = FirebaseInstance.firestore.collection('events');
 
-  Future<EventModel?> getEvent(String id) async {
-    final doc = await events.doc(id).get();
+  Future<EventModel?> getEvent(String id, bool getCache) async {
+    final doc = await events
+        .doc(id)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
     if (doc.exists) {
       return EventDTO.fromMap(doc).toModel();
     } else {
@@ -15,7 +17,25 @@ class EventRepository {
     }
   }
 
-  Future<List<EventModel>> getEvents({int? limit, String? sport}) async {
+  Future<EventModel?> getLastEvent(
+      {int? limit, String? sport, required bool getCache}) async {
+    var query = events.orderBy('createdAt', descending: true);
+    if (sport != '') {
+      query = query.where('sport', isEqualTo: sport);
+    }
+    final event = await query
+        .limit(1)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    if (event.docs.isNotEmpty) {
+      final lastEvent = EventDTO.fromMap(event.docs.first).toModel();
+      return lastEvent;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<EventModel>> getEvents(
+      {int? limit, String? sport, required bool getCache}) async {
     final now = DateTime.now();
 
     var futureEventsQuery = events
@@ -36,8 +56,10 @@ class EventRepository {
       pastEventsQuery = pastEventsQuery.limit(limit);
     }
 
-    final futureEvents = await futureEventsQuery.get();
-    final pastEvents = await pastEventsQuery.get();
+    final futureEvents = await futureEventsQuery
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    final pastEvents = await pastEventsQuery
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
 
     final futureEventsList = futureEvents.docs
         .map((doc) => EventDTO.fromMap(doc).toModel())
@@ -45,30 +67,16 @@ class EventRepository {
     final pastEventsList =
         pastEvents.docs.map((doc) => EventDTO.fromMap(doc).toModel()).toList();
 
-    final orderedEvents = [
-      ...pastEventsList,
-      ...futureEventsList,
-    ].toList();
+    final today = futureEventsList.where(
+      (event) =>
+          event.startDate.toDate().day == now.day &&
+          event.startDate.toDate().month == now.month &&
+          event.startDate.toDate().year == now.year,
+    );
 
-    orderedEvents.sort((a, b) {
-      var aStartDate = a.startDate.toDate();
-      var bStartDate = b.startDate.toDate();
-      final diffA = aStartDate.difference(now).abs();
-      final diffB = bStartDate.difference(now).abs();
+    futureEventsList.removeWhere((element) => today.contains(element));
 
-      if (aStartDate.isAfter(now) && bStartDate.isBefore(now)) {
-        return -1;
-      } else if (aStartDate.isBefore(now) && bStartDate.isAfter(now)) {
-        return 1;
-      } else if (aStartDate.isAfter(now) && bStartDate.isAfter(now)) {
-        return aStartDate.compareTo(bStartDate);
-      } else if (aStartDate.isBefore(now) && bStartDate.isBefore(now)) {
-        return bStartDate.compareTo(aStartDate);
-      } else {
-        return diffA.compareTo(diffB);
-      }
-    });
-
+    final orderedEvents = [...today, ...futureEventsList, ...pastEventsList];
     return orderedEvents;
   }
 
@@ -86,17 +94,21 @@ class EventRepository {
     await events.doc(id).delete();
   }
 
-  Future<List<EventModel>> getMostRecentUserEvents(String userId) async {
+  Future<List<EventModel>> getMostRecentUserEvents(
+      String userId, bool getCache) async {
     final DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
+    final Timestamp now = Timestamp.now();
     var ownedEvents = await events
         .where('eventOwner', isEqualTo: userId)
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
-        .get();
+        .where('startDate', isLessThan: now)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
     var joinedEvents = await events
         .where('participants', arrayContains: userId)
         .where('startDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(lastWeek))
+        .where('startDate', isLessThan: now)
         .get();
     List<DocumentSnapshot> allRecentEvents =
         ownedEvents.docs + joinedEvents.docs;

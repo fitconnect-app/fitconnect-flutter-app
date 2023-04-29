@@ -15,7 +15,13 @@ class FirebaseInstance {
   }
 
   static FirebaseFirestore get firestore {
-    _firestoreInstance ??= FirebaseFirestore.instance;
+    if (_firestoreInstance == null) {
+      _firestoreInstance = FirebaseFirestore.instance;
+      _firestoreInstance!.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: 41943040,
+      );
+    }
     return _firestoreInstance!;
   }
 

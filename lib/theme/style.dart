@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 
 ThemeData appTheme() {
   return ThemeData(
-      useMaterial3: true, colorScheme: lightColorScheme, fontFamily: 'Roboto');
+    useMaterial3: true,
+    colorScheme: lightColorScheme,
+    fontFamily: 'Roboto',
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: lightColorScheme.primary,
+      contentTextStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      actionTextColor: Colors.white,
+    ),
+  );
 }
 
 const lightColorScheme = ColorScheme(
@@ -32,7 +42,7 @@ const lightColorScheme = ColorScheme(
   outline: Color(0xFF767680),
   onInverseSurface: Color(0xFFF2F0F4),
   inverseSurface: Color(0xFF303034),
-  inversePrimary: Color(0xFFB8C4FF),
+  inversePrimary: Color(0xFFFFFFFF),
   shadow: Color(0xFF000000),
   surfaceTint: Color(0xFF4559A9),
   outlineVariant: Color(0xFFC6C5D0),

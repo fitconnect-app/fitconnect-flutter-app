@@ -7,19 +7,34 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final AuthViewModel viewModel;
+
+  const SignupForm({super.key, required this.viewModel});
 
   @override
   SignupFormState createState() => SignupFormState();
 }
 
 class SignupFormState extends State<SignupForm> {
-  final AuthViewModel viewModel = AuthViewModel();
+  late AuthViewModel viewModel;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
+  bool _isLoading = false;
+
+  void _setLoading(bool isLoading) {
+    setState(() {
+      _isLoading = isLoading;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = widget.viewModel;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +71,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _firstName,
               validator: (value) {
@@ -93,6 +109,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _lastName,
               validator: (value) {
@@ -130,6 +147,7 @@ class SignupFormState extends State<SignupForm> {
                   borderSide:
                       const BorderSide(width: 2.5, color: Colors.redAccent),
                 ),
+                errorStyle: TextStyle(color: darkColorScheme.error),
               ),
               controller: _email,
               validator: (value) {
@@ -173,6 +191,7 @@ class SignupFormState extends State<SignupForm> {
                 borderSide:
                     const BorderSide(width: 2.5, color: Colors.redAccent),
               ),
+              errorStyle: TextStyle(color: darkColorScheme.error),
             ),
             obscureText: true,
             controller: _password,
@@ -181,7 +200,7 @@ class SignupFormState extends State<SignupForm> {
                 return 'The password is required';
               }
               if (value.length < 6) {
-                return 'The password must have at least 6 characters';
+                return 'Must have at least 6 characters';
               }
               return null;
             },
@@ -197,28 +216,44 @@ class SignupFormState extends State<SignupForm> {
                   width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: lightColorScheme.scrim,
-                        foregroundColor: lightColorScheme.onSecondary,
-                        side: BorderSide(
-                            width: 0.5, color: lightColorScheme.onSecondary)),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _registerUser(context);
-                      } else {
-                        MotionToast.error(
-                          position: MotionToastPosition.top,
-                          animationType: AnimationType.fromTop,
-                          title: const Text(
-                            "Error",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                      backgroundColor: lightColorScheme.scrim,
+                      foregroundColor: lightColorScheme.onSecondary,
+                      side: BorderSide(
+                        width: 0.5,
+                        color: lightColorScheme.onSecondary,
+                      ),
+                    ),
+                    onPressed: _isLoading
+                        ? null
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              _registerUser(context);
+                            } else {
+                              MotionToast.error(
+                                position: MotionToastPosition.top,
+                                animationType: AnimationType.fromTop,
+                                title: const Text(
+                                  "Error",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                description:
+                                    const Text("There is some invalid data"),
+                              ).show(context);
+                            }
+                          },
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                lightColorScheme.onSecondary,
+                              ),
                             ),
-                          ),
-                          description: const Text("There is some invalid data"),
-                        ).show(context);
-                      }
-                    },
-                    child: const Text('SIGN UP'),
+                          )
+                        : const Text('SIGN UP'),
                   ),
                 ),
                 const SizedBox(height: 2)
@@ -232,6 +267,7 @@ class SignupFormState extends State<SignupForm> {
 
   Future<void> _registerUser(BuildContext context) async {
     try {
+      _setLoading(true);
       await viewModel.signup(
         _firstName.text,
         _lastName.text,
@@ -254,23 +290,29 @@ class SignupFormState extends State<SignupForm> {
         ).show(context);
       }
     } catch (e) {
-      String errorMessage = '';
-      if (e is FirebaseAuthException) {
-        errorMessage = FirebaseExceptionHelper.getMessage(context, e);
-      } else {
-        errorMessage = 'An error has occurred. Please try again later';
-      }
-      MotionToast.error(
-        position: MotionToastPosition.top,
-        animationType: AnimationType.fromTop,
-        title: const Text(
-          "Error",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+      if (!viewModel.isOffline) {
+        String errorMessage = '';
+        if (e is FirebaseAuthException) {
+          errorMessage = FirebaseExceptionHelper.getMessage(context, e);
+        } else if (e is FormatException) {
+          errorMessage = e.message;
+        } else {
+          errorMessage = 'An error has occurred. Please try again later';
+        }
+        MotionToast.error(
+          position: MotionToastPosition.top,
+          animationType: AnimationType.fromTop,
+          title: const Text(
+            "Error",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        description: Text(errorMessage),
-      ).show(context);
+          description: Text(errorMessage),
+        ).show(context);
+      }
+    } finally {
+      _setLoading(false);
     }
   }
 }
