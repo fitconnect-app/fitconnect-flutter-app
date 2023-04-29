@@ -3,16 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fit_connect/view_model/help_view_model.dart';
 
-class HelpScreen extends StatelessWidget {
+class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HelpScreen> createState() => HelpScreenState();
+}
+
+class HelpScreenState extends State<HelpScreen> {
+  late HelpViewModel viewModel;
+
+  @override
+  void initState() {
+    viewModel = HelpViewModel();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HelpViewModel>(
-      create: (context) => HelpViewModel(),
+      create: (context) => viewModel,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add Feature'),
+          title: const Text('Features Feedback'),
           centerTitle: true,
         ),
         body: Padding(
@@ -91,10 +104,10 @@ class HelpScreen extends StatelessWidget {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration(
-                      labelText: 'Response',
+                      labelText: 'Feedback',
                     ),
                     onChanged: (value) {
-                      viewModel.featureDetails = value;
+                      viewModel.feedback = value;
                     },
                   ),
                   const SizedBox(height: 8),
@@ -104,7 +117,9 @@ class HelpScreen extends StatelessWidget {
           }),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () async {
+            viewModel.sendFeedback();
+          },
           label: const Text("Send Feedback"),
           icon: const Icon(Icons.send),
           backgroundColor: lightColorScheme.primary,
