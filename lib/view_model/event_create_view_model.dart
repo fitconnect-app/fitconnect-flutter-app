@@ -92,7 +92,6 @@ class EventCreateViewModel extends ChangeNotifier {
       try {
         position = await determinePosition();
       } catch (e) {
-        print('Error getting location: $e');
         return;
       }
 
