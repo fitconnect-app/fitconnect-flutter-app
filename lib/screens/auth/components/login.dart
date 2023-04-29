@@ -5,17 +5,32 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  final AuthViewModel viewModel;
+
+  const LoginForm({super.key, required this.viewModel});
 
   @override
   LoginFormState createState() => LoginFormState();
 }
 
 class LoginFormState extends State<LoginForm> {
-  final AuthViewModel viewModel = AuthViewModel();
+  late AuthViewModel viewModel;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  bool _isLoading = false;
+
+  void _setLoading(bool isLoading) {
+    setState(() {
+      _isLoading = isLoading;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = widget.viewModel;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +100,22 @@ class LoginFormState extends State<LoginForm> {
                       backgroundColor: lightColorScheme.scrim,
                       foregroundColor: lightColorScheme.onSecondary,
                       side: BorderSide(
-                          width: 0.5, color: lightColorScheme.onSecondary),
+                        width: 0.5,
+                        color: lightColorScheme.onSecondary,
+                      ),
                     ),
-                    onPressed: () {
-                      _loginUser(context);
-                    },
-                    child: const Text('LOG IN'),
+                    onPressed: _isLoading ? null : () => _loginUser(context),
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                lightColorScheme.onSecondary,
+                              ),
+                            ),
+                          )
+                        : const Text('LOG IN'),
                   ),
                 ),
                 const SizedBox(height: 2)
@@ -104,23 +129,28 @@ class LoginFormState extends State<LoginForm> {
 
   Future<void> _loginUser(BuildContext context) async {
     try {
+      _setLoading(true);
       await viewModel.login(_email.text, _password.text);
 
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
       }
     } catch (e) {
-      MotionToast.error(
-        position: MotionToastPosition.top,
-        animationType: AnimationType.fromTop,
-        title: const Text(
-          "Error",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+      if (!viewModel.isOffline) {
+        MotionToast.error(
+          position: MotionToastPosition.top,
+          animationType: AnimationType.fromTop,
+          title: const Text(
+            "Error",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        description: const Text('Login failed'),
-      ).show(context);
+          description: const Text('Login failed'),
+        ).show(context);
+      }
+    } finally {
+      _setLoading(false);
     }
   }
 }

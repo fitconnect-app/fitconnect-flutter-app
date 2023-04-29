@@ -1,11 +1,13 @@
 import 'dart:async';
-
 import 'package:camera/camera.dart';
+import 'package:fit_connect/model/bpm/bpm_model.dart';
+import 'package:fit_connect/model/bpm/bpm_repository.dart';
 import 'package:fit_connect/screens/bpm/components/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
 class BPMViewModel extends ChangeNotifier {
+  final BPMDataRepository _bpmDataRepository = BPMDataRepository();
   bool _toggled = false;
   final List<SensorValue> _bpmData = <SensorValue>[];
   CameraController? _controller;
@@ -82,6 +84,10 @@ class BPMViewModel extends ChangeNotifier {
 
   void untoggle({dispose = false}) {
     if (_toggled) {
+      if (_bpm > 30 && _bpm < 150) {
+        _bpmDataRepository
+            .createBPMData(BPMDataModel(value: _bpm, date: DateTime.now()));
+      }
       _disposeController();
       Wakelock.disable();
       _animationController?.stop();

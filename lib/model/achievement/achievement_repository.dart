@@ -6,8 +6,10 @@ class AchievementRepository {
   CollectionReference achievements =
       FirebaseInstance.firestore.collection('achievements');
 
-  Future<AchievementModel?> getAchievement(String id) async {
-    final doc = await achievements.doc(id).get();
+  Future<AchievementModel?> getAchievement(String id, bool getCache) async {
+    final doc = await achievements
+        .doc(id)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
     if (doc.exists) {
       return AchievementModel.fromMap(doc);
     } else {

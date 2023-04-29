@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  geolocator: ^8.0.0
+  gsheets: "^0.3.2"
   duration_picker: "^1.0.0"
   cupertino_icons: ^1.0.2
   firebase_core: ^2.7.0
@@ -47,7 +49,14 @@ dependencies:
   google_fonts: ^4.0.3
   fl_chart: ^0.61.0
   intl: ^0.17.0
-
+  async: ^2.10.0
+  flutter_native_splash: ^2.2.19
+  connectivity_plus: ^3.0.3
+  realm: ^1.0.3
+  settings_ui: ^2.0.2
+  shared_preferences: ^2.1.0
+  http: ^0.13.3
+  flutter_local_notifications: ^14.0.0
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +70,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.12.0
+
+flutter_native_splash:
+  color: '#091540'
+  image: assets/icon/splash.png
+  android_12:
+    image: assets/icon/splash.png
 
 flutter_icons:
   android: launcher_icon
@@ -76,12 +91,12 @@ flutter_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/icon/
     - assets/images/
     - assets/images/events/
 

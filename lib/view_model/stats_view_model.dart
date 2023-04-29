@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:fit_connect/model/bpm/bpm_model.dart';
+import 'package:fit_connect/model/bpm/bpm_repository.dart';
 import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:fit_connect/utils/connectivity.dart';
 import 'dart:collection';
 
 class DataStats {
@@ -22,34 +27,107 @@ class DataStats {
 
 enum StatsState { loading, completed, error }
 
-class MyPersonalStatisticsViewModel extends ChangeNotifier {
+class StatsViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
+  final BPMDataRepository _bpmDataRepository = BPMDataRepository();
+  StreamController<void> asyncController = StreamController<void>();
   List<EventModel> recentEvents = [];
+  List<BPMDataModel> _bpmData = [];
+  List<DataStats> bpmAverages = [];
   List<DataStats> mostSearchedSports = [];
   List<DataStats> mostFrequentHours = [];
   List<DataStats> hoursPracticed = [];
-  StatsState _state = StatsState.loading;
+  StatsState _bpmState = StatsState.loading;
+  StatsState _topSportsState = StatsState.loading;
+  StatsState _mostFrequentHoursState = StatsState.loading;
+  StatsState _hoursPracticedState = StatsState.loading;
+  bool _isOffline = false;
 
-  StatsState get state => _state;
+  bool get isOffline => _isOffline;
 
-  MyPersonalStatisticsViewModel() {
-    Trace statseTrace = FirebasePerformance.instance.newTrace('getMyStats');
-    statseTrace.start();
-    _eventRepository
-        .getMostRecentUserEvents(FirebaseInstance.auth.currentUser!.uid)
-        .then((value) {
-      recentEvents = value;
-      getTopPlayedSports();
-      getMostFrequentHours();
-      getHoursPracticed();
-      _state = StatsState.completed;
-      notifyListeners();
-      statseTrace.stop();
-    });
+  StatsState get bpmState => _bpmState;
+  StatsState get topSportsState => _topSportsState;
+  StatsState get mostFrequentHoursState => _mostFrequentHoursState;
+  StatsState get hoursPracticedState => _hoursPracticedState;
+
+  StatsViewModel() {
+    Trace statsTrace = FirebasePerformance.instance.newTrace('getMyStats');
+    statsTrace.start();
+    retrieveStats().then(
+      (_) {
+        statsTrace.stop();
+      },
+    );
   }
 
-  void getTopPlayedSports() {
-    Map<String, double> sportCount = {};
+  void close() {
+    asyncController.close();
+  }
+
+  Future<void> refreshStats() async {
+    Trace refreshStatsTrace =
+        FirebasePerformance.instance.newTrace('refreshMyStats');
+    refreshStatsTrace.start();
+    await retrieveStats();
+    refreshStatsTrace.stop();
+  }
+
+  Future<void> retrieveStats() async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+      notifyListeners();
+    } else {
+      _isOffline = false;
+    }
+    _bpmData = _bpmDataRepository.getRecentBPMData();
+    getBPMAverages();
+    recentEvents = await _eventRepository.getMostRecentUserEvents(
+        FirebaseInstance.auth.currentUser!.uid, _isOffline);
+    getTopPlayedSports();
+    getMostFrequentHours();
+    getHoursPracticed();
+  }
+
+  void getBPMAverages() async {
+    Map<dynamic, dynamic> averages = {};
+    for (BPMDataModel bpmData in _bpmData) {
+      var date = DateUtils.dateOnly(bpmData.date!);
+      if (averages.containsKey(date)) {
+        averages[date]!.add(bpmData.value!);
+      } else {
+        averages[date] = [bpmData.value!];
+      }
+    }
+    averages.forEach((key, value) {
+      int sum = 0;
+      for (int i in value) {
+        sum += i;
+      }
+      averages[key] = sum ~/ value.length;
+    });
+    averages = sortMapByValueAndOrder(averages);
+    bpmAverages = List.generate(
+      averages.length > 5 ? 5 : averages.length,
+      (index) {
+        var datetime = averages.keys.elementAt(index);
+        return DataStats(
+          id: index,
+          label: "${datetime.day}/${datetime.month}",
+          yValue: averages.values.elementAt(index).toDouble(),
+          color: Colors.red,
+        );
+      },
+    );
+    _bpmState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
+  }
+
+  void getTopPlayedSports() async {
+    Map<dynamic, dynamic> sportCount = {};
     for (EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
         sportCount[event.sport.getString()] =
@@ -68,10 +146,16 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.primary,
       ),
     );
+    _topSportsState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  void getMostFrequentHours() {
-    Map<String, double> hourCount = {};
+  void getMostFrequentHours() async {
+    Map<dynamic, dynamic> hourCount = {};
 
     for (EventModel event in recentEvents) {
       String hour = "${event.startDate.toDate().hour}:00";
@@ -93,10 +177,16 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.secondary,
       ),
     );
+    _mostFrequentHoursState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  void getHoursPracticed() {
-    Map<String, double> sportHourCount = {};
+  void getHoursPracticed() async {
+    Map<dynamic, dynamic> sportHourCount = {};
     for (EventModel event in recentEvents) {
       String sport = event.sport.getString();
       DateTime startDate = event.startDate.toDate();
@@ -120,20 +210,25 @@ class MyPersonalStatisticsViewModel extends ChangeNotifier {
         color: lightColorScheme.tertiary,
       ),
     );
+    _hoursPracticedState = StatsState.completed;
+    if (asyncController.isClosed) {
+      return;
+    }
+    asyncController.add(null);
+    notifyListeners();
   }
 
-  Map<String, double> sortMapByValueAndOrder(Map<String, double> originalMap) {
+  Map<dynamic, dynamic> sortMapByValueAndOrder(
+      Map<dynamic, dynamic> originalMap) {
     if (originalMap.isEmpty) {
       return originalMap;
     }
-    var sortedMap = SplayTreeMap<dynamic, dynamic>();
-    sortedMap.addAll(originalMap);
 
     var top5Keys = originalMap.keys.toList()
       ..sort((a, b) => originalMap[b]!.compareTo(originalMap[a] as num));
     top5Keys = top5Keys.sublist(0, top5Keys.length < 5 ? top5Keys.length : 5);
 
-    var result = SplayTreeMap<String, double>.from(originalMap)
+    var result = SplayTreeMap<dynamic, dynamic>.from(originalMap)
       ..removeWhere((key, value) => !top5Keys.contains(key))
       ..removeWhere((key, value) => value < top5Keys.length)
       ..addAll({for (var key in top5Keys) key: originalMap[key] ?? 0});
