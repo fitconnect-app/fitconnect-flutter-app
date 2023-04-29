@@ -35,7 +35,7 @@ class ProfileScreen extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.help),
                     onPressed: () {
-                      // TODO: handle Help button
+                      Navigator.pushNamed(context, '/help');
                     },
                   ),
                   PopupMenuButton(
