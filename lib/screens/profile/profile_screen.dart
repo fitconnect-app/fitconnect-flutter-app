@@ -33,8 +33,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {},
+                    icon: const Icon(Icons.help),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/help');
+                    },
                   ),
                   PopupMenuButton(
                     itemBuilder: (BuildContext context) => [
@@ -45,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                       const PopupMenuItem(
                         value: 1,
                         child: Text('Logout'),
-                      )
+                      ),
                     ],
                     onSelected: (value) {
                       switch (value) {
