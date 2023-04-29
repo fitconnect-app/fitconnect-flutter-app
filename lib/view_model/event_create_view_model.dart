@@ -153,16 +153,6 @@ enum CreateState {
   error,
 }
 
-Future<void> _getLocation() async {
-  try {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print('Latitude: ${position.latitude}, Longitude: ${position.longitude}');
-  } catch (e) {
-    print('Error getting location: $e');
-  }
-}
-
 // The getHumidity function for the isolate
 void getHumidity(Map<String, dynamic> args) async {
   SendPort sendPort = args['sendPort'];
@@ -184,7 +174,7 @@ void getHumidity(Map<String, dynamic> args) async {
   String lat = position.latitude.toString();
   String lon = position.longitude.toString();
 
-  const String url =
+  String url =
       'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
 
   http.Response response = await http.get(Uri.parse(url));
