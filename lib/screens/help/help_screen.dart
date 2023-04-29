@@ -129,6 +129,19 @@ class HelpScreenState extends State<HelpScreen> {
                   "There is no internet connection, can't send feedback!",
                   ScaffoldMessenger.of(context),
                 );
+              } else {
+                Navigator.pushReplacementNamed(context, "/home");
+                MotionToast.success(
+                  position: MotionToastPosition.top,
+                  animationType: AnimationType.fromTop,
+                  title: const Text(
+                    "Success",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  description: const Text("Feedback sent successfully!"),
+                ).show(context);
               }
             } catch (e) {
               MotionToast.error(
@@ -143,6 +156,7 @@ class HelpScreenState extends State<HelpScreen> {
                 description:
                     Text(e is FormatException ? e.message : e.toString()),
               ).show(context);
+              rethrow;
             }
           },
           label: const Text("Send Feedback"),
