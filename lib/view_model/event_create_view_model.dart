@@ -8,12 +8,14 @@ import 'package:fit_connect/model/event/event_model.dart';
 import 'package:fit_connect/model/event/event_repository.dart';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
+import 'package:fit_connect/services/geolocalizator/geolocalizator.dart';
 import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 class EventCreateViewModel extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
@@ -86,6 +88,13 @@ class EventCreateViewModel extends ChangeNotifier {
     createEventTrace.stop();
 
     if (!_isOffline) {
+      Position position;
+      try {
+        position = await determinePosition();
+      } catch (e) {
+        return;
+      }
+
       // Create isolate for fetching humidity
       final receivePort = ReceivePort();
       final isolate = await Isolate.spawn(
@@ -93,6 +102,8 @@ class EventCreateViewModel extends ChangeNotifier {
         {
           'sendPort': receivePort.sendPort,
           'startDateTime': startDateTime,
+          'latitude': position.latitude,
+          'longitude': position.longitude,
         },
       );
 
@@ -100,7 +111,7 @@ class EventCreateViewModel extends ChangeNotifier {
       receivePort.listen((humidity) {
         if (humidity != null && humidity) {
           NotificationService.showNotification(
-              title: "Weather Forcast",
+              title: "Weather Forecast",
               body:
                   "There's a probability that your ${sportName.getString().toLowerCase()} event will have rain");
         }
@@ -156,11 +167,15 @@ enum CreateState {
 void getHumidity(Map<String, dynamic> args) async {
   SendPort sendPort = args['sendPort'];
   DateTime dateTime = args['startDateTime'];
+  double latitude = args['latitude'];
+  double longitude = args['longitude'];
 
   const String apiKey = '3db658571158dea7845186f549b77f21';
-  const String lat = '4.7110';
-  const String lon = '-74.0721';
-  const String url =
+
+  String lat = latitude.toString();
+  String lon = longitude.toString();
+
+  String url =
       'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey&units=metric';
 
   http.Response response = await http.get(Uri.parse(url));
@@ -178,7 +193,7 @@ void getHumidity(Map<String, dynamic> args) async {
         return;
       }
     }
-  }
 
-  sendPort.send(null);
+    sendPort.send(null);
+  }
 }

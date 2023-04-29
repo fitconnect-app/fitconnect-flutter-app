@@ -22,8 +22,6 @@ Future<Object> getHumidity(DateTime dateTime) async {
         return forecast['weather'][0]['main'] == "Rain" ? true : false ;
       }
     }
-  } else {
-    // print('Error al obtener los datos del pronóstico del tiempo: ${response.statusCode}');
   }
 
   return Future.error(
