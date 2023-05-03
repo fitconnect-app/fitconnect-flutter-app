@@ -62,10 +62,8 @@ class ExerciseListScreen extends StatelessWidget {
                   Expandable(
                     collapsed: Stack(
                       children: [
-                        _buildExerciseHeader(
-                          viewModel.exercises[index]['name'],
-                          'https://picsum.photos/400/200',
-                        ),
+                        _buildExerciseHeader(viewModel.exercises[index]['name'],
+                            'https://picsum.photos/400/200', false),
                       ],
                     ),
                     expanded: ExpandableButton(
@@ -82,11 +80,12 @@ class ExerciseListScreen extends StatelessWidget {
                           const Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.expand_less,
-                                  size: 30,
-                                )),
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.expand_less,
+                                size: 30,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -101,47 +100,51 @@ class ExerciseListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildExerciseHeader(String name, String thumbnailUrl) {
+  Widget _buildExerciseHeader(
+      String name, String thumbnailUrl, bool isExpanded) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            constraints: const BoxConstraints(
-              maxHeight: 200,
-            ),
-            child: AspectRatio(
-              aspectRatio: 2,
-              child: CachedNetworkImage(
-                imageUrl: thumbnailUrl,
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
+      child: ExpandableButton(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: const BoxConstraints(
+                maxHeight: 200,
               ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+              child: AspectRatio(
+                aspectRatio: 2,
+                child: CachedNetworkImage(
+                  imageUrl: thumbnailUrl,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
                 ),
               ),
-              ExpandableButton(
-                child: const Icon(
-                  Icons.expand_more,
-                  size: 30,
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Visibility(
+                  visible: !isExpanded,
+                  child: const Icon(
+                    Icons.expand_more,
+                    size: 30,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -157,7 +160,7 @@ class ExerciseListScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildExerciseHeader(name, imageUrl),
+        _buildExerciseHeader(name, imageUrl, true),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
