@@ -47,57 +47,82 @@ class ExerciseListScreen extends StatelessWidget {
   }
 
   Widget _buildExerciseList(ExerciseListViewModel viewModel, context) {
-    return ListView.builder(
-      itemCount: viewModel.exercises.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: ExpandableNotifier(
-              child: Column(
-                children: [
-                  Expandable(
-                    collapsed: Stack(
-                      children: [
-                        _buildExerciseHeader(viewModel.exercises[index]['name'],
-                            viewModel.exercises[index]['imgUrl'], false),
-                      ],
-                    ),
-                    expanded: ExpandableButton(
-                      child: Column(
+    if (viewModel.exercises.isNotEmpty) {
+      return ListView.builder(
+        itemCount: viewModel.exercises.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: ExpandableNotifier(
+                child: Column(
+                  children: [
+                    Expandable(
+                      collapsed: Stack(
                         children: [
-                          _buildExerciseDetails(
-                            viewModel.exercises[index]['name'],
-                            viewModel.exercises[index]['type'],
-                            viewModel.exercises[index]['muscle'],
-                            viewModel.exercises[index]['difficulty'],
-                            viewModel.exercises[index]['instructions'],
-                            viewModel.exercises[index]['imgUrl'],
-                          ),
-                          const Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.expand_less,
-                                size: 30,
-                              ),
-                            ),
-                          ),
+                          _buildExerciseHeader(
+                              viewModel.exercises[index]['name'],
+                              viewModel.exercises[index]['imgUrl'],
+                              false),
                         ],
                       ),
+                      expanded: ExpandableButton(
+                        child: Column(
+                          children: [
+                            _buildExerciseDetails(
+                              viewModel.exercises[index]['name'],
+                              viewModel.exercises[index]['type'],
+                              viewModel.exercises[index]['muscle'],
+                              viewModel.exercises[index]['difficulty'],
+                              viewModel.exercises[index]['instructions'],
+                              viewModel.exercises[index]['imgUrl'],
+                            ),
+                            const Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.expand_less,
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height/1.3,
+          width: MediaQuery.of(context).size.width,
+          child: const Padding(
+            padding: EdgeInsets.all(30.0),
+            child: Center(
+              child: Text(
+                'You have no internet connection.\nPlease connect to the internet and pull down to refresh the exercise list.',
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
   }
 
   Widget _buildExerciseHeader(

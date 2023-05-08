@@ -54,16 +54,22 @@ class ExerciseListViewModel extends ChangeNotifier {
       url,
       {'X-Api-Key': 'XHldlCZ6BtEIIpwW+HaWsg==oMwUs8WRq2HVCxCS'},
     );
-    var data = jsonDecode(response.body);
-    for (var exercise in data) {
-      exercise['imgUrl'] = getImgUrl(exercise['type']);
-      exercise['type'] = getDisplayText(exercise['type']);
-      exercise['muscle'] = getDisplayText(exercise['muscle']);
-      exercise['difficulty'] = getDisplayText(exercise['difficulty']);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      for (var exercise in data) {
+        exercise['imgUrl'] = getImgUrl(exercise['type']);
+        exercise['type'] = getDisplayText(exercise['type']);
+        exercise['muscle'] = getDisplayText(exercise['muscle']);
+        exercise['difficulty'] = getDisplayText(exercise['difficulty']);
+      }
+      _exercises = data;
+      _state = ExerciseListState.completed;
+      notifyListeners();
     }
-    _exercises = data;
-    _state = ExerciseListState.completed;
-    notifyListeners();
+    else {
+      _state = ExerciseListState.completed;
+      notifyListeners();
+    }
   }
 
   String getImgUrl(String exerciseType) {
