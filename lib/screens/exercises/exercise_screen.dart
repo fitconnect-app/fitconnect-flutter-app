@@ -63,7 +63,7 @@ class ExerciseListScreen extends StatelessWidget {
                     collapsed: Stack(
                       children: [
                         _buildExerciseHeader(viewModel.exercises[index]['name'],
-                            'https://picsum.photos/400/200', false),
+                            viewModel.exercises[index]['imgUrl'], false),
                       ],
                     ),
                     expanded: ExpandableButton(
@@ -75,7 +75,7 @@ class ExerciseListScreen extends StatelessWidget {
                             viewModel.exercises[index]['muscle'],
                             viewModel.exercises[index]['difficulty'],
                             viewModel.exercises[index]['instructions'],
-                            'https://picsum.photos/600/300',
+                            viewModel.exercises[index]['imgUrl'],
                           ),
                           const Align(
                             alignment: Alignment.centerRight,

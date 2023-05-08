@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/cache_manager/fitconnect_cache_manager.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 
@@ -53,10 +54,41 @@ class ExerciseListViewModel extends ChangeNotifier {
       url,
       {'X-Api-Key': 'XHldlCZ6BtEIIpwW+HaWsg==oMwUs8WRq2HVCxCS'},
     );
-    final data = jsonDecode(response.body);
+    var data = jsonDecode(response.body);
+    for (var exercise in data) {
+      exercise['imgUrl'] = getImgUrl(exercise['type']);
+      exercise['type'] = getDisplayText(exercise['type']);
+      exercise['muscle'] = getDisplayText(exercise['muscle']);
+      exercise['difficulty'] = getDisplayText(exercise['difficulty']);
+    }
     _exercises = data;
     _state = ExerciseListState.completed;
     notifyListeners();
+  }
+
+  String getImgUrl(String exerciseType) {
+    switch (exerciseType) {
+      case "stretching":
+        return "https://i.ibb.co/FHN3tB1/stretching.jpg";
+      case "cardio":
+        return "https://i.ibb.co/BsNPL6v/cardio.jpg";
+      case "olympic_weightlifting":
+        return "https://i.ibb.co/p2CFfBz/Olympic-Lift.jpg";
+      case "powerlifting":
+        return "https://i.ibb.co/vYSGPkg/powerlifting.jpg";
+      case "plyometrics":
+        return "https://i.ibb.co/n0Lb8LJ/plyometric.jpg";
+      case "strength":
+        return "https://i.ibb.co/GpSnqPC/strength.jpg";
+      case "strongman":
+        return "https://i.ibb.co/0MH9QtG/strongman.jpg";
+      default:
+        return "https://i.ibb.co/LSRbK6B/default-Exercise.jpg";
+    }
+  }
+
+  String getDisplayText(String string) {
+    return string.replaceAll('_', ' ').capitalize();
   }
 }
 
