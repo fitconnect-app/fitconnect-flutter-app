@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:fit_connect/components/bottom_nav_bar.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,104 +24,111 @@ class ExerciseListScreen extends StatelessWidget {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.filter_list),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return StatefulBuilder(
-                          builder:
-                              (BuildContext context, StateSetter setState) {
-                            return AlertDialog(
-                              title: const Text('Filter exercises'),
-                              content: SingleChildScrollView(
-                                // Add SingleChildScrollView here
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text('Exercise Type'),
-                                    DropdownButton<String>(
-                                      value: viewModel.typeFilter,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          viewModel.typeFilter = newValue ?? '';
-                                        });
-                                      },
-                                      items:
-                                          viewModel.typeOptions.map((option) {
-                                        return DropdownMenuItem<String>(
-                                          value: option,
-                                          child: Text(option),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    const Text('Muscle'),
-                                    DropdownButton<String>(
-                                      value: viewModel.muscleFilter,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          viewModel.muscleFilter =
-                                              newValue ?? '';
-                                        });
-                                      },
-                                      items:
-                                          viewModel.muscleOptions.map((option) {
-                                        return DropdownMenuItem<String>(
-                                          value: option,
-                                          child: Text(option),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    const Text('Difficulty'),
-                                    DropdownButton<String>(
-                                      value: viewModel.difficultyFilter,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          viewModel.difficultyFilter =
-                                              newValue ?? 'Beginner';
-                                        });
-                                      },
-                                      items: viewModel.difficultyOptions
-                                          .map((option) {
-                                        return DropdownMenuItem<String>(
-                                          value: option,
-                                          child: Text(option),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
+                  onPressed: () async {
+                    await viewModel.checkConnectionFromView();
+                    if (viewModel.isOffline) {
+                      return;
+                    } else if (context.mounted) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder:
+                                (BuildContext context, StateSetter setState) {
+                              return AlertDialog(
+                                title: const Text('Filter exercises'),
+                                content: SingleChildScrollView(
+                                  // Add SingleChildScrollView here
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Exercise Type'),
+                                      DropdownButton<String>(
+                                        value: viewModel.typeFilter,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            viewModel.typeFilter =
+                                                newValue ?? 'Any';
+                                          });
+                                        },
+                                        items:
+                                            viewModel.typeOptions.map((option) {
+                                          return DropdownMenuItem<String>(
+                                            value: option,
+                                            child: Text(option),
+                                          );
+                                        }).toList(),
+                                      ),
+                                      const Text('Muscle'),
+                                      DropdownButton<String>(
+                                        value: viewModel.muscleFilter,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            viewModel.muscleFilter =
+                                                newValue ?? 'Any';
+                                          });
+                                        },
+                                        items: viewModel.muscleOptions
+                                            .map((option) {
+                                          return DropdownMenuItem<String>(
+                                            value: option,
+                                            child: Text(option),
+                                          );
+                                        }).toList(),
+                                      ),
+                                      const Text('Difficulty'),
+                                      DropdownButton<String>(
+                                        value: viewModel.difficultyFilter,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            viewModel.difficultyFilter =
+                                                newValue ?? 'Any';
+                                          });
+                                        },
+                                        items: viewModel.difficultyOptions
+                                            .map((option) {
+                                          return DropdownMenuItem<String>(
+                                            value: option,
+                                            child: Text(option),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    viewModel.typeFilter = '';
-                                    viewModel.muscleFilter = '';
-                                    viewModel.difficultyFilter = 'Beginner';
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: lightColorScheme.primary,
-                                      foregroundColor:
-                                          lightColorScheme.onSecondary),
-                                  onPressed: () {
-                                    viewModel.state = ExerciseListState.loading;
-                                    viewModel.getExercises();
-                                    if (context.mounted) {
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      viewModel.typeFilter = 'Any';
+                                      viewModel.muscleFilter = 'Any';
+                                      viewModel.difficultyFilter = 'Any';
                                       Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: const Text('Filter'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    );
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            lightColorScheme.primary,
+                                        foregroundColor:
+                                            lightColorScheme.onSecondary),
+                                    onPressed: () {
+                                      viewModel.getExercises();
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Text('Filter'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               ],
@@ -144,6 +152,15 @@ class ExerciseListScreen extends StatelessWidget {
   }
 
   Widget _buildExerciseList(ExerciseListViewModel viewModel, context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (viewModel.isOffline) {
+          getMessageSnackBar(
+              'You have no internet connection. Showing the latest updated exercises!\nCannot filter exercises offline.',
+              ScaffoldMessenger.of(context));
+        }
+      },
+    );
     if (viewModel.exercises.isNotEmpty) {
       return ListView.builder(
         itemCount: viewModel.exercises.length,
@@ -208,7 +225,9 @@ class ExerciseListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(30.0),
             child: Center(
               child: Text(
-                viewModel.isOffline ? 'You have no internet connection.\nPlease connect to the internet and pull down to refresh the exercise list.': 'No exercises found.\nPlease try with different filters.',
+                viewModel.isOffline
+                    ? 'You have no internet connection.\nPlease connect to the internet and pull down to refresh the exercise list.'
+                    : 'No exercises found.\nPlease try with different filters.',
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.ltr,
                 style: const TextStyle(

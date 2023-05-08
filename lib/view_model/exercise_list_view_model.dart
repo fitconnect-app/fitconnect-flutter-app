@@ -73,6 +73,7 @@ class ExerciseListViewModel extends ChangeNotifier {
   }
 
   Future<void> getExercises() async {
+    _state = ExerciseListState.loading;
     if (!await checkConnectivity()) {
       _isOffline = true;
       notifyListeners();
@@ -96,8 +97,6 @@ class ExerciseListViewModel extends ChangeNotifier {
           ? '&muscle=${getApiText(muscleFilter)}'
           : '&muscle=${getApiText(muscleFilter)}';
     }
-
-    print(url);
 
     final response = await FitConnectCacheManager.getData(
       url,
@@ -154,6 +153,11 @@ class ExerciseListViewModel extends ChangeNotifier {
 
   String getApiText(String string) {
     return string.replaceAll(' ', '_').toLowerCase();
+  }
+
+  Future<void> checkConnectionFromView() async {
+    _isOffline = !await checkConnectivity();
+    notifyListeners();
   }
 }
 
