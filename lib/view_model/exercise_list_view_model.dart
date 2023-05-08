@@ -11,9 +11,46 @@ class ExerciseListViewModel extends ChangeNotifier {
 
   String baseUrl = 'https://api.api-ninjas.com/v1/exercises';
 
-  String? typeFilter;
-  String? muscleFilter;
-  String? difficultyFilter;
+  final List<String> _typeOptions = [
+    'Any',
+    'Cardio',
+    'Olympic Weightlifting',
+    'Plyometrics',
+    'Powerlifting',
+    'Strength',
+    'Stretching',
+    'Strongman'
+  ];
+
+  final List<String> _muscleOptions = [
+    'Any',
+    'Abdominals',
+    'Adductors',
+    'Biceps',
+    'Calves',
+    'Chest',
+    'Forearms',
+    'Glutes',
+    'Hamstrings',
+    'Lats',
+    'Lower Back',
+    'Middle Back',
+    'Neck',
+    'Quadriceps',
+    'Traps',
+    'Triceps'
+  ];
+
+  final List<String> _difficultyOptions = [
+    'Any',
+    'Beginner',
+    'Intermediate',
+    'Expert'
+  ];
+
+  String typeFilter = 'Any';
+  String muscleFilter = 'Any';
+  String difficultyFilter = 'Any';
   ExerciseListState _state = ExerciseListState.loading;
 
   List<dynamic> _exercises = [];
@@ -21,6 +58,15 @@ class ExerciseListViewModel extends ChangeNotifier {
   bool get isOffline => _isOffline;
   List<dynamic> get exercises => _exercises;
   ExerciseListState get state => _state;
+
+  List<String> get typeOptions => _typeOptions;
+  List<String> get muscleOptions => _muscleOptions;
+  List<String> get difficultyOptions => _difficultyOptions;
+
+  set state(ExerciseListState value) {
+    _state = value;
+    notifyListeners();
+  }
 
   ExerciseListViewModel() {
     getExercises();
@@ -36,19 +82,22 @@ class ExerciseListViewModel extends ChangeNotifier {
     }
 
     String url = baseUrl;
-    if (typeFilter != null) {
-      url += '?type=$typeFilter';
-    }
-    if (muscleFilter != null) {
-      url += '?muscle=$muscleFilter';
-    }
-    if (difficultyFilter != null) {
-      url += '?difficulty=$difficultyFilter';
+    if (difficultyFilter != 'Any') {
+      url += '?difficulty=${getApiText(difficultyFilter)}';
     }
 
-    if (url == baseUrl) {
-      url += '?difficulty=beginner';
+    if (typeFilter != 'Any') {
+      url += url == baseUrl
+          ? '?type=${getApiText(typeFilter)}'
+          : '&type=${getApiText(typeFilter)}';
     }
+    if (muscleFilter != 'Any') {
+      url += url == baseUrl
+          ? '&muscle=${getApiText(muscleFilter)}'
+          : '&muscle=${getApiText(muscleFilter)}';
+    }
+
+    print(url);
 
     final response = await FitConnectCacheManager.getData(
       url,
@@ -65,11 +114,17 @@ class ExerciseListViewModel extends ChangeNotifier {
       _exercises = data;
       _state = ExerciseListState.completed;
       notifyListeners();
-    }
-    else {
+    } else {
       _state = ExerciseListState.completed;
       notifyListeners();
     }
+  }
+
+  List<String> getDisplayList(list) {
+    for (var item in list) {
+      item = getDisplayText(item);
+    }
+    return list;
   }
 
   String getImgUrl(String exerciseType) {
@@ -95,6 +150,10 @@ class ExerciseListViewModel extends ChangeNotifier {
 
   String getDisplayText(String string) {
     return string.replaceAll('_', ' ').capitalize();
+  }
+
+  String getApiText(String string) {
+    return string.replaceAll(' ', '_').toLowerCase();
   }
 }
 
