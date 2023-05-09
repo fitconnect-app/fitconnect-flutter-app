@@ -98,7 +98,10 @@ class ExerciseListViewModel extends ChangeNotifier {
           : '&muscle=${getApiText(muscleFilter)}';
     }
 
-    if(difficultyFilter == 'Any' && typeFilter == 'Any' && muscleFilter == 'Any' && !isInit){
+    if (difficultyFilter == 'Any' &&
+        typeFilter == 'Any' &&
+        muscleFilter == 'Any' &&
+        !isInit) {
       url += '?offset=${Random().nextInt(1000) + 10}';
     }
 

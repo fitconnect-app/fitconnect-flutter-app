@@ -21,5 +21,5 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/stats": (BuildContext context) => const StatsScreen(),
   "/events": (BuildContext context) => const EventsListScreen(),
   "/createEvent": (BuildContext context) => const SportFormScreen(),
-  "/exercises" : (BuildContext context) => const ExerciseListScreen()
+  "/exercises": (BuildContext context) => const ExerciseListScreen()
 };

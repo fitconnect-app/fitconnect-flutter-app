@@ -19,7 +19,7 @@ Future<Object> getHumidity(DateTime dateTime) async {
           forecastDateTime.month == dateTime.month &&
           forecastDateTime.day == dateTime.day &&
           forecastDateTime.hour >= dateTime.hour) {
-        return forecast['weather'][0]['main'] == "Rain" ? true : false ;
+        return forecast['weather'][0]['main'] == "Rain" ? true : false;
       }
     }
   }
