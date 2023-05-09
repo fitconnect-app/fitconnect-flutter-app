@@ -38,7 +38,6 @@ class ExerciseListScreen extends StatelessWidget {
                               return AlertDialog(
                                 title: const Text('Filter exercises'),
                                 content: SingleChildScrollView(
-                                  // Add SingleChildScrollView here
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
