@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/cache_manager/fitconnect_cache_manager.dart';
 import 'package:fit_connect/utils/connectivity.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ExerciseListViewModel extends ChangeNotifier {
   bool _isOffline = false;
 
-  String baseUrl = 'https://api.api-ninjas.com/v1/exercises';
+  final String baseUrl = 'https://api.api-ninjas.com/v1/exercises';
 
   final List<String> _typeOptions = [
     'Any',
@@ -69,10 +69,10 @@ class ExerciseListViewModel extends ChangeNotifier {
   }
 
   ExerciseListViewModel() {
-    getExercises();
+    getExercises(isInit: true);
   }
 
-  Future<void> getExercises() async {
+  Future<void> getExercises({bool isInit = false}) async {
     _state = ExerciseListState.loading;
     if (!await checkConnectivity()) {
       _isOffline = true;
@@ -96,6 +96,10 @@ class ExerciseListViewModel extends ChangeNotifier {
       url += url == baseUrl
           ? '&muscle=${getApiText(muscleFilter)}'
           : '&muscle=${getApiText(muscleFilter)}';
+    }
+
+    if(difficultyFilter == 'Any' && typeFilter == 'Any' && muscleFilter == 'Any' && !isInit){
+      url += '?offset=${Random().nextInt(1000) + 10}';
     }
 
     final response = await FitConnectCacheManager.getData(
