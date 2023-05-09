@@ -2,6 +2,7 @@ import 'package:fit_connect/screens/auth/auth_screen.dart';
 import 'package:fit_connect/screens/bpm/bpm_screen.dart';
 import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/screens/events/event_create_screen.dart';
+import 'package:fit_connect/screens/exercises/exercise_screen.dart';
 import 'package:fit_connect/screens/home/home_screen.dart';
 import 'package:fit_connect/screens/profile/profile_screen.dart';
 import 'package:fit_connect/screens/settings/settings_screen.dart';
@@ -20,4 +21,5 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/stats": (BuildContext context) => const StatsScreen(),
   "/events": (BuildContext context) => const EventsListScreen(),
   "/createEvent": (BuildContext context) => const SportFormScreen(),
+  "/exercises": (BuildContext context) => const ExerciseListScreen()
 };
