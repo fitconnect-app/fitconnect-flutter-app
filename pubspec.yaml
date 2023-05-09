@@ -57,6 +57,8 @@ dependencies:
   shared_preferences: ^2.1.0
   http: ^0.13.3
   flutter_local_notifications: ^14.0.0
+  flutter_cache_manager: ^3.3.0
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:

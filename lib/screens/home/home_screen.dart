@@ -78,13 +78,12 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   FeatureButton(
-                    icon: Icons.event,
-                    label: 'Events',
+                    icon: Icons.directions_run,
+                    label: 'Exercises',
                     onPressed: () {
                       Navigator.pushNamed(
                         context,
-                        '/events',
-                        arguments: EventsScreenArguments(null),
+                        '/exercises',
                       );
                     },
                   ),
