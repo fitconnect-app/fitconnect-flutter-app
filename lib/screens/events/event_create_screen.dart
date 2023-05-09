@@ -124,7 +124,8 @@ class SportFormState extends State<SportFormScreen> {
                 ),
               ],
             ),
-            body: SingleChildScrollView(child: _buildCreateScreen(viewModel, context)),
+            body: SingleChildScrollView(
+                child: _buildCreateScreen(viewModel, context)),
             floatingActionButton: FloatingActionButton.extended(
               onPressed: viewModel.state == CreateState.loading
                   ? null
