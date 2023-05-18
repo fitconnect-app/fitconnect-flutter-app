@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:fit_connect/model/shared/sports.dart';
 import 'package:fit_connect/services/cache_manager/fitconnect_cache_manager.dart';
 import 'package:fit_connect/utils/connectivity.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseListViewModel extends ChangeNotifier {
   bool _isOffline = false;
+
+  late final SharedPreferences _preferences;
 
   final String baseUrl = 'https://api.api-ninjas.com/v1/exercises';
 
@@ -69,10 +71,19 @@ class ExerciseListViewModel extends ChangeNotifier {
   }
 
   ExerciseListViewModel() {
-    getExercises(isInit: true);
+    SharedPreferences.getInstance().then(
+      (prefs) {
+        _preferences = prefs;
+        typeFilter = prefs.getString("exerciseListType") ?? 'Any';
+        muscleFilter = prefs.getString("exerciseListMuscle") ?? 'Any';
+        difficultyFilter = prefs.getString("exerciseListDifficulty") ?? 'Any';
+        getExercises(isInit: true);
+      },
+    );
   }
 
-  Future<void> getExercises({bool isInit = false}) async {
+  Future<void> getExercises(
+      {bool isInit = false, bool saveFilters = false}) async {
     _state = ExerciseListState.loading;
     if (!await checkConnectivity()) {
       _isOffline = true;
@@ -80,6 +91,10 @@ class ExerciseListViewModel extends ChangeNotifier {
     } else {
       _isOffline = false;
       notifyListeners();
+    }
+
+    if (saveFilters) {
+      _saveLastFilters();
     }
 
     String url = baseUrl;
@@ -165,6 +180,12 @@ class ExerciseListViewModel extends ChangeNotifier {
   Future<void> checkConnectionFromView() async {
     _isOffline = !await checkConnectivity();
     notifyListeners();
+  }
+
+  void _saveLastFilters() {
+    _preferences.setString("exerciseListType", typeFilter);
+    _preferences.setString("exerciseListMuscle", muscleFilter);
+    _preferences.setString("exerciseListDifficulty", difficultyFilter);
   }
 }
 
