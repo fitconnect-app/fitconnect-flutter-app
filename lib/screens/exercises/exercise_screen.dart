@@ -36,7 +36,8 @@ class ExerciseListScreen extends StatelessWidget {
                             builder:
                                 (BuildContext context, StateSetter setState) {
                               return AlertDialog(
-                                contentPadding: const EdgeInsets.only(left:24, bottom: 24),
+                                contentPadding:
+                                    const EdgeInsets.only(left: 24, bottom: 24),
                                 title: const Text('Filter exercises'),
                                 content: SingleChildScrollView(
                                   child: Column(
