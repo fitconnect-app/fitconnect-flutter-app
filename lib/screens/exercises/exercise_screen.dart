@@ -36,6 +36,7 @@ class ExerciseListScreen extends StatelessWidget {
                             builder:
                                 (BuildContext context, StateSetter setState) {
                               return AlertDialog(
+                                contentPadding: const EdgeInsets.only(left:24, bottom: 24),
                                 title: const Text('Filter exercises'),
                                 content: SingleChildScrollView(
                                   child: Column(
@@ -43,6 +44,20 @@ class ExerciseListScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      TextButton.icon(
+                                        label: const Text("Clear Filters"),
+                                        icon: const Icon(Icons.refresh),
+                                        onPressed: () {
+                                          setState(
+                                            () {
+                                              viewModel.typeFilter = 'Any';
+                                              viewModel.muscleFilter = 'Any';
+                                              viewModel.difficultyFilter =
+                                                  'Any';
+                                            },
+                                          );
+                                        },
+                                      ),
                                       const Text('Exercise Type'),
                                       DropdownButton<String>(
                                         value: viewModel.typeFilter,
@@ -114,7 +129,7 @@ class ExerciseListScreen extends StatelessWidget {
                                         foregroundColor:
                                             lightColorScheme.onSecondary),
                                     onPressed: () {
-                                      viewModel.getExercises(saveFilters:true);
+                                      viewModel.getExercises(saveFilters: true);
                                       if (context.mounted) {
                                         Navigator.of(context).pop();
                                       }
