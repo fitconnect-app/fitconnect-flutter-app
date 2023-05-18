@@ -114,7 +114,7 @@ class ExerciseListScreen extends StatelessWidget {
                                         foregroundColor:
                                             lightColorScheme.onSecondary),
                                     onPressed: () {
-                                      viewModel.getExercises();
+                                      viewModel.getExercises(saveFilters:true);
                                       if (context.mounted) {
                                         Navigator.of(context).pop();
                                       }
