@@ -1,5 +1,4 @@
 import 'package:dotlottie_loader/dotlottie_loader.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -13,19 +12,12 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class EmergencyScreenState extends State<EmergencyScreen> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   bool _isWaiting = false;
   bool _isAdminApproved = false;
 
   @override
   void initState() {
     super.initState();
-    _firebaseMessaging.requestPermission();
-    _firebaseMessaging.getToken().then((token) {
-      print('Firebase Messaging Token: $token');
-      // Send the token to your server for additional processing if required
-    });
-    _firebaseMessaging.subscribeToTopic('admin_approval_topic');
 
     // _firebaseMessaging.configure(
     //   onMessage: (message) async {
@@ -133,7 +125,7 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 100),
+                      const SizedBox(height: 130),
                       Transform.scale(
                         scale: 2, // Replace with your desired width
                         child: DotLottieLoader.fromAsset(
@@ -152,24 +144,36 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                 ),
               ),
             if (_isAdminApproved)
-              Column(
-                children: [
-                  const Text(
-                    'Congratulations, an admin has approved your request and it\'s on its way',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 60, vertical: 60),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Congratulations, an admin has approved your request and it\'s on its way',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(height: 100),
+                      Transform.scale(
+                        scale: 1.5, // Replace with your desired width
+                        child: DotLottieLoader.fromAsset(
+                            'assets/animations/meditation-wait-please.lottie',
+                            frameBuilder:
+                                (BuildContext ctx, DotLottie? dotlottie) {
+                          if (dotlottie != null) {
+                            return Lottie.memory(
+                              dotlottie.animations.values.single,
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  DotLottieLoader.fromAsset(
-                      'assets/animations/meditation-wait-please.lottie',
-                      frameBuilder: (BuildContext ctx, DotLottie? dotlottie) {
-                    if (dotlottie != null) {
-                      return Lottie.memory(dotlottie.animations.values.single);
-                    } else {
-                      return Container();
-                    }
-                  }),
-                ],
+                ),
               ),
           ],
         ),
