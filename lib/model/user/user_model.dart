@@ -25,10 +25,10 @@ class UserModel {
 
   Future<List<AchievementModel?>> getAchievements(bool getCache) async {
     AchievementRepository achievementRepo = AchievementRepository();
-    for (String achievementId in achievementsIDs) {
-      AchievementModel? achievement =
+    for (final String achievementId in achievementsIDs) {
+      final AchievementModel? achievement =
           await achievementRepo.getAchievement(achievementId, getCache);
-      var achievementAlreadyInsertedFound = achievements.firstWhere(
+      final achievementAlreadyInsertedFound = achievements.firstWhere(
           (element) => element?.id == achievement?.id,
           orElse: () => null);
       if (achievement != null && achievementAlreadyInsertedFound == null) {

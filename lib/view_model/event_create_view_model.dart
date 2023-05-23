@@ -183,7 +183,7 @@ void getHumidity(Map<String, dynamic> args) async {
     Map<String, dynamic> data = jsonDecode(response.body);
     List<dynamic> forecasts = data['list'];
 
-    for (var forecast in forecasts) {
+    for (final forecast in forecasts) {
       DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
       if (forecastDateTime.year == dateTime.year &&
           forecastDateTime.month == dateTime.month &&

@@ -56,9 +56,9 @@ class EventModel {
 
   Future<List<UserModel?>> getParticipants(getCache) async {
     final UserRepository userRepository = UserRepository();
-    for (String participantsId in participantsIds) {
-      UserModel? user = await userRepository.getUser(participantsId, getCache);
-      var achievementAlreadyInsertedFound = participants
+    for (final String participantsId in participantsIds) {
+      final UserModel? user = await userRepository.getUser(participantsId, getCache);
+      final achievementAlreadyInsertedFound = participants
           .firstWhere((element) => element?.id == user?.id, orElse: () => null);
       if (user != null && achievementAlreadyInsertedFound == null) {
         participants.add(user);

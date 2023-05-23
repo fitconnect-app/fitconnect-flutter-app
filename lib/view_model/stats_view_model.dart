@@ -90,8 +90,8 @@ class StatsViewModel extends ChangeNotifier {
 
   void getBPMAverages() async {
     Map<dynamic, dynamic> averages = {};
-    for (BPMDataModel bpmData in _bpmData) {
-      var date = DateUtils.dateOnly(bpmData.date!);
+    for (final BPMDataModel bpmData in _bpmData) {
+      final date = DateUtils.dateOnly(bpmData.date!);
       if (averages.containsKey(date)) {
         averages[date]!.add(bpmData.value!);
       } else {
@@ -100,7 +100,7 @@ class StatsViewModel extends ChangeNotifier {
     }
     averages.forEach((key, value) {
       int sum = 0;
-      for (int i in value) {
+      for (final int i in value) {
         sum += i;
       }
       averages[key] = sum ~/ value.length;
@@ -128,7 +128,7 @@ class StatsViewModel extends ChangeNotifier {
 
   void getTopPlayedSports() async {
     Map<dynamic, dynamic> sportCount = {};
-    for (EventModel event in recentEvents) {
+    for (final EventModel event in recentEvents) {
       if (sportCount.containsKey(event.sport.getString())) {
         sportCount[event.sport.getString()] =
             sportCount[event.sport.getString()]! + 1;
@@ -157,8 +157,8 @@ class StatsViewModel extends ChangeNotifier {
   void getMostFrequentHours() async {
     Map<dynamic, dynamic> hourCount = {};
 
-    for (EventModel event in recentEvents) {
-      String hour = "${event.startDate.toDate().hour}:00";
+    for (final EventModel event in recentEvents) {
+      final String hour = "${event.startDate.toDate().hour}:00";
       if (hourCount.containsKey(hour)) {
         hourCount[hour] = hourCount[hour]! + 1;
       } else {
@@ -187,11 +187,11 @@ class StatsViewModel extends ChangeNotifier {
 
   void getHoursPracticed() async {
     Map<dynamic, dynamic> sportHourCount = {};
-    for (EventModel event in recentEvents) {
-      String sport = event.sport.getString();
-      DateTime startDate = event.startDate.toDate();
-      DateTime endDate = event.endDate.toDate();
-      double duration = endDate.difference(startDate).inSeconds / 3600;
+    for (final EventModel event in recentEvents) {
+      final String sport = event.sport.getString();
+      final DateTime startDate = event.startDate.toDate();
+      final DateTime endDate = event.endDate.toDate();
+      final double duration = endDate.difference(startDate).inSeconds / 3600;
       if (sportHourCount.containsKey(sport)) {
         sportHourCount[sport] = sportHourCount[sport]! + duration;
       } else {
@@ -231,7 +231,7 @@ class StatsViewModel extends ChangeNotifier {
     var result = SplayTreeMap<dynamic, dynamic>.from(originalMap)
       ..removeWhere((key, value) => !top5Keys.contains(key))
       ..removeWhere((key, value) => value < top5Keys.length)
-      ..addAll({for (var key in top5Keys) key: originalMap[key] ?? 0});
+      ..addAll({for (final key in top5Keys) key: originalMap[key] ?? 0});
 
     return result;
   }
