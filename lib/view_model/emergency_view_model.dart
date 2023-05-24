@@ -6,6 +6,7 @@ import 'package:fit_connect/model/emergency/emergency_model.dart';
 import 'package:fit_connect/model/emergency/emergency_repository.dart';
 import 'package:fit_connect/model/user/user_model.dart';
 import 'package:fit_connect/model/user/user_repository.dart';
+import 'package:fit_connect/services/emergency/emergency_service.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/services/geolocalizator/geolocalizator.dart';
 import 'package:fit_connect/utils/connectivity.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum EmergencyState {
   isInitialized,
+  isLoading,
   isWaiting,
   isAdminApproved,
 }
@@ -25,72 +27,94 @@ class EmergencyViewModel extends ChangeNotifier {
   final EmergencyRepository _emergencyRepository = EmergencyRepository();
   late GeoPoint _position;
   bool _isOffline = false;
-  bool _isRequestPending = false;
   String _reason = "General Accident";
-  EmergencyState state = EmergencyState.isInitialized;
+  EmergencyState _state = EmergencyState.isInitialized;
+  late EmergencyService _emergencyService;
 
   bool get isOffline => _isOffline;
 
   String get reason => _reason;
 
-    // Stream<String> get emergencyServiceStream => _emergencyService.eventStream;
+  EmergencyState get state => _state;
+
+  Stream<String> get emergencyServiceStream =>
+      _emergencyService.emergencyStream;
 
   void setReason(newReason) => _reason = newReason;
 
+  EmergencyViewModel() {
+    changeEmergencyState(EmergencyState.isLoading);
+    _emergencyService = EmergencyService();
+    checkPendingRequest(); // Don't allow to create requests if there is one pending
+  }
+
   void changeEmergencyState(newState) {
-    state = newState;
+    _state = newState;
     notifyListeners();
   }
 
-  Future<void> sendHelpRequest(reason) async {
-    // Check if there is a pending request
-    SharedPreferences.getInstance().then(
-      (prefs) async {
-        String lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
-        if (lastRequestId != '') {
-          var emergency = await _emergencyRepository.getEmergency(
-            lastRequestId,
-            _isOffline,
-          );
-          if (emergency == null) {
-            return;
-          }
-
-          // Check if the emergency is older than 3 hours
-          DateTime currentDateTime = DateTime.now();
-          Duration timeDifference =
-              currentDateTime.difference(emergency.timestamp.toDate());
-          if (timeDifference.inHours >= 3) {
-            // Delete the emergency
-            _emergencyRepository.deleteEmergency(lastRequestId);
-            prefs.setString('lastEmergencyRequest', '');
-            return;
-          }
-
-          if (emergency.status == 'APPROVED') {
-            _emergencyRepository.deleteEmergency(lastRequestId);
-            prefs.setString('lastEmergencyRequest', '');
-          } else if (emergency.status == 'PENDING') {
-            _isRequestPending = true;
-          }
-        }
-      },
+  void checkPendingRequest() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
+    // No last emergency request was found
+    if (lastRequestId.isEmpty) {
+      if (state == EmergencyState.isLoading) {
+        changeEmergencyState(EmergencyState.isInitialized);
+        notifyListeners();
+      }
+      return;
+    }
+    // There was a previous emergency request
+    final emergency = await _emergencyRepository.getEmergency(
+      lastRequestId,
+      _isOffline,
     );
+    // Last emergency request was deleted
+    if (emergency == null) {
+      prefs.setString('lastEmergencyRequest', '');
+      if (state == EmergencyState.isLoading) {
+        changeEmergencyState(EmergencyState.isInitialized);
+        notifyListeners();
+      }
+      return;
+    }
+    // Check if the emergency is outdated (older than 3 hours)
+    final currentDateTime = DateTime.now();
+    final timeDifference =
+        currentDateTime.difference(emergency.timestamp.toDate());
+    // Delete approved and outdated last emergency request
+    if (timeDifference.inHours >= 3 || emergency.status == 'APPROVED') {
+      _emergencyRepository.deleteEmergency(lastRequestId);
+      prefs.setString('lastEmergencyRequest', '');
+      if (state == EmergencyState.isLoading) {
+        changeEmergencyState(EmergencyState.isInitialized);
+        notifyListeners();
+      }
+      return;
+    }
+    // There is a pending request
+    if (emergency.status == 'PENDING') {
+      changeEmergencyState(EmergencyState.isWaiting);
+      notifyListeners();
+      listenEmergencyStream();
+    }
+    // Prevent user stuck on loading
+    if (state == EmergencyState.isLoading) {
+      changeEmergencyState(EmergencyState.isInitialized);
+      notifyListeners();
+    }
+  }
 
+  Future<void> sendHelpRequest() async {
+    changeEmergencyState(EmergencyState.isLoading);
     if (!await checkConnectivity()) {
       _isOffline = true;
-      // Do not enqueue new request if there is already one pending
-      if (!_isRequestPending) {
-        return;
-      }
-      notifyListeners();
+      checkPendingRequest(); // Don't enqueue new request if there is one pending
+      //TODO: Notify user no internet
     } else {
       _isOffline = false;
-      // Do not create new request if there is already one pending
-      if (!_isRequestPending) {
-        return;
-      }
-      Trace emergencyTrace = FirebasePerformance.instance.newTrace('emergency');
+      Trace emergencyTrace =
+          FirebasePerformance.instance.newTrace('createEmergencyRequest');
       emergencyTrace.start();
       _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
       await determinePosition().then((value) {
@@ -101,9 +125,9 @@ class EmergencyViewModel extends ChangeNotifier {
 
       // Store emergency in Firestore
       var emergency = EmergencyModel(
-        userName: _userData?.getNameString() ?? 'Undefined User Name',
+        userName: _userData?.getNameString() ?? 'No Name',
         location: _position,
-        reason: reason,
+        reason: _reason,
         timestamp: Timestamp.now(),
         status: 'PENDING',
       );
@@ -111,10 +135,27 @@ class EmergencyViewModel extends ChangeNotifier {
           .createEmergency(EmergencyDTO.fromModel(emergency));
 
       // Store last emergency request on device
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('lastEmergencyRequest', emergency.id ?? '');
-      // emergencyService.
+      await SharedPreferences.getInstance().then((prefs) =>
+          prefs.setString('lastEmergencyRequest', emergency.id.toString()));
+      // Listen for request changes with emergency service
+      listenEmergencyStream();
+
       emergencyTrace.stop();
+      changeEmergencyState(EmergencyState.isWaiting);
     }
+  }
+
+  void listenEmergencyStream() {
+    _emergencyService.init();
+    _emergencyService.emergencyStream.listen(_onStreamValueAdded);
+  }
+
+  void _onStreamValueAdded(String value) {
+    _state = EmergencyState.isAdminApproved;
+    notifyListeners();
+  }
+
+  void closeEmergencyStream() {
+    _emergencyService.dispose();
   }
 }
