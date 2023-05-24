@@ -82,6 +82,14 @@ class EmergencyViewModel extends ChangeNotifier {
     final currentDateTime = DateTime.now();
     final timeDifference =
         currentDateTime.difference(emergency.timestamp.toDate());
+    // Show current last emergency approved request
+    if (timeDifference.inHours < 3 && emergency.status == 'APPROVED') {
+      if (state == EmergencyState.isLoading) {
+        changeEmergencyState(EmergencyState.isAdminApproved);
+        notifyListeners();
+      }
+      return;
+    }
     // Delete approved and outdated last emergency request
     if (timeDifference.inHours >= 3 || emergency.status == 'APPROVED') {
       _emergencyRepository.deleteEmergency(lastRequestId);
