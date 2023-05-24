@@ -10,14 +10,13 @@ import 'package:fit_connect/services/firebase/singleton.dart';
 import 'package:fit_connect/services/geolocalizator/geolocalizator.dart';
 import 'package:fit_connect/utils/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class EmergencyViewModel extends ChangeNotifier {
   final User? _user = FirebaseInstance.auth.currentUser;
   UserModel? _userData;
   final UserRepository _userRepository = UserRepository();
   final EmergencyRepository _emergencyRepository = EmergencyRepository();
-  late Position _position;
+  late GeoPoint _position;
   bool _isOffline = false;
 
   bool get isOffline => _isOffline;
@@ -32,12 +31,16 @@ class EmergencyViewModel extends ChangeNotifier {
       Trace emergencyTrace = FirebasePerformance.instance.newTrace('emergency');
       emergencyTrace.start();
       _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
-      _position = await determinePosition();
+      await determinePosition().then((value) {
+        _position = GeoPoint(value.latitude, value.longitude);
+      }).catchError((error, stackTrace) {
+        _position = const GeoPoint(0.0, 0.0);
+      });
 
       // Store emergency in Firestore
       final emergency = EmergencyModel(
         userName: _userData?.getNameString() ?? 'Undefined User Name',
-        location: GeoPoint(_position.latitude, _position.longitude),
+        location: _position,
         reason: reason,
         timestamp: Timestamp.now(),
         status: 'PENDING',

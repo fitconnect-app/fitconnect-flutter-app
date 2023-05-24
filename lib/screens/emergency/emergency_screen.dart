@@ -70,9 +70,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           child: Column(
                             children: [
                               Text(
-                                'Please read the instructions below before requesting help:',
+                                'Please read the instructions below before requesting help',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               SizedBox(height: 20),
                               Text(
@@ -82,6 +85,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Text(
+                                'Remember to activate your GPS for allow us to locate you easier',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
                               ),
                             ],
@@ -133,7 +145,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 40),
                         SliderButton(
                           action: _sendHelpRequest,
                           label: const Text(
