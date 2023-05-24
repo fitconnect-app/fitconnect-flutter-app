@@ -8,7 +8,9 @@ class EmergencyRepository {
       FirebaseInstance.firestore.collection('emergencies');
 
   Future<EmergencyModel> createEmergency(EmergencyDTO emergency) async {
-    await emergencies.doc(emergency.id).set(emergency.toMap());
+    final docRef = emergencies.doc();
+    emergency = emergency.copyWith(id: docRef.id);
+    await docRef.set(emergency.toMap());
     return emergency.toModel();
   }
 
@@ -18,9 +20,13 @@ class EmergencyRepository {
         .get(getCache ? const GetOptions(source: Source.cache) : null);
     if (doc.exists) {
       return EmergencyDTO.fromMap(doc).toModel();
-    } else {
-      return null;
     }
+    return null;
+  }
+
+  Future<dynamic> getEmergencyRef(String id) async {
+    final doc = emergencies.doc(id);
+    return doc;
   }
 
   Future<void> deleteEmergency(String id) async {

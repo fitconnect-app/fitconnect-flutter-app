@@ -60,4 +60,22 @@ class EmergencyDTO {
       status: model.status,
     );
   }
+
+  EmergencyDTO copyWith({
+    String? id,
+    String? userName,
+    GeoPoint? location,
+    String? reason,
+    Timestamp? timestamp,
+    String? status,
+  }) {
+    return EmergencyDTO(
+      id: id ?? this.id,
+      userName: userName ?? this.userName,
+      location: location ?? this.location,
+      reason: reason ?? this.reason,
+      timestamp: timestamp ?? this.timestamp,
+      status: status ?? this.status,
+    );
+  }
 }
