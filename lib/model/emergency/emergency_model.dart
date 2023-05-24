@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EmergencyModel {
   String? id;
   String userName;
-  String location;
+  GeoPoint location;
   String reason;
   Timestamp timestamp;
   String status;

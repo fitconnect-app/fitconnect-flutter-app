@@ -4,7 +4,7 @@ import 'package:fit_connect/model/emergency/emergency_model.dart';
 class EmergencyDTO {
   String? id;
   final String userName;
-  final String location;
+  final GeoPoint location;
   final String reason;
   final Timestamp timestamp;
   final String status;
