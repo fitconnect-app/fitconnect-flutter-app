@@ -14,32 +14,16 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
-  bool _isWaiting = false;
-  bool _isAdminApproved = false;
-  String _reason = "General Accident";
   late EmergencyViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-
-    // _firebaseMessaging.configure(
-    //   onMessage: (message) async {
-    //     // Handle notification received when admin approves the request
-    //     if (message.data['status'] == 'approved') {
-    //       setState(() {
-    //         _isAdminApproved = true;
-    //       });
-    //     }
-    //   },
-    // );
   }
 
   void _sendHelpRequest() async {
-    _viewModel.sendHelpRequest(_reason);
-    setState(() {
-      _isWaiting = true;
-    });
+    _viewModel.sendHelpRequest(_viewModel.reason);
+    _viewModel.changeEmergencyState(EmergencyState.isWaiting);
   }
 
   @override
@@ -60,7 +44,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (!_isWaiting && !_isAdminApproved)
+                if (viewModel.state == EmergencyState.isInitialized)
                   Expanded(
                     child: Column(
                       children: [
@@ -89,7 +73,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               ),
                               SizedBox(height: 20),
                               Text(
-                                'Remember to activate your GPS for allow us to locate you easier',
+                                'Please remember to activate your GPS to allow us to locate you easier',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -141,7 +125,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               ),
                             ],
                             onChanged: (String? value) {
-                              _reason = value ?? 'General Accident';
+                              viewModel.setReason(value);
                             },
                           ),
                         ),
@@ -170,7 +154,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       ],
                     ),
                   ),
-                if (_isWaiting)
+                if (viewModel.state == EmergencyState.isWaiting)
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -201,7 +185,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                     ),
                   ),
-                if (_isAdminApproved)
+                if (viewModel.state == EmergencyState.isAdminApproved)
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -209,7 +193,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       child: Column(
                         children: [
                           const Text(
-                            'Congratulations, an admin has approved your request and it\'s on its way',
+                            'Congratulations, an administrator has approved your request and it\'s on its way',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           ),
