@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_connect/model/emergency/emergency_model.dart';
 
 class EmergencyDTO {
-  final String id;
+  String? id;
   final String userName;
   final String location;
   final String reason;
@@ -10,7 +10,7 @@ class EmergencyDTO {
   final String status;
 
   EmergencyDTO({
-    required this.id,
+    this.id,
     required this.userName,
     required this.location,
     required this.reason,
@@ -42,13 +42,12 @@ class EmergencyDTO {
 
   EmergencyModel toModel() {
     return EmergencyModel(
-      id: id,
       userName: userName,
       location: location,
       reason: reason,
       timestamp: timestamp,
       status: status,
-    );
+    )..id = id;
   }
 
   factory EmergencyDTO.fromModel(EmergencyModel model) {

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EmergencyModel {
-  String id;
+  String? id;
   String userName;
   String location;
   String reason;
@@ -9,11 +9,12 @@ class EmergencyModel {
   String status;
 
   EmergencyModel({
-    required this.id,
     required this.userName,
     required this.location,
     required this.reason,
     required this.timestamp,
     required this.status,
   });
+
+  set setId(String? id) => this.id = id;
 }
