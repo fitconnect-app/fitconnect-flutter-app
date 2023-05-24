@@ -68,15 +68,16 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                             'IMPORTANT: This emergency section should only be used in genuine emergency situations.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      width: 200, // Replace with your desired width
+                      width: 200,
                       child: DotLottieLoader.fromAsset(
                         'assets/animations/alert.lottie',
                         frameBuilder: (BuildContext ctx, DotLottie? dotlottie) {
@@ -90,6 +91,34 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                     ),
                     const SizedBox(height: 30),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'Reason',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Accident',
+                          child: Text('Accident'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Medical Emergency',
+                          child: Text('Medical Emergency'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Natural Disaster',
+                          child: Text('Natural Disaster'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Facility Damage',
+                          child: Text('Facility Damage'),
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        // Handle the selected value here
+                      },
+                    ),
+                    const SizedBox(height: 20),
                     SliderButton(
                       action: _sendHelpRequest,
                       label: const Text(
@@ -127,7 +156,7 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                       const SizedBox(height: 130),
                       Transform.scale(
-                        scale: 2, // Replace with your desired width
+                        scale: 2,
                         child: DotLottieLoader.fromAsset(
                             'assets/animations/rest-wait.lottie', frameBuilder:
                                 (BuildContext ctx, DotLottie? dotlottie) {
@@ -157,7 +186,7 @@ class EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                       const SizedBox(height: 100),
                       Transform.scale(
-                        scale: 1.5, // Replace with your desired width
+                        scale: 1.5,
                         child: DotLottieLoader.fromAsset(
                             'assets/animations/meditation-wait-please.lottie',
                             frameBuilder:
