@@ -4,11 +4,23 @@ import 'package:fit_connect/model/emergency/emergency_model.dart';
 import 'package:fit_connect/services/firebase/singleton.dart';
 
 class EmergencyRepository {
-  CollectionReference emergencies = FirebaseInstance.firestore.collection('emergencies');
+  CollectionReference emergencies =
+      FirebaseInstance.firestore.collection('emergencies');
 
   Future<EmergencyModel> createEmergency(EmergencyDTO emergency) async {
     await emergencies.doc(emergency.id).set(emergency.toMap());
     return emergency.toModel();
+  }
+
+  Future<EmergencyModel?> getEmergency(String id, bool getCache) async {
+    final doc = await emergencies
+        .doc(id)
+        .get(getCache ? const GetOptions(source: Source.cache) : null);
+    if (doc.exists) {
+      return EmergencyDTO.fromMap(doc).toModel();
+    } else {
+      return null;
+    }
   }
 
   Future<void> deleteEmergency(String id) async {
