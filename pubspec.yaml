@@ -59,6 +59,7 @@ dependencies:
   flutter_local_notifications: ^14.0.0
   flutter_cache_manager: ^3.3.0
   expandable: ^5.0.1
+  google_maps_flutter: ^2.2.8
 
 dev_dependencies:
   flutter_test:
