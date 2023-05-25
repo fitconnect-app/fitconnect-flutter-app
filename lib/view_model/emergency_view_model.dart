@@ -27,11 +27,14 @@ class EmergencyViewModel extends ChangeNotifier {
   final EmergencyRepository _emergencyRepository = EmergencyRepository();
   late GeoPoint _position;
   bool _isOffline = false;
+  bool _wasOfflineNotified = false;
   String _reason = "General Accident";
   EmergencyState _state = EmergencyState.isInitialized;
   late EmergencyService _emergencyService;
 
   bool get isOffline => _isOffline;
+
+  bool get wasOfflineNotified => _wasOfflineNotified;
 
   String get reason => _reason;
 
@@ -50,6 +53,11 @@ class EmergencyViewModel extends ChangeNotifier {
 
   void changeEmergencyState(newState) {
     _state = newState;
+    notifyListeners();
+  }
+
+  void toggleWasOfflineNotified() {
+    _wasOfflineNotified = !_wasOfflineNotified;
     notifyListeners();
   }
 

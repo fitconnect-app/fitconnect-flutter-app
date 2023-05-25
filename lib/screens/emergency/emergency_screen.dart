@@ -46,11 +46,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         } else {
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
-              if (_viewModel.isOffline &&
-                  _viewModel.state == EmergencyState.isLoading) {
+              if (viewModel.isOffline &&
+                  !viewModel.wasOfflineNotified &&
+                  viewModel.state == EmergencyState.isWaiting) {
                 getMessageSnackBar(
                     "There is no internet connection, your help request will be automatically created once you connect back",
                     ScaffoldMessenger.of(context));
+                viewModel.toggleWasOfflineNotified();
               }
             },
           );
