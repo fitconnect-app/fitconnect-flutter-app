@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/theme/style.dart';
@@ -10,6 +11,9 @@ import "package:fit_connect/view_model/event_create_view_model.dart";
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import '../map_settings/map_settings_screen.dart';
 
 class SportFormScreen extends StatefulWidget {
   const SportFormScreen({super.key});
@@ -248,7 +252,7 @@ class SportFormState extends State<SportFormScreen> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 15),
+                        const SizedBox(height: 15),
             const Text(
               'How many players are needed?',
               style: TextStyle(
@@ -399,15 +403,55 @@ class SportFormState extends State<SportFormScreen> {
               ),
             ),
             const SizedBox(height: 5),
-            TextField(
-              decoration: const InputDecoration(
-                hintText: 'Enter event location',
-              ),
-              controller: _locationController,
-            )
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Enter event location',
+                    ),
+                    controller: _locationController,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () async {
+                      await _showPicker(context);
+                    },
+                    icon: const Icon(Icons.location_pin)),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _showPicker(BuildContext context) async {
+    var settings = await Navigator.push(
+      context,
+      MaterialPageRoute<Map<String, dynamic>>(
+        builder: (context) => const MapSettings(),
+      ),
+    );
+
+    if (settings != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlacePicker(
+            searchForInitialValue: false,
+            initialMapType: settings['mapType'],
+            apiKey: "AIzaSyDhkoIAmVbfSSY1WtHecpMk7KWB64wFg6s",
+            onPlacePicked: (result) {
+              _locationController.text = result.formattedAddress ?? '';
+              Navigator.of(context).pop();
+            },
+            initialPosition: settings['useCurrentLocation'] ? const LatLng(0, 0): const LatLng(4.60140465, -74.0649032880709),
+            useCurrentLocation: settings['useCurrentLocation'],
+            resizeToAvoidBottomInset: false,
+          ),
+        ),
+      );
+    }
   }
 }
