@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/screens/events/event_list_screen.dart';
 import 'package:fit_connect/theme/style.dart';
@@ -415,7 +414,7 @@ class SportFormState extends State<SportFormScreen> {
                 ),
                 IconButton(
                     onPressed: () async {
-                      await _showPicker(context);
+                      await _showPicker(context, viewModel);
                     },
                     icon: const Icon(Icons.location_pin)),
               ],
@@ -426,7 +425,8 @@ class SportFormState extends State<SportFormScreen> {
     );
   }
 
-  Future<void> _showPicker(BuildContext context) async {
+  Future<void> _showPicker(
+      BuildContext context, EventCreateViewModel viewModel) async {
     var settings = await Navigator.push(
       context,
       MaterialPageRoute<Map<String, dynamic>>(
@@ -434,7 +434,9 @@ class SportFormState extends State<SportFormScreen> {
       ),
     );
 
-    if (settings != null) {
+    await viewModel.checkConnectionFromView();
+
+    if (settings != null && context.mounted) {
       Navigator.push(
         context,
         MaterialPageRoute(
