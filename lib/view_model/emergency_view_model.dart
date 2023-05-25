@@ -69,6 +69,14 @@ class EmergencyViewModel extends ChangeNotifier {
     }
     final prefs = await SharedPreferences.getInstance();
     final lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
+    // A enqueued request was found
+    if (prefs.getBool("isEmergencyRequestEnqueued") ?? false) {
+      if (state == EmergencyState.isLoading) {
+        changeEmergencyState(EmergencyState.isWaiting);
+        notifyListeners();
+      }
+      return;
+    }
     // No last emergency request was found
     if (lastRequestId.isEmpty) {
       if (state == EmergencyState.isLoading) {
@@ -130,7 +138,10 @@ class EmergencyViewModel extends ChangeNotifier {
     changeEmergencyState(EmergencyState.isLoading);
     if (!await checkConnectivity()) {
       _isOffline = true;
-      changeEmergencyState(EmergencyState.isWaiting); // Enqueue new request
+      // Enqueue new request
+      changeEmergencyState(EmergencyState.isWaiting);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isEmergencyRequestEnqueued', true);
     } else {
       _isOffline = false;
     }
@@ -154,14 +165,17 @@ class EmergencyViewModel extends ChangeNotifier {
     );
     emergency = await _emergencyRepository
         .createEmergency(EmergencyDTO.fromModel(emergency));
+    emergencyTrace.stop();
 
     // Store last emergency request on device
     await SharedPreferences.getInstance().then((prefs) =>
         prefs.setString('lastEmergencyRequest', emergency.id.toString()));
     // Listen for request changes with emergency service
     listenEmergencyStream();
+    // Dequeue offline requests
+    await SharedPreferences.getInstance()
+        .then((prefs) => prefs.setBool('isEmergencyRequestEnqueued', false));
 
-    emergencyTrace.stop();
     changeEmergencyState(EmergencyState.isWaiting);
   }
 
