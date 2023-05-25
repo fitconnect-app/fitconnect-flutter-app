@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { initializeApp } from '@firebase/app';
 	import { getFirestore, doc, onSnapshot, collection, setDoc } from '@firebase/firestore';
+	import Logo from '$lib/assets/fitconnect-logo.png';
 
 	// Initialize Firebase
 	const firebaseConfig = {
@@ -50,35 +51,108 @@
 	}
 </script>
 
-<table>
-	<thead>
-		<tr>
-			<th>Emergency ID</th>
-			<th>User Name</th>
-			<th>Reason</th>
-			<th>Location</th>
-			<th>Timestamp</th>
-			<th>Status</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each emergencies as emergency}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+
+<div class="container">
+	<div class="header">
+		<img src={Logo} alt="FitConnect Logo" class="logo" />
+		<h1 class="title">FitConnect Emergencies</h1>
+	</div>
+	<table>
+		<thead>
 			<tr>
-				<td>{emergency.id}</td>
-				<td>{emergency.userName}</td>
-				<td>{emergency.reason}</td>
-				<td>Latitude: {emergency.location.latitude}, Longitude: {emergency.location.longitude}</td>
-				<td>{emergency.timestamp.toDate().toLocaleString()}</td>
-				<td>{emergency.status}</td>
-				<td>
-					{#if emergency.status === 'PENDING'}
-						<button on:click={() => approveRequest(emergency.id)}>Approve</button>
-					{:else}
-						<p>Already approved</p>
-					{/if}
-				</td>
+				<th>Emergency ID</th>
+				<th>User Name</th>
+				<th>Reason</th>
+				<th>Location</th>
+				<th>Timestamp</th>
+				<th>Status</th>
+				<th>Actions</th>
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each emergencies as emergency}
+				<tr>
+					<td>{emergency.id.slice(0, 8)}</td>
+					<td>{emergency.userName}</td>
+					<td>{emergency.reason}</td>
+					<td>Lat. {emergency.location.latitude} - Lon. {emergency.location.longitude}</td>
+					<td>{emergency.timestamp.toDate().toLocaleString()}</td>
+					<td>{emergency.status}</td>
+					<td class="actions">
+						{#if emergency.status === 'PENDING'}
+							<button on:click={() => approveRequest(emergency.id)}>Approve</button>
+						{:else}
+							<p>No action available</p>
+						{/if}
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
+
+<style>
+	.container {
+		font-family: 'Roboto', sans-serif;
+		max-width: 80%;
+		margin: 0 auto;
+		padding: 20px;
+	}
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 20px;
+	}
+
+	.logo {
+		height: 50px;
+	}
+
+	.title {
+		font-size: 24px;
+		font-weight: bold;
+		color: #091540;
+	}
+
+	table {
+		width: 100%;
+		text-align: center;
+		border-collapse: collapse;
+		margin-bottom: 20px;
+	}
+
+	th,
+	td {
+		text-align: center !important;
+		padding: 10px;
+		border: 0px solid #ffffff;
+	}
+
+	th {
+		background-color: #20a4f3;
+		color: #ffffff;
+		font-weight: bold;
+		text-align: left;
+	}
+
+	td {
+		background-color: #09154036;
+	}
+
+	.actions {
+		text-align: center;
+	}
+
+	.actions button {
+		background-color: #dc602e;
+		color: #ffffff;
+		border: none;
+		padding: 8px 16px;
+		font-size: 14px;
+		cursor: pointer;
+		border-radius: 8px;
+	}
+</style>
