@@ -74,34 +74,47 @@ class HomeScreenState extends State<HomeScreen> {
                       fontFamily: GoogleFonts.rubik().fontFamily),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FeatureButton(
-                    icon: Icons.directions_run,
-                    label: 'Exercises',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/exercises',
-                      );
-                    },
-                  ),
-                  FeatureButton(
-                    icon: Icons.favorite,
-                    label: 'Heart Rate Monitor',
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/bpm');
-                    },
-                  ),
-                  FeatureButton(
-                    icon: Icons.query_stats,
-                    label: 'My Stats',
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/stats");
-                    },
-                  ),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(width: 15),
+                    FeatureButton(
+                      icon: Icons.warning,
+                      label: 'Emergency',
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/emergency');
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    FeatureButton(
+                      icon: Icons.directions_run,
+                      label: 'Exercises',
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/exercises',
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    FeatureButton(
+                      icon: Icons.query_stats,
+                      label: 'My Stats',
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/stats');
+                      },
+                    ),
+                    FeatureButton(
+                      icon: Icons.favorite,
+                      label: 'Heart Rate Monitor',
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/bpm');
+                      },
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 25),
             ],
