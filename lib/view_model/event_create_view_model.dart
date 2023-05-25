@@ -154,6 +154,7 @@ class EventCreateViewModel extends ChangeNotifier {
       'location': prefs.getString('location') ?? '',
     };
   }
+
   Future<void> checkConnectionFromView() async {
     _isOffline = !await checkConnectivity();
     notifyListeners();
@@ -201,4 +202,3 @@ void getHumidity(Map<String, dynamic> args) async {
     sendPort.send(null);
   }
 }
-
