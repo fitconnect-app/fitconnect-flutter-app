@@ -58,38 +58,45 @@
 		<img src={Logo} alt="FitConnect Logo" class="logo" />
 		<h1 class="title">FitConnect Emergencies</h1>
 	</div>
-	<table>
-		<thead>
-			<tr>
-				<th>Emergency ID</th>
-				<th>User Name</th>
-				<th>Reason</th>
-				<th>Location</th>
-				<th>Timestamp</th>
-				<th>Status</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each emergencies as emergency}
+	{#if emergencies.length > 0}
+		<table>
+			<thead>
 				<tr>
-					<td>{emergency.id.slice(0, 8)}</td>
-					<td>{emergency.userName}</td>
-					<td>{emergency.reason}</td>
-					<td>Lat. {emergency.location.latitude} - Lon. {emergency.location.longitude}</td>
-					<td>{emergency.timestamp.toDate().toLocaleString()}</td>
-					<td>{emergency.status}</td>
-					<td class="actions">
-						{#if emergency.status === 'PENDING'}
-							<button on:click={() => approveRequest(emergency.id)}>Approve</button>
-						{:else}
-							<p>No action available</p>
-						{/if}
-					</td>
+					<th>Emergency ID</th>
+					<th>User Name</th>
+					<th>Reason</th>
+					<th>Location</th>
+					<th>Timestamp</th>
+					<th>Status</th>
+					<th>Actions</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each emergencies as emergency}
+					<tr>
+						<td>{emergency.id.slice(0, 8)}</td>
+						<td>{emergency.userName}</td>
+						<td>{emergency.reason}</td>
+						<td>
+							Lat. {emergency.location.latitude.toFixed(2)}<br />
+							Lon. {emergency.location.longitude.toFixed(2)}
+						</td>
+						<td>{emergency.timestamp.toDate().toLocaleString()}</td>
+						<td>{emergency.status}</td>
+						<td class="actions">
+							{#if emergency.status === 'PENDING'}
+								<button on:click={() => approveRequest(emergency.id)}>Approve</button>
+							{:else}
+								<p>No action available</p>
+							{/if}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		<p>No emergencies found.</p>
+	{/if}
 </div>
 
 <style>
