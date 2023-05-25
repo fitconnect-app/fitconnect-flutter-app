@@ -188,7 +188,7 @@ void getHumidity(Map<String, dynamic> args) async {
     List<dynamic> forecasts = data['list'];
 
     for (final forecast in forecasts) {
-      DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
+      final DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
       if (forecastDateTime.year == dateTime.year &&
           forecastDateTime.month == dateTime.month &&
           forecastDateTime.day == dateTime.day &&

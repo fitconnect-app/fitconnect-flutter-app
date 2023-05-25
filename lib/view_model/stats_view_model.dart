@@ -187,11 +187,15 @@ class StatsViewModel extends ChangeNotifier {
 
   void getHoursPracticed() async {
     Map<dynamic, dynamic> sportHourCount = {};
+    String sport = '';
+    DateTime startDate;
+    DateTime endDate;
+    double duration = 0;
     for (final EventModel event in recentEvents) {
-      final String sport = event.sport.getString();
-      final DateTime startDate = event.startDate.toDate();
-      final DateTime endDate = event.endDate.toDate();
-      final double duration = endDate.difference(startDate).inSeconds / 3600;
+      sport = event.sport.getString();
+      startDate = event.startDate.toDate();
+      endDate = event.endDate.toDate();
+      duration = endDate.difference(startDate).inSeconds / 3600;
       if (sportHourCount.containsKey(sport)) {
         sportHourCount[sport] = sportHourCount[sport]! + duration;
       } else {
