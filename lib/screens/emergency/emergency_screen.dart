@@ -1,4 +1,5 @@
 import 'package:dotlottie_loader/dotlottie_loader.dart';
+import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/emergency_view_model.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,16 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             ),
           );
         } else {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              if (_viewModel.isOffline &&
+                  _viewModel.state == EmergencyState.isLoading) {
+                getMessageSnackBar(
+                    "There is no internet connection, your help request will be automatically created once you connect back",
+                    ScaffoldMessenger.of(context));
+              }
+            },
+          );
           return Scaffold(
             appBar: AppBar(
               title: const Text('Emergency'),

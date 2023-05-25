@@ -54,6 +54,11 @@ class EmergencyViewModel extends ChangeNotifier {
   }
 
   void checkPendingRequest() async {
+    if (!await checkConnectivity()) {
+      _isOffline = true;
+    } else {
+      _isOffline = false;
+    }
     final prefs = await SharedPreferences.getInstance();
     final lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
     // No last emergency request was found
@@ -117,40 +122,39 @@ class EmergencyViewModel extends ChangeNotifier {
     changeEmergencyState(EmergencyState.isLoading);
     if (!await checkConnectivity()) {
       _isOffline = true;
-      checkPendingRequest(); // Don't enqueue new request if there is one pending
-      //TODO: Notify user no internet
+      changeEmergencyState(EmergencyState.isWaiting); // Enqueue new request
     } else {
       _isOffline = false;
-      Trace emergencyTrace =
-          FirebasePerformance.instance.newTrace('createEmergencyRequest');
-      emergencyTrace.start();
-      _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
-      await determinePosition().then((value) {
-        _position = GeoPoint(value.latitude, value.longitude);
-      }).catchError((error, stackTrace) {
-        _position = const GeoPoint(0.0, 0.0);
-      });
-
-      // Store emergency in Firestore
-      var emergency = EmergencyModel(
-        userName: _userData?.getNameString() ?? 'No Name',
-        location: _position,
-        reason: _reason,
-        timestamp: Timestamp.now(),
-        status: 'PENDING',
-      );
-      emergency = await _emergencyRepository
-          .createEmergency(EmergencyDTO.fromModel(emergency));
-
-      // Store last emergency request on device
-      await SharedPreferences.getInstance().then((prefs) =>
-          prefs.setString('lastEmergencyRequest', emergency.id.toString()));
-      // Listen for request changes with emergency service
-      listenEmergencyStream();
-
-      emergencyTrace.stop();
-      changeEmergencyState(EmergencyState.isWaiting);
     }
+    Trace emergencyTrace =
+        FirebasePerformance.instance.newTrace('createEmergencyRequest');
+    emergencyTrace.start();
+    _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
+    await determinePosition().then((value) {
+      _position = GeoPoint(value.latitude, value.longitude);
+    }).catchError((error, stackTrace) {
+      _position = const GeoPoint(0.0, 0.0);
+    });
+
+    // Store emergency in Firestore
+    var emergency = EmergencyModel(
+      userName: _userData?.getNameString() ?? 'No Name',
+      location: _position,
+      reason: _reason,
+      timestamp: Timestamp.now(),
+      status: 'PENDING',
+    );
+    emergency = await _emergencyRepository
+        .createEmergency(EmergencyDTO.fromModel(emergency));
+
+    // Store last emergency request on device
+    await SharedPreferences.getInstance().then((prefs) =>
+        prefs.setString('lastEmergencyRequest', emergency.id.toString()));
+    // Listen for request changes with emergency service
+    listenEmergencyStream();
+
+    emergencyTrace.stop();
+    changeEmergencyState(EmergencyState.isWaiting);
   }
 
   void listenEmergencyStream() {
