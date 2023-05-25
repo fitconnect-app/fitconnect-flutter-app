@@ -113,7 +113,7 @@ class EmergencyViewModel extends ChangeNotifier {
       return;
     }
     // Delete approved and outdated last emergency request
-    if (timeDifference.inHours >= 3 || emergency.status == 'APPROVED') {
+    if (timeDifference.inMinutes >= 30 || emergency.status == 'APPROVED') {
       _emergencyRepository.deleteEmergency(lastRequestId);
       _preferencesInstance.setString('lastEmergencyRequest', '');
       if (state == EmergencyState.isLoading) {
