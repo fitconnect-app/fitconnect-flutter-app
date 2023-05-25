@@ -3,6 +3,7 @@ import 'package:fit_connect/components/message_snack_bar.dart';
 import 'package:fit_connect/theme/style.dart';
 import 'package:fit_connect/view_model/emergency_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:slider_button/slider_button.dart';
@@ -58,7 +59,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           );
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Emergency'),
+              title: Text(
+                'Emergency',
+                style: TextStyle(
+                  fontFamily: GoogleFonts.rubik().fontFamily,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              centerTitle: true,
             ),
             body: Center(
               child: Column(
