@@ -8,9 +8,7 @@ class EmergencyRepository {
       FirebaseInstance.firestore.collection('emergencies');
 
   Future<EmergencyModel> createEmergency(EmergencyDTO emergency) async {
-    final docRef = emergencies.doc();
-    emergency = emergency.copyWith(id: docRef.id);
-    await docRef.set(emergency.toMap());
+    await emergencies.doc(emergency.id).set(emergency.toMap());
     return emergency.toModel();
   }
 

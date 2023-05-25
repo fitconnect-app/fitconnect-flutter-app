@@ -18,6 +18,8 @@ class EmergencyDTO {
     required this.status,
   });
 
+  set setId(String? id) => this.id = id;
+
   Map<String, dynamic> toMap() {
     return {
       'userName': userName,

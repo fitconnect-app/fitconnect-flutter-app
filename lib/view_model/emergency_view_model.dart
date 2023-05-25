@@ -71,10 +71,7 @@ class EmergencyViewModel extends ChangeNotifier {
     final lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
     // A enqueued request was found
     if (prefs.getBool("isEmergencyRequestEnqueued") ?? false) {
-      if (state == EmergencyState.isLoading) {
-        changeEmergencyState(EmergencyState.isWaiting);
-        notifyListeners();
-      }
+      sendHelpRequest();
       return;
     }
     // No last emergency request was found
@@ -163,6 +160,7 @@ class EmergencyViewModel extends ChangeNotifier {
       timestamp: Timestamp.now(),
       status: 'PENDING',
     );
+    emergency.setId = _userData?.id;
     emergency = await _emergencyRepository
         .createEmergency(EmergencyDTO.fromModel(emergency));
     emergencyTrace.stop();
