@@ -25,18 +25,20 @@ class MapSettingsState extends State<MapSettings> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModel.isOffline) {
-        getMessageSnackBar(
-          "Please check your internet connection, you can only access the map in cache mode to view it.",
-          ScaffoldMessenger.of(context),
-        );
-      }
-    });
     return ChangeNotifierProvider<MapSettingsViewModel>(
       create: (context) => viewModel,
       child: Consumer<MapSettingsViewModel>(
         builder: (context, viewModel, child) {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              if (viewModel.isOffline) {
+                getMessageSnackBar(
+                  "Please check your internet connection, you can only access the map in cache mode to view it. You can choose the map location when you are online!",
+                  ScaffoldMessenger.of(context),
+                );
+              }
+            },
+          );
           return Scaffold(
               appBar: AppBar(
                 title: const Text('Map Settings'),
