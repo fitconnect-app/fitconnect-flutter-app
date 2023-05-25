@@ -64,6 +64,8 @@ dependencies:
   slider_button: ^2.0.0
   dotlottie_loader: ^0.0.3
   lottie: ^2.3.2
+  google_maps_flutter_platform_interface: ^2.2.7
+  google_maps_flutter_android: ^2.4.15
 
 dev_dependencies:
   flutter_test:

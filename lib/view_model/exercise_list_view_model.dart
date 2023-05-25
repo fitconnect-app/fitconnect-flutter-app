@@ -126,7 +126,7 @@ class ExerciseListViewModel extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      for (var exercise in data) {
+      for (final exercise in data) {
         exercise['imgUrl'] = getImgUrl(exercise['type']);
         exercise['type'] = getDisplayText(exercise['type']);
         exercise['muscle'] = getDisplayText(exercise['muscle']);

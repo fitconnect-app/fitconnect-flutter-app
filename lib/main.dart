@@ -1,14 +1,13 @@
-import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/init.dart';
 import 'package:fit_connect/services/notifications/notifications_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-import 'services/firebase/singleton.dart';
 import 'services/firebase/config.dart';
+import 'services/firebase/singleton.dart';
 import 'theme/style.dart';
 import 'utils/routes.dart';
 

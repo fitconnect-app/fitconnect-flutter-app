@@ -38,7 +38,7 @@ class EmergencyService {
             _emergencyRequestStreamController.add("approved-request");
           }
         },
-        onError: (error) => print("Listen failed: $error"),
+        onError: (error) => {},
       );
     });
   }
