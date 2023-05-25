@@ -31,6 +31,7 @@ class EmergencyViewModel extends ChangeNotifier {
   String _reason = "General Accident";
   EmergencyState _state = EmergencyState.isInitialized;
   late EmergencyService _emergencyService;
+  late SharedPreferences _preferencesInstance;
 
   bool get isOffline => _isOffline;
 
@@ -47,8 +48,11 @@ class EmergencyViewModel extends ChangeNotifier {
 
   EmergencyViewModel() {
     changeEmergencyState(EmergencyState.isLoading);
-    _emergencyService = EmergencyService();
-    checkPendingRequest(); // Don't allow to create requests if there is one pending
+    SharedPreferences.getInstance().then((prefs) {
+      _preferencesInstance = prefs;
+      _emergencyService = EmergencyService();
+      checkPendingRequest(); // Don't allow to create requests if there is one pending
+    });
   }
 
   void changeEmergencyState(newState) {
@@ -67,10 +71,10 @@ class EmergencyViewModel extends ChangeNotifier {
     } else {
       _isOffline = false;
     }
-    final prefs = await SharedPreferences.getInstance();
-    final lastRequestId = prefs.getString("lastEmergencyRequest") ?? '';
+    final lastRequestId =
+        _preferencesInstance.getString("lastEmergencyRequest") ?? '';
     // A enqueued request was found
-    if (prefs.getBool("isEmergencyRequestEnqueued") ?? false) {
+    if (_preferencesInstance.getBool("isEmergencyRequestEnqueued") ?? false) {
       sendHelpRequest();
       return;
     }
@@ -89,7 +93,7 @@ class EmergencyViewModel extends ChangeNotifier {
     );
     // Last emergency request was deleted
     if (emergency == null) {
-      prefs.setString('lastEmergencyRequest', '');
+      _preferencesInstance.setString('lastEmergencyRequest', '');
       if (state == EmergencyState.isLoading) {
         changeEmergencyState(EmergencyState.isInitialized);
         notifyListeners();
@@ -111,7 +115,7 @@ class EmergencyViewModel extends ChangeNotifier {
     // Delete approved and outdated last emergency request
     if (timeDifference.inHours >= 3 || emergency.status == 'APPROVED') {
       _emergencyRepository.deleteEmergency(lastRequestId);
-      prefs.setString('lastEmergencyRequest', '');
+      _preferencesInstance.setString('lastEmergencyRequest', '');
       if (state == EmergencyState.isLoading) {
         changeEmergencyState(EmergencyState.isInitialized);
         notifyListeners();
@@ -137,8 +141,7 @@ class EmergencyViewModel extends ChangeNotifier {
       _isOffline = true;
       // Enqueue new request
       changeEmergencyState(EmergencyState.isWaiting);
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isEmergencyRequestEnqueued', true);
+      _preferencesInstance.setBool('isEmergencyRequestEnqueued', true);
     } else {
       _isOffline = false;
     }
@@ -166,13 +169,14 @@ class EmergencyViewModel extends ChangeNotifier {
     emergencyTrace.stop();
 
     // Store last emergency request on device
-    await SharedPreferences.getInstance().then((prefs) =>
-        prefs.setString('lastEmergencyRequest', emergency.id.toString()));
+    _preferencesInstance.setString(
+      'lastEmergencyRequest',
+      emergency.id.toString(),
+    );
     // Listen for request changes with emergency service
     listenEmergencyStream();
     // Dequeue offline requests
-    await SharedPreferences.getInstance()
-        .then((prefs) => prefs.setBool('isEmergencyRequestEnqueued', false));
+    _preferencesInstance.setBool('isEmergencyRequestEnqueued', false);
 
     changeEmergencyState(EmergencyState.isWaiting);
   }
