@@ -1,3 +1,6 @@
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_connect/services/init.dart';
 import 'package:fit_connect/services/notifications/notifications_service.dart';
@@ -14,6 +17,11 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   NotificationService.initNotification();
 
+  final GoogleMapsFlutterPlatform mapsImplementation =
+      GoogleMapsFlutterPlatform.instance;
+  if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    mapsImplementation.useAndroidViewSurface = true;
+  }
   await initializeFirebase();
   OnInitService.init();
   User? user = FirebaseInstance.auth.currentUser;
