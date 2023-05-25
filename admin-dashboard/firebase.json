@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "fitconnect-admin",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
