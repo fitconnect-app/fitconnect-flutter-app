@@ -61,6 +61,9 @@ dependencies:
   expandable: ^5.0.1
   google_maps_flutter: ^2.2.8
   google_maps_place_picker_mb: ^2.0.0-mb.20
+  slider_button: ^2.0.0
+  dotlottie_loader: ^0.0.3
+  lottie: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +106,7 @@ flutter:
     - assets/icon/
     - assets/images/
     - assets/images/events/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
