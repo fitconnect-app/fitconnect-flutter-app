@@ -252,7 +252,7 @@ class SportFormState extends State<SportFormScreen> {
                 );
               }).toList(),
             ),
-                        const SizedBox(height: 15),
+            const SizedBox(height: 15),
             const Text(
               'How many players are needed?',
               style: TextStyle(
@@ -446,7 +446,9 @@ class SportFormState extends State<SportFormScreen> {
               _locationController.text = result.formattedAddress ?? '';
               Navigator.of(context).pop();
             },
-            initialPosition: settings['useCurrentLocation'] ? const LatLng(0, 0): const LatLng(4.60140465, -74.0649032880709),
+            initialPosition: settings['useCurrentLocation']
+                ? const LatLng(0, 0)
+                : const LatLng(4.60140465, -74.0649032880709),
             useCurrentLocation: settings['useCurrentLocation'],
             resizeToAvoidBottomInset: false,
           ),

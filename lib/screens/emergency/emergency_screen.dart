@@ -76,11 +76,11 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 50, vertical: 30),
                             child: Column(
-                              children: [
+                              children: const [
                                 Text(
                                   'Please read the instructions below before requesting help',
                                   textAlign: TextAlign.center,
