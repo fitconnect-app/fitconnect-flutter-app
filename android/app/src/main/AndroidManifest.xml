@@ -8,6 +8,10 @@
         android:label="FitConnect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+     <meta-data android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyDhkoIAmVbfSSY1WtHecpMk7KWB64wFg6s"/>
+    <meta-data android:name="android.max_size_of_encoded_image_cache"
+        android:value="52428800" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

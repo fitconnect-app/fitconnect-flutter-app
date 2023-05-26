@@ -150,7 +150,7 @@ class BPMViewModel extends ChangeNotifier {
       avg = 0;
       listLength = values.length;
       min = 0;
-      for (var value in values) {
+      for (final value in values) {
         avg += value.value / listLength;
         if (value.value > min) min = value.value;
       }
