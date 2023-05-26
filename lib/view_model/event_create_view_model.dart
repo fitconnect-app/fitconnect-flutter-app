@@ -38,12 +38,12 @@ class EventCreateViewModel extends ChangeNotifier {
     createEventTrace.start();
     var uid = _auth.currentUser?.uid ?? '';
 
-    if (location.length > 50) {
+    if (location.length > 100) {
       _state = CreateState.error;
       notifyListeners();
       throw const FormatException(
-          "The event location cannot be longer than 50 characters");
-    } else if (RegExp(r'[^a-zA-Z0-9 \-\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1]')
+          "The event location cannot be longer than 100 characters");
+    } else if (RegExp(r'[^a-zA-Z0-9 .#,\-\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1]')
         .allMatches(location)
         .isNotEmpty) {
       _state = CreateState.error;
@@ -154,6 +154,11 @@ class EventCreateViewModel extends ChangeNotifier {
       'location': prefs.getString('location') ?? '',
     };
   }
+
+  Future<void> checkConnectionFromView() async {
+    _isOffline = !await checkConnectivity();
+    notifyListeners();
+  }
 }
 
 enum CreateState {
@@ -183,8 +188,8 @@ void getHumidity(Map<String, dynamic> args) async {
     Map<String, dynamic> data = jsonDecode(response.body);
     List<dynamic> forecasts = data['list'];
 
-    for (var forecast in forecasts) {
-      DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
+    for (final forecast in forecasts) {
+      final DateTime forecastDateTime = DateTime.parse(forecast['dt_txt']);
       if (forecastDateTime.year == dateTime.year &&
           forecastDateTime.month == dateTime.month &&
           forecastDateTime.day == dateTime.day &&

@@ -10,6 +10,9 @@ import "package:fit_connect/view_model/event_create_view_model.dart";
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import '../map_settings/map_settings_screen.dart';
 
 class SportFormScreen extends StatefulWidget {
   const SportFormScreen({super.key});
@@ -124,7 +127,8 @@ class SportFormState extends State<SportFormScreen> {
                 ),
               ],
             ),
-            body: SingleChildScrollView(child: _buildCreateScreen(viewModel, context)),
+            body: SingleChildScrollView(
+                child: _buildCreateScreen(viewModel, context)),
             floatingActionButton: FloatingActionButton.extended(
               onPressed: viewModel.state == CreateState.loading
                   ? null
@@ -398,15 +402,60 @@ class SportFormState extends State<SportFormScreen> {
               ),
             ),
             const SizedBox(height: 5),
-            TextField(
-              decoration: const InputDecoration(
-                hintText: 'Enter event location',
-              ),
-              controller: _locationController,
-            )
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Enter event location',
+                    ),
+                    controller: _locationController,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () async {
+                      await _showPicker(context, viewModel);
+                    },
+                    icon: const Icon(Icons.location_pin)),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _showPicker(
+      BuildContext context, EventCreateViewModel viewModel) async {
+    var settings = await Navigator.push(
+      context,
+      MaterialPageRoute<Map<String, dynamic>>(
+        builder: (context) => const MapSettings(),
+      ),
+    );
+
+    await viewModel.checkConnectionFromView();
+
+    if (settings != null && context.mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlacePicker(
+            searchForInitialValue: false,
+            initialMapType: settings['mapType'],
+            apiKey: "AIzaSyDhkoIAmVbfSSY1WtHecpMk7KWB64wFg6s",
+            onPlacePicked: (result) {
+              _locationController.text = result.formattedAddress ?? '';
+              Navigator.of(context).pop();
+            },
+            initialPosition: settings['useCurrentLocation']
+                ? const LatLng(0, 0)
+                : const LatLng(4.60140465, -74.0649032880709),
+            useCurrentLocation: settings['useCurrentLocation'],
+            resizeToAvoidBottomInset: false,
+          ),
+        ),
+      );
+    }
   }
 }
