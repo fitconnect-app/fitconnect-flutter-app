@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class EmergencyService {
   late StreamController<String> _emergencyRequestStreamController;
   late Stream<String> _emergencyStream;
+  late StreamSubscription firestoreSub;
 
   StreamController<String> get emergencyRequestStreamController =>
       _emergencyRequestStreamController;
@@ -30,7 +31,7 @@ class EmergencyService {
     SharedPreferences.getInstance().then((prefs) async {
       String lastRequestId = prefs.getString('lastEmergencyRequest') ?? '';
       final docRef = await emergencyRepository.getEmergencyRef(lastRequestId);
-      docRef.snapshots().listen(
+      firestoreSub = docRef.snapshots().listen(
         (emergency) {
           if (emergency.data() != null &&
               emergency.data()!['status'] == "APPROVED") {
@@ -45,5 +46,6 @@ class EmergencyService {
 
   void dispose() {
     _emergencyRequestStreamController.close();
+    firestoreSub.cancel();
   }
 }
