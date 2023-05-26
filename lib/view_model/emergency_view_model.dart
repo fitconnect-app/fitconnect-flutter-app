@@ -28,7 +28,7 @@ class EmergencyViewModel extends ChangeNotifier {
   late GeoPoint _position;
   bool _isOffline = false;
   bool _wasOfflineNotified = false;
-  String _reason = "General Accident";
+  String _reason = 'General Accident';
   EmergencyState _state = EmergencyState.isInitialized;
   late EmergencyService _emergencyService;
   late SharedPreferences _preferencesInstance;
@@ -66,11 +66,7 @@ class EmergencyViewModel extends ChangeNotifier {
   }
 
   void checkPendingRequest() async {
-    if (!await checkConnectivity()) {
-      _isOffline = true;
-    } else {
-      _isOffline = false;
-    }
+    _isOffline = !await checkConnectivity();
     final lastRequestId =
         _preferencesInstance.getString("lastEmergencyRequest") ?? '';
     // A enqueued request was found
@@ -104,16 +100,17 @@ class EmergencyViewModel extends ChangeNotifier {
     final currentDateTime = DateTime.now();
     final timeDifference =
         currentDateTime.difference(emergency.timestamp.toDate());
+    final isRequestOutdated = timeDifference.inMinutes >= 30;
     // Show current last emergency approved request
-    if (timeDifference.inHours < 3 && emergency.status == 'APPROVED') {
+    if (!isRequestOutdated && emergency.status == 'APPROVED') {
       if (state == EmergencyState.isLoading) {
         changeEmergencyState(EmergencyState.isAdminApproved);
         notifyListeners();
       }
       return;
     }
-    // Delete approved and outdated last emergency request
-    if (timeDifference.inMinutes >= 30 || emergency.status == 'APPROVED') {
+    // Delete outdated last emergency request
+    if (isRequestOutdated) {
       _emergencyRepository.deleteEmergency(lastRequestId);
       _preferencesInstance.setString('lastEmergencyRequest', '');
       if (state == EmergencyState.isLoading) {
@@ -136,25 +133,36 @@ class EmergencyViewModel extends ChangeNotifier {
   }
 
   Future<void> sendHelpRequest() async {
+    // Send Firebase Custom Trace by Emergency Type
+    var traceMsg = 'createEmergencyRequest';
+    if (_reason == 'Medical Emergency') {
+      traceMsg = 'createMedicalEmergencyRequest';
+    }
+    if (_reason == 'Facility Damage') {
+      traceMsg = 'createFacilityDamageEmergencyRequest';
+    }
+    if (_reason == 'Natural Disaster') {
+      traceMsg = 'createNaturalDisasterEmergencyRequest';
+    }
+    Trace emergencyTrace = FirebasePerformance.instance.newTrace(traceMsg);
+    emergencyTrace.start();
     changeEmergencyState(EmergencyState.isLoading);
+
+    // No internet connection detected on user create request
     if (!await checkConnectivity()) {
       _isOffline = true;
       // Enqueue new request
       changeEmergencyState(EmergencyState.isWaiting);
       _preferencesInstance.setBool('isEmergencyRequestEnqueued', true);
-    } else {
-      _isOffline = false;
     }
-    Trace emergencyTrace =
-        FirebasePerformance.instance.newTrace('createEmergencyRequest');
-    emergencyTrace.start();
+
+    // Obtain additional user information for creating emergency request
     _userData = await _userRepository.getUser(_user?.uid ?? '', _isOffline);
     await determinePosition().then((value) {
       _position = GeoPoint(value.latitude, value.longitude);
     }).catchError((error, stackTrace) {
       _position = const GeoPoint(0.0, 0.0);
     });
-
     // Store emergency in Firestore
     var emergency = EmergencyModel(
       userName: _userData?.getNameString() ?? 'No Name',
@@ -166,7 +174,6 @@ class EmergencyViewModel extends ChangeNotifier {
     emergency.setId = _userData?.id;
     emergency = await _emergencyRepository
         .createEmergency(EmergencyDTO.fromModel(emergency));
-    emergencyTrace.stop();
 
     // Store last emergency request on device
     _preferencesInstance.setString(
@@ -179,6 +186,7 @@ class EmergencyViewModel extends ChangeNotifier {
     _preferencesInstance.setBool('isEmergencyRequestEnqueued', false);
 
     changeEmergencyState(EmergencyState.isWaiting);
+    emergencyTrace.stop();
   }
 
   void listenEmergencyStream() {
