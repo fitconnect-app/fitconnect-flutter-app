@@ -109,7 +109,7 @@ class ExerciseListViewModel extends ChangeNotifier {
     }
     if (muscleFilter != 'Any') {
       url += url == baseUrl
-          ? '&muscle=${getApiText(muscleFilter)}'
+          ? '?muscle=${getApiText(muscleFilter)}'
           : '&muscle=${getApiText(muscleFilter)}';
     }
 
