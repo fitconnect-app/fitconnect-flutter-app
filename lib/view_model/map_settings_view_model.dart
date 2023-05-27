@@ -40,7 +40,7 @@ class MapSettingsViewModel extends ChangeNotifier {
       _isOffline = false;
     }
     useCurrentLocation = _preferences.getBool('useCurrentLocation') ?? true;
-    mapType = MapType.values[_preferences.getInt('mapType') ?? 0];
+    mapType = MapType.values[_preferences.getInt('mapType') ?? 1];
     notifyListeners();
   }
 
